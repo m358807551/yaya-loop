@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+"""
+Methodology kit · commit-msg hook
+非 Claude Code 用户的"代码气味扫描通过"质量门兜底。
+
+触发：每次 git commit 时
+检查：如果本次 commit staged 的 docs/feature-list.json 把任何 feature 从
+      in_progress 或 pending 改成 done，则要求 commit message 中含
+      `Code smell scan: pass` 字样（由 execute-next-feature 阶段 6 产出）。
+若缺失：拒绝 commit 并打印指引。
+
+为何用 commit-msg 而不是 pre-commit：
+- 需要同时访问 staged 改动（git diff --cached）和 commit message。
+- pre-commit 在 message 编辑前运行，看不到 -m 之外的 message；commit-msg 总能看到。
+
+安装：
+    cp git-hooks/commit-msg .git/hooks/commit-msg && chmod +x .git/hooks/commit-msg
+"""
+
+import json
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+FEATURE_LIST_PATH = "docs/feature-list.json"
+PASS_PATTERN = re.compile(r"Code\s+smell\s+scan:\s*pass", re.IGNORECASE)
+
+
+def get_staged_feature_list_before_after():
+    """返回 (HEAD 版本的 feature-list, staged 即将提交的版本)。
+    若 staged 版本里 docs/feature-list.json 不存在 → 返回 (None, None)，跳过检查。
+    """
+    # staged 版本
+    try:
+        staged_blob = subprocess.run(
+            ["git", "show", f":{FEATURE_LIST_PATH}"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout
+    except subprocess.CalledProcessError:
+        return None, None
+    try:
+        staged_data = json.loads(staged_blob)
+    except json.JSONDecodeError:
+        return None, None
+
+    # HEAD 版本（可能不存在，例如首次 commit 该文件）
+    try:
+        head_blob = subprocess.run(
+            ["git", "show", f"HEAD:{FEATURE_LIST_PATH}"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout
+        head_data = json.loads(head_blob)
+    except (subprocess.CalledProcessError, json.JSONDecodeError):
+        head_data = {"features": []}
+
+    return head_data, staged_data
+
+
+def find_newly_done(head_data, staged_data):
+    """对比 head_data 与 staged_data，返回本次新切到 done 的 feature id 列表。"""
+    head_status = {f["id"]: f.get("status") for f in head_data.get("features", [])}
+    newly_done = []
+    for f in staged_data.get("features", []):
+        if f.get("status") == "done":
+            prev = head_status.get(f["id"])
+            if prev != "done":  # 从 pending/in_progress/missing → done
+                newly_done.append(f["id"])
+    return newly_done
+
+
+def main():
+    if len(sys.argv) < 2:
+        # 异常情况：commit-msg hook 总会有 $1
+        return 0
+
+    msg_path = Path(sys.argv[1])
+    if not msg_path.exists():
+        return 0
+    commit_msg = msg_path.read_text(encoding="utf-8")
+
+    head_data, staged_data = get_staged_feature_list_before_after()
+    if staged_data is None:
+        # feature-list.json 未在本次 commit 中、或解析失败 → 不拦
+        return 0
+
+    newly_done = find_newly_done(head_data, staged_data)
+    if not newly_done:
+        return 0
+
+    if PASS_PATTERN.search(commit_msg):
+        return 0
+
+    sys.stderr.write(
+        "\n"
+        "─────────────────────────────────────────────────────────────\n"
+        "❌ Methodology kit · commit-msg hook 阻断\n"
+        "─────────────────────────────────────────────────────────────\n"
+        f"本次 commit 把以下 feature 切到了 done：{', '.join(newly_done)}\n"
+        "但 commit message 中没有找到 `Code smell scan: pass` 行。\n"
+        "\n"
+        "这是 execute-next-feature 阶段 6（代码气味扫描）的硬性准入证据。\n"
+        "请按 execute-next-feature.prompt.md 阶段 6 完成扫描，把扫描报告\n"
+        "末尾的 `Code smell scan: pass (must_fix: N, suggest: N, acceptable: M)` 行\n"
+        "加入本次 commit message 后重新 commit。\n"
+        "\n"
+        "若你确实想绕过此 hook（强烈不建议）：\n"
+        "    git commit --no-verify\n"
+        "─────────────────────────────────────────────────────────────\n"
+    )
+    return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
