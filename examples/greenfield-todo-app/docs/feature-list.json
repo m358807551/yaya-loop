@@ -1,0 +1,56 @@
+{
+  "meta": {
+    "generated_from": [
+      "docs/product.md",
+      "docs/product/**/*.md",
+      "docs/coding_rules.md"
+    ],
+    "generated_at": "2026-05-25T10:00:00Z",
+    "total_features": 5,
+    "details_dir": "docs/features/",
+    "revisions_file": "docs/feature-list-revisions.json",
+    "notes": "按「基础设施 → 数据层 → 交互层 → 持久化」顺序拆解，F001 是基础设施，F002 引入数据层，F003-F005 逐项承载用户可观察交互。"
+  },
+  "features": [
+    {
+      "id": "F001",
+      "title": "搭建 Vite + React + TS 项目骨架，渲染空白页",
+      "status": "done",
+      "depends_on": [],
+      "estimated_scope": "small",
+      "completed_at": "2026-05-25T11:30:00Z"
+    },
+    {
+      "id": "F002",
+      "title": "Todo 数据类型与 localStorage 读写工具",
+      "status": "pending",
+      "depends_on": ["F001"],
+      "estimated_scope": "small",
+      "completed_at": null
+    },
+    {
+      "id": "F003",
+      "title": "渲染 todo 列表 + 输入框新增 todo",
+      "status": "pending",
+      "depends_on": ["F002"],
+      "estimated_scope": "medium",
+      "completed_at": null
+    },
+    {
+      "id": "F004",
+      "title": "切换完成状态 + 删除线样式",
+      "status": "pending",
+      "depends_on": ["F003"],
+      "estimated_scope": "small",
+      "completed_at": null
+    },
+    {
+      "id": "F005",
+      "title": "清空已完成按钮",
+      "status": "pending",
+      "depends_on": ["F004"],
+      "estimated_scope": "small",
+      "completed_at": null
+    }
+  ]
+}

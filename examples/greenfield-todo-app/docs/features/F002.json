@@ -1,0 +1,14 @@
+{
+  "id": "F002",
+  "description": "定义 Todo 类型与从/向 localStorage 读写的纯函数；本 feature 不涉及任何渲染，只产出数据层 API。",
+  "acceptance_criteria": [
+    "src/data/todo.ts 暴露 Todo 类型与 loadTodos / saveTodos 函数",
+    "loadTodos 在 localStorage 无数据时返回空数组",
+    "loadTodos 在 localStorage 数据损坏时返回空数组并 console.warn",
+    "saveTodos 把数组完整 JSON.stringify 后写入键 todomate:todos:v1",
+    "在 src/data/todo.test.ts 中写 3 个测试覆盖：首次加载、保存后再加载、损坏数据 fallback",
+    "npm run typecheck 与 npm test 全通过"
+  ],
+  "source": "product/01-tasks.md#数据模型",
+  "notes": ""
+}

@@ -1,0 +1,14 @@
+{
+  "id": "F003",
+  "description": "App 组件渲染 todo 列表 + 顶部输入框；用户按回车可新增 todo；新增后输入框清空。本 feature 不实现完成状态切换（留给 F004）。",
+  "acceptance_criteria": [
+    "页面渲染顶部输入框（占位符『新增待办，回车提交』）+ 列表容器",
+    "首次加载时列表显示 localStorage 中的现有 todos（按 createdAt 倒序）",
+    "输入文本，按回车 → 列表顶部新增一行；输入框清空",
+    "空字符串（或 trim 后为空）回车 → 忽略，不添加",
+    "超过 200 字符 → 只接受前 200 字符",
+    "todo 数据通过 F002 的 loadTodos/saveTodos 持久化"
+  ],
+  "source": "product/01-tasks.md#功能流程",
+  "notes": ""
+}

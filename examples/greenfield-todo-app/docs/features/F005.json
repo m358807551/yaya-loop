@@ -1,0 +1,13 @@
+{
+  "id": "F005",
+  "description": "列表底部显示「清空已完成 (N)」按钮；N 是当前 done 数；点击移除所有 done=true 的 todo；N=0 时按钮 disabled。",
+  "acceptance_criteria": [
+    "列表底部固定显示按钮，文本为「清空已完成 (N)」",
+    "N 实时反映当前 done 的 todo 数",
+    "N=0 时按钮 disabled，鼠标 hover 显示「没有已完成的待办」",
+    "点击按钮 → 所有 done=true 的 todo 从列表与 localStorage 移除",
+    "未完成 todo 顺序保持不变"
+  ],
+  "source": "product/01-tasks.md#功能流程",
+  "notes": ""
+}

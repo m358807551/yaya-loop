@@ -1,0 +1,13 @@
+{
+  "id": "F004",
+  "description": "每行 todo 前显示复选框；点击切换 done 状态；done=true 时文字加删除线 + 50% 透明。",
+  "acceptance_criteria": [
+    "每个 todo 行左侧渲染复选框，反映当前 done 状态",
+    "点击复选框 → 状态切换 + 立即视觉反馈",
+    "done=true 时 todo 文本加删除线 + opacity 0.5",
+    "状态变化通过 saveTodos 持久化",
+    "刷新页面后状态保持"
+  ],
+  "source": "product/01-tasks.md#功能流程",
+  "notes": ""
+}
