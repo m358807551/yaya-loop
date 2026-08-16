@@ -238,10 +238,10 @@
 ### 🟢 认可不处理（来自 acceptable）
 - **<smell>**：<file> — <reason>
 
-Code smell scan: pass (must_fix: <N_fixed>, suggest: <N>, acceptable: <M>)
+Code smell scan: pass (feature: F0XX, must_fix: 0, suggest: <N>, acceptable: <M>)
 ```
 
-**最后一行 `Code smell scan: pass` 是阶段 7 准入证据，必须原样输出。hook（Claude Code 的 PreToolUse 或 git commit-msg）会扫描它。**
+**最后一行是阶段 7 准入证据，必须写入当前 feature id，并保证修复后的 `must_fix` 为 `0`。hook（Claude Code 的 PreToolUse 或 git commit-msg）会校验完整证据行。**
 
 ### 6.4 约束
 
@@ -268,7 +268,7 @@ Code smell scan: pass (must_fix: <N_fixed>, suggest: <N>, acceptable: <M>)
    chore(F0XX): mark feature as done
 
    Acceptance criteria all verified by human review.
-   Code smell scan: pass (must_fix: <N>, suggest: <N>, acceptable: <M>)
+   Code smell scan: pass (feature: F0XX, must_fix: 0, suggest: <N>, acceptable: <M>)
    <如有 notes 中的关键信息，简要列出>
    ```
    **`Code smell scan: pass` 行必须包含**，hook 会扫描。

@@ -45,7 +45,7 @@
 | **feature-list 轻量索引 + 详情懒加载** | 95 个 feature 也能塞进任何 AI 的上下文窗口，详情按需读取 |
 | **产品变更 = 走 standardizer 入口** | 用户随口说的"想加 X"会被 AI 走标准化流程：判断改哪个模块文件、追问关键点、画 UI 草图、写音效条目、回写 product.md、增量更新 feature-list。不是随口改 |
 | **执行 feature = 走 8 阶段流程** | 防止 AI 跳过验证就标 done；防止 AI 把"自己觉得对"当成"完成" |
-| **代码气味扫描 = 子 agent 委派 + commit message 准入证据** | 主 agent 走完 7 阶段后上下文已被压缩，子 agent fresh context 能精确扫描；最终 commit 必须含 `Code smell scan: pass`，hook 兜底，硬阻断遗漏 |
+| **代码气味扫描 = 子 agent 委派 + commit message 准入证据** | 主 agent 走完 7 阶段后上下文已被压缩，子 agent fresh context 能精确扫描；最终 commit 必须含当前 feature 专属、`must_fix: 0` 的完整扫描证据，hook 兜底，硬阻断遗漏 |
 
 ## 一个 feature 的完整生命周期
 
@@ -79,7 +79,7 @@
 ## 三大硬约束（kit 全局不可绕过）
 
 1. **产品变更走 standardizer，不直接改 product.md**：保证模块归位、增量同步可追溯。
-2. **AI 不能自行标 done**：阶段 5 必须有用户文字/口头确认；阶段 7 commit message 必须含 `Code smell scan: pass`，hook 阻断。
+2. **AI 不能自行标 done**：阶段 5 必须有用户文字/口头确认；阶段 7 commit message 必须含当前 feature 专属、`must_fix: 0` 的完整 `Code smell scan: pass` 证据行，hook 阻断。
 3. **AI 不操作 main 分支、不 force push、不 reset --hard**：所有 commit 在工作分支，破坏性操作必须用户显式授权。
 
 ## 进一步阅读

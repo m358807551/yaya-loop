@@ -8,7 +8,7 @@
 
 | 文件 | 类型 | 作用 |
 |------|------|------|
-| `commit-msg` | git commit-msg hook | commit 时检查：本次若把任何 feature 切到 `done`，则 commit message 必须含 `Code smell scan: pass`，否则拒绝 commit |
+| `commit-msg` | git commit-msg hook | commit 时检查：本次若把任何 feature 切到 `done`，则 commit message 必须含该 feature 专属、`must_fix: 0` 的完整扫描证据行，否则拒绝 commit |
 
 ## 一键安装（在目标项目根目录跑）
 
@@ -38,7 +38,7 @@ git restore docs/feature-list.json
 git add docs/feature-list.json
 git commit -m "chore: mark done
 
-Code smell scan: pass (must_fix: 0, suggest: 0, acceptable: 0)
+Code smell scan: pass (feature: F001, must_fix: 0, suggest: 0, acceptable: 0)
 "
 ```
 

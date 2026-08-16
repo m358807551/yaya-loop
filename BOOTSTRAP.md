@@ -212,7 +212,7 @@ cp <KIT>/git-hooks/commit-msg .git/hooks/commit-msg
 chmod +x .git/hooks/commit-msg
 ```
 
-提示用户：「非 Claude Code CLI 安装完成。打开 `docs/methodology-prompts/00-how-to-use.md` 看『触发短语 → 用哪个 prompt 文件』速查表。**注意**：你的 CLI 没有 PreToolUse hook 能力，质量门由 `.git/hooks/commit-msg` 兜底——commit 时会校验 feature-list 的 done 状态和 commit message 是否含 `Code smell scan: pass`。」
+提示用户：「非 Claude Code CLI 安装完成。打开 `docs/methodology-prompts/00-how-to-use.md` 看『触发短语 → 用哪个 prompt 文件』速查表。**注意**：你的 CLI 没有 PreToolUse hook 能力，质量门由 `.git/hooks/commit-msg` 兜底——commit 时会校验 feature-list 的 done 状态，以及 commit message 是否包含该 feature 专属、`must_fix: 0` 的完整扫描证据行。」
 
 ---
 

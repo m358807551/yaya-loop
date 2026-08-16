@@ -1,25 +1,34 @@
 #!/usr/bin/env python3
-"""Pre-tool-use hook: gate feature -> done transitions on code smell scan evidence.
+"""Block feature -> done transitions without feature-specific scan evidence.
 
-Triggered on Edit/Write of docs/feature-list.json. If the operation would change a
-feature's status from in_progress to done, scan the recent transcript for the line
-"Code smell scan: pass". If absent, block with exit code 2 so Claude must run stage 6
-of execute-next-feature first.
+This PreToolUse hook compares the current feature index with the content proposed
+by Claude's Edit/Write call. Every feature newly marked ``done`` must have a
+matching evidence line in an assistant text message in the recent transcript:
 
-This is the last-line backstop for the three soft gates (stage 0 出关报告, stage 6
-sub-agent smell scan, CLAUDE.md hardline note). Should fire rarely in practice.
+    Code smell scan: pass (feature: F001, must_fix: 0, suggest: 2, acceptable: 1)
+
+Restricting evidence to assistant text prevents the literal examples contained
+in skill instructions or user prompts from satisfying the gate automatically.
 """
 import json
 import os
 import re
 import sys
-from typing import Tuple
+from pathlib import Path
+from typing import Dict, Iterable, List, Set
 
 
-PASS_PATTERN = re.compile(r"Code smell scan:\s*pass", re.IGNORECASE)
+EVIDENCE_PATTERN = re.compile(
+    r"^Code smell scan:\s*pass\s*\(\s*"
+    r"feature:\s*(F\d+)\s*,\s*"
+    r"must_fix:\s*0\s*,\s*"
+    r"suggest:\s*\d+\s*,\s*"
+    r"acceptable:\s*\d+\s*\)\s*$",
+    re.IGNORECASE | re.MULTILINE,
+)
 
 
-def main():
+def main() -> None:
     try:
         payload = json.load(sys.stdin)
     except json.JSONDecodeError:
@@ -33,63 +42,106 @@ def main():
     if not file_path.endswith("docs/feature-list.json"):
         sys.exit(0)
 
-    feature_id, marking_done = _detect_status_change(payload.get("tool_name"), tool_input)
-    if not marking_done:
+    newly_done = _newly_done_ids(Path(file_path), payload["tool_name"], tool_input)
+    if not newly_done:
         sys.exit(0)
 
     transcript_path = payload.get("transcript_path", "")
-    if not transcript_path or not os.path.exists(transcript_path):
-        ## 找不到 transcript 时放行，避免误伤；这只是兜底，不是唯一防线。
-        print("[gate-feature-done] WARNING: transcript not available, cannot verify.", file=sys.stderr)
+    evidence = _assistant_evidence_features(transcript_path)
+    missing = newly_done - evidence
+    if not missing:
         sys.exit(0)
 
-    if _transcript_has_pass(transcript_path):
-        sys.exit(0)
-
+    missing_list = ", ".join(sorted(missing))
     print(
-        f"⛔ 阻断：尝试把 feature {feature_id} 标记为 done，"
-        f"但本会话 transcript 中找不到「Code smell scan: pass」证据。\n"
-        f"请先执行 execute-next-feature 阶段 6 代码气味扫描（Task 子 agent 委派），"
-        f"主 agent 输出包含 `Code smell scan: pass (must_fix: 0, suggest: N, acceptable: M)` "
-        f"那一行后，再次尝试标记 done。",
+        f"⛔ 阻断：尝试把 feature {missing_list} 标记为 done，但本会话中找不到"
+        "对应的代码气味扫描证据。\n"
+        "请先完成 execute-next-feature 阶段 6，并由主 agent 输出独立一行：\n"
+        "Code smell scan: pass (feature: F0XX, must_fix: 0, suggest: N, acceptable: M)",
         file=sys.stderr,
     )
     sys.exit(2)
 
 
-def _detect_status_change(tool_name, tool_input):
-    # type: (str, dict) -> Tuple[str, bool]
-    """Return (feature_id, is_marking_done)."""
-    if tool_name == "Edit":
-        old = tool_input.get("old_string", "")
-        new = tool_input.get("new_string", "")
-        if '"status": "in_progress"' in old and '"status": "done"' in new:
-            m = re.search(r'"id":\s*"(F\d+)"', old + new)
-            return (m.group(1) if m else "?", True)
-        return ("?", False)
-
-    if tool_name == "Write":
-        ## 整篇覆盖时缺少 old 上下文，但若 content 同时含 done 状态和 completed_at 时间戳，倾向认为是新近标记 done。
-        content = tool_input.get("content", "")
-        if '"status": "done"' in content and '"completed_at": "20' in content:
-            return ("?", True)
-        return ("?", False)
-
-    return ("?", False)
-
-
-def _transcript_has_pass(transcript_path):
-    # type: (str) -> bool
-    """Scan last ~200 lines of transcript JSONL for the pass marker."""
+def _status_map(content: str) -> Dict[str, str]:
     try:
-        with open(transcript_path, encoding="utf-8") as f:
-            lines = f.readlines()
+        data = json.loads(content)
+    except (json.JSONDecodeError, TypeError):
+        return {}
+    if not isinstance(data, dict):
+        return {}
+    return {
+        entry["id"]: entry.get("status")
+        for entry in data.get("features", [])
+        if isinstance(entry, dict) and entry.get("id")
+    }
+
+
+def _proposed_content(current: str, tool_name: str, tool_input: dict) -> str:
+    if tool_name == "Write":
+        return tool_input.get("content", "")
+
+    old = tool_input.get("old_string", "")
+    new = tool_input.get("new_string", "")
+    if not old or old not in current:
+        return current
+    count = -1 if tool_input.get("replace_all") else 1
+    return current.replace(old, new, count)
+
+
+def _newly_done_ids(file_path: Path, tool_name: str, tool_input: dict) -> Set[str]:
+    try:
+        current = file_path.read_text(encoding="utf-8")
     except OSError:
-        return False
-    for line in lines[-200:]:
-        if PASS_PATTERN.search(line):
-            return True
-    return False
+        current = '{"features": []}'
+
+    before = _status_map(current)
+    after = _status_map(_proposed_content(current, tool_name, tool_input))
+    return {
+        feature_id
+        for feature_id, status in after.items()
+        if status == "done" and before.get(feature_id) != "done"
+    }
+
+
+def _assistant_texts(event: dict) -> Iterable[str]:
+    if event.get("type") != "assistant":
+        return []
+
+    message = event.get("message", event)
+    if not isinstance(message, dict) or message.get("role") != "assistant":
+        return []
+
+    content = message.get("content", [])
+    if isinstance(content, str):
+        return [content]
+    if not isinstance(content, list):
+        return []
+    return [
+        block.get("text", "")
+        for block in content
+        if isinstance(block, dict) and block.get("type") == "text"
+    ]
+
+
+def _assistant_evidence_features(transcript_path: str) -> Set[str]:
+    if not transcript_path or not os.path.exists(transcript_path):
+        return set()
+    try:
+        with open(transcript_path, encoding="utf-8") as transcript:
+            lines: List[str] = transcript.readlines()[-200:]
+    except OSError:
+        return set()
+
+    feature_ids: Set[str] = set()
+    for line in lines:
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        for text in _assistant_texts(event):
+            feature_ids.update(EVIDENCE_PATTERN.findall(text))
+    return feature_ids
 
 
 if __name__ == "__main__":

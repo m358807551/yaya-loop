@@ -16,7 +16,7 @@
 - AI 不能自行将 feature 标记为 done，必须经人工验证后由人类口头/文字确认。
 - 占位资源必须以 `_placeholder_` 为前缀命名（如有），并在 feature 的 notes 中登记。
 
-**执行 execute-next-feature 时，阶段 0 出关报告（含规则原文 + 行号引用）和阶段 6 代码气味扫描是流程硬约束，不是可选步骤。最终 commit message 必须包含 `Code smell scan: pass` 行，否则会被 git commit-msg hook 阻断。**
+**执行 execute-next-feature 时，阶段 0 出关报告（含规则原文 + 行号引用）和阶段 6 代码气味扫描是流程硬约束，不是可选步骤。最终 commit message 必须包含当前 feature id 且 `must_fix: 0` 的完整 `Code smell scan: pass` 证据行，否则会被 git commit-msg hook 阻断。**
 
 ---
 

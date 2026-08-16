@@ -46,7 +46,7 @@
 
 非 Claude Code 用户**没有 PreToolUse hook 能力**，所以"不允许跳过代码气味扫描就标 done"这条硬约束需要靠 git commit-msg hook 兜底。
 
-安装方式见 `../git-hooks/install.md`。安装后，commit 时若把任何 feature 改成 `done` 但 commit message 不含 `Code smell scan: pass`，commit 会被拒绝。
+安装方式见 `../git-hooks/install.md`。安装后，commit 时若把任何 feature 改成 `done`，但 commit message 不含该 feature 专属、`must_fix: 0` 的完整 `Code smell scan: pass` 证据行，commit 会被拒绝。
 
 ## 与 Claude Code 版本的差异
 

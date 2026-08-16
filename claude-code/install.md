@@ -40,7 +40,7 @@ claude-code/
 │   └── product-audio-sketcher/SKILL.md    # 音效条目
 ├── hooks/
 │   ├── gate-feature-done.py               # PreToolUse：阻断未通过气味扫描的 feature 标 done
-│   └── check-feature-list.py              # PostToolUse：feature-list 结构自检（备用）
+│   └── check-feature-list.py              # PostToolUse：feature-list 结构自检
 ├── settings.example.json                  # hook 注册示例
 └── install.md                             # 你正在读
 ```

@@ -5,8 +5,8 @@ Yaya Loop · commit-msg hook
 
 触发：每次 git commit 时
 检查：如果本次 commit staged 的 docs/feature-list.json 把任何 feature 从
-      in_progress 或 pending 改成 done，则要求 commit message 中含
-      `Code smell scan: pass` 字样（由 execute-next-feature 阶段 6 产出）。
+      in_progress 或 pending 改成 done，则要求 commit message 中含该 feature
+      专属且 must_fix 为 0 的 `Code smell scan: pass` 证据行。
 若缺失：拒绝 commit 并打印指引。
 
 为何用 commit-msg 而不是 pre-commit：
@@ -24,7 +24,14 @@ import sys
 from pathlib import Path
 
 FEATURE_LIST_PATH = "docs/feature-list.json"
-PASS_PATTERN = re.compile(r"Code\s+smell\s+scan:\s*pass", re.IGNORECASE)
+EVIDENCE_PATTERN = re.compile(
+    r"^Code smell scan:\s*pass\s*\(\s*"
+    r"feature:\s*(F\d+)\s*,\s*"
+    r"must_fix:\s*0\s*,\s*"
+    r"suggest:\s*\d+\s*,\s*"
+    r"acceptable:\s*\d+\s*\)\s*$",
+    re.IGNORECASE | re.MULTILINE,
+)
 
 
 def get_staged_feature_list_before_after():
@@ -92,7 +99,9 @@ def main():
     if not newly_done:
         return 0
 
-    if PASS_PATTERN.search(commit_msg):
+    evidenced = set(EVIDENCE_PATTERN.findall(commit_msg))
+    missing_evidence = [feature_id for feature_id in newly_done if feature_id not in evidenced]
+    if not missing_evidence:
         return 0
 
     sys.stderr.write(
@@ -101,11 +110,12 @@ def main():
         "❌ Yaya Loop · commit-msg hook 阻断\n"
         "─────────────────────────────────────────────────────────────\n"
         f"本次 commit 把以下 feature 切到了 done：{', '.join(newly_done)}\n"
-        "但 commit message 中没有找到 `Code smell scan: pass` 行。\n"
+        f"但以下 feature 缺少有效扫描证据：{', '.join(missing_evidence)}\n"
         "\n"
         "这是 execute-next-feature 阶段 6（代码气味扫描）的硬性准入证据。\n"
         "请按 execute-next-feature.prompt.md 阶段 6 完成扫描，把扫描报告\n"
-        "末尾的 `Code smell scan: pass (must_fix: N, suggest: N, acceptable: M)` 行\n"
+        "末尾的 `Code smell scan: pass (feature: F0XX, must_fix: 0, "
+        "suggest: N, acceptable: M)` 行\n"
         "加入本次 commit message 后重新 commit。\n"
         "\n"
         "若你确实想绕过此 hook（强烈不建议）：\n"

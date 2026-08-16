@@ -11,7 +11,7 @@ Cross-check mismatches are warnings, not errors — they emit to stderr but do n
 block. This is so a single Edit that touches the index can complete even before
 the matching detail file is written (the next Edit will rebalance things).
 
-JSON syntax errors are hard failures (exit 1).
+JSON syntax errors are reported back to Claude with the blocking hook exit code 2.
 """
 import json
 import os
@@ -77,7 +77,7 @@ def main() -> int:
             if not _validate_json(detail):
                 ok = False
     if not ok:
-        return 1
+        return 2
     _check_id_consistency()
     return 0
 

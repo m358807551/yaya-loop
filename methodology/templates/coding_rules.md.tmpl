@@ -28,7 +28,7 @@
 - 占位资源必须以 `_placeholder_` 为前缀命名，并在 feature 的 notes 中登记。
 - 工作区不干净时不开新 feature。
 
-**执行 `execute-next-feature` skill 时，阶段 0 出关报告（含规则原文 + 行号引用）和阶段 6 代码气味扫描（子 agent 委派）是流程硬约束，不是可选步骤。AI 跳过任一阶段都视为流程违规。最终 commit message 必须包含 `Code smell scan: pass` 行作为证据，否则会被 hook 阻断。**
+**执行 `execute-next-feature` skill 时，阶段 0 出关报告（含规则原文 + 行号引用）和阶段 6 代码气味扫描（子 agent 委派）是流程硬约束，不是可选步骤。AI 跳过任一阶段都视为流程违规。最终 commit message 必须包含当前 feature id 且 `must_fix: 0` 的完整 `Code smell scan: pass` 证据行，否则会被 hook 阻断。**
 
 ## 1.3 AI 产出代码的提交规范
 
