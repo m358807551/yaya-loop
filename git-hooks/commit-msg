@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Methodology kit · commit-msg hook
+Yaya Loop · commit-msg hook
 非 Claude Code 用户的"代码气味扫描通过"质量门兜底。
 
 触发：每次 git commit 时
@@ -98,7 +98,7 @@ def main():
     sys.stderr.write(
         "\n"
         "─────────────────────────────────────────────────────────────\n"
-        "❌ Methodology kit · commit-msg hook 阻断\n"
+        "❌ Yaya Loop · commit-msg hook 阻断\n"
         "─────────────────────────────────────────────────────────────\n"
         f"本次 commit 把以下 feature 切到了 done：{', '.join(newly_done)}\n"
         "但 commit message 中没有找到 `Code smell scan: pass` 行。\n"

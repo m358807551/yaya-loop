@@ -7,19 +7,19 @@
 ## 一键安装（在目标项目根目录跑）
 
 ```bash
-# 假定 kit 在 ~/code/methodology-kit/
+# 假定 Yaya Loop 在 ~/code/yaya-loop/
 mkdir -p .claude/skills .claude/hooks
 
 # 1) 拷 9 个 skill
-cp -r ~/code/methodology-kit/claude-code/skills/* .claude/skills/
+cp -r ~/code/yaya-loop/claude-code/skills/* .claude/skills/
 
 # 2) 拷 2 个 hook
-cp ~/code/methodology-kit/claude-code/hooks/*.py .claude/hooks/
+cp ~/code/yaya-loop/claude-code/hooks/*.py .claude/hooks/
 chmod +x .claude/hooks/*.py
 
 # 3) 合并 settings.json
 #    - 若 .claude/settings.json 不存在：
-cp ~/code/methodology-kit/claude-code/settings.example.json .claude/settings.json
+cp ~/code/yaya-loop/claude-code/settings.example.json .claude/settings.json
 
 #    - 若已存在：手动把 settings.example.json 的 hooks 段并入你的 .claude/settings.json
 ```
@@ -75,8 +75,8 @@ claude-code/
 cp -r .claude .claude.backup-$(date +%Y%m%d)
 
 # 重新拷贝
-cp -r ~/code/methodology-kit/claude-code/skills/* .claude/skills/
-cp ~/code/methodology-kit/claude-code/hooks/*.py .claude/hooks/
+cp -r ~/code/yaya-loop/claude-code/skills/* .claude/skills/
+cp ~/code/yaya-loop/claude-code/hooks/*.py .claude/hooks/
 ```
 
 详细升级流程见 [../upgrade-notes.md](../upgrade-notes.md)。

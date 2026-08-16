@@ -4,7 +4,7 @@
 >
 > **重要假设**：用户主语言是中文，你与用户的所有交互使用中文（除非用户主动切换语言）。
 >
-> 本 kit 的根目录位置由用户告诉你，可能是 `~/code/methodology-kit/` 或别的路径。下文用 `<KIT>` 代指。先问用户：「请告诉我这个 methodology-kit 文件夹的绝对路径，比如 `/Users/xxx/code/methodology-kit/`」。拿到后写死在本次会话里。
+> Yaya Loop 的根目录位置由用户告诉你，可能是 `~/code/yaya-loop/` 或别的路径。下文用 `<KIT>` 代指。先问用户：「请告诉我这个 yaya-loop 文件夹的绝对路径，比如 `/Users/xxx/code/yaya-loop/`」。拿到后写死在本次会话里。
 
 ---
 

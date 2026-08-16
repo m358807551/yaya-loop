@@ -1,6 +1,6 @@
 # AI 辅助开发 · 代码最佳实践（TodoMate 项目）
 
-> 本项目使用 methodology-kit 初始化。第 1 层与第 2 层从 kit template 直接复制；第 3 层 / 第 4 层引用 web-frontend + typescript 的 stub。
+> 本项目使用 Yaya Loop 初始化。第 1 层与第 2 层从 kit template 直接复制；第 3 层 / 第 4 层引用 web-frontend + typescript 的 stub。
 >
 > 第 1+2 层内容详见 kit 的 `methodology/templates/coding_rules.md.tmpl`（首次拷贝时已粘贴到此处，下方略去重复，仅保留引擎/语言层引用）。
 

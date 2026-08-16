@@ -13,8 +13,8 @@
 ## 一键安装（在目标项目根目录跑）
 
 ```bash
-# 假定 kit 在 ~/code/methodology-kit/
-cp ~/code/methodology-kit/git-hooks/commit-msg .git/hooks/commit-msg
+# 假定 Yaya Loop 在 ~/code/yaya-loop/
+cp ~/code/yaya-loop/git-hooks/commit-msg .git/hooks/commit-msg
 chmod +x .git/hooks/commit-msg
 ```
 

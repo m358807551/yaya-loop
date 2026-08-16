@@ -1,4 +1,4 @@
-# Legacy 项目接入 methodology-kit · 叙事走查
+# Legacy 项目接入 Yaya Loop · 叙事走查
 
 > 这是一个**虚构但合理**的走查，演示 BOOTSTRAP.md 的 STEP 2b（legacy 分支）在一个已经开发了一年多的 Django Web 项目上是怎么跑的。读完你会知道：
 >
@@ -162,7 +162,7 @@ B2B 订单管理系统，覆盖客户从下单到发货收发票的完整链路�
 
 ## 变更历史
 
-- 2026-05-25：通过 methodology-kit BOOTSTRAP legacy 流程反向工程产出。锚点 commit `<git rev-parse HEAD>`。
+- 2026-05-25：通过 Yaya Loop BOOTSTRAP legacy 流程反向工程产出。锚点 commit `<git rev-parse HEAD>`。
 ```
 
 ### 5. 每个模块文件（5 个），同样 [REVERSE-ENGINEERED]

@@ -1,4 +1,4 @@
-# Methodology Kit · product → feature → execute 工作流可移植套件
+# Yaya Loop · Product → Feature → Ship
 
 这是一套**对任何软件项目都适用的"产品需求 → 任务拆解 → 一步一步实现"工作流**，从一个 Godot+GDScript 游戏项目中沉淀出来，已用同一套流程稳定推进了 95 个 feature。
 
@@ -25,8 +25,8 @@
 
 ```
 1. 把这个文件夹拷一份到自己电脑（如果你还没有的话）：
-   git clone <repo> ~/code/methodology-kit
-   # 或：cp -r methodology-kit ~/code/
+   git clone <repo> ~/code/yaya-loop
+   # 或：cp -r yaya-loop ~/code/
 
 2. 进入你的目标项目目录（新的、旧的都行）：
    cd ~/code/<your-project>
@@ -34,7 +34,7 @@
 3. 打开你的 AI CLI（Claude Code / Codex / Aider / Cursor 都行），
    把以下指令丢给它：
 
-   "请按 ~/code/methodology-kit/BOOTSTRAP.md 的步骤，把这套
+   "请按 ~/code/yaya-loop/BOOTSTRAP.md 的步骤，把这套
     方法论在当前项目里初始化好。"
 
 4. 跟着 AI 的提问回答（10 分钟左右），完成后：
