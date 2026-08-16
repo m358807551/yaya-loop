@@ -70,7 +70,7 @@ ls .claude/skills/ 2>/dev/null || ls docs/methodology-prompts/
 
 - 三种文档 + 三类 skill 模型成型
 - 9 个 SKILL.md（Claude Code 版） + 9 个 .prompt.md（AI agnostic 版）
-- 2 个 hook：`gate-feature-done.py`（PreToolUse）+ `commit-msg`（git）
+- 3 个质量门：`gate-feature-done.py`（PreToolUse）+ `check-feature-list.py`（PostToolUse）+ `commit-msg`（git）
 - 引擎规则库：godot（实战）+ unity/unreal/web-frontend/backend-service（stub）
 - 语言规则库：gdscript（实战）+ csharp/typescript/python/rust（stub）
 - BOOTSTRAP.md 支持 greenfield + legacy 双分支

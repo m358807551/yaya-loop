@@ -1,6 +1,8 @@
 # Yaya Loop · Product → Feature → Ship
 
-这是一套**对任何软件项目都适用的"产品需求 → 任务拆解 → 一步一步实现"工作流**，从一个 Godot+GDScript 游戏项目中沉淀出来，已用同一套流程稳定推进了 95 个 feature。
+这是一套**面向各类软件项目的「产品需求 → 任务拆解 → 一步一步实现」工作流**，从一个 Godot + GDScript 游戏项目中沉淀出来，已用同一套流程稳定推进了 95 个 feature。
+
+> 当前版本：`v0.1.0`。核心方法论、Godot 与 GDScript 规则来自实际项目；其他引擎和语言规则目前以可协作补全的 stub 为主。
 
 ## 它解决了什么
 
@@ -82,4 +84,6 @@
 
 ## License
 
-MIT。随便拷、随便改、随便商用，不需要署名。
+[MIT](./LICENSE)。允许使用、复制、修改和商用；再分发本项目或其实质部分时，请保留版权与许可声明。
+
+参与贡献请阅读 [CONTRIBUTING.md](./CONTRIBUTING.md)；安全问题请按 [SECURITY.md](./SECURITY.md) 私密报告。
