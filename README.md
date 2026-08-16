@@ -27,7 +27,7 @@
 
 ```
 1. 把这个文件夹拷一份到自己电脑（如果你还没有的话）：
-   git clone <repo> ~/code/yaya-loop
+   git clone https://github.com/m358807551/yaya-loop.git ~/code/yaya-loop
    # 或：cp -r yaya-loop ~/code/
 
 2. 进入你的目标项目目录（新的、旧的都行）：
