@@ -86,7 +86,7 @@
 
 4. **逐模块 spec 细化**（可选但推荐）：对每个新建的模块文件，问用户「要不要现在把它细化到能拆 feature 的程度？」如果是，按 CLI 类型启动 product-spec-elicitor，把每个模块文件填充完。
 
-5. **生成 feature-list**：按 CLI 类型启动 generate-feature-list，让它读完上面三个产品文档 + 用户的 `docs/coding_rules.md`（在 STEP 3 会写好），输出 `docs/feature-list.json` + `docs/features/F0XX.json` 一系列文件。
+5. **记录待拆解范围**：汇总已经确认的产品模块与细化结果。本阶段不生成 feature-list；必须等 STEP 3 创建 `docs/coding_rules.md` 后，再按技术约束拆解。
 
 6. 完成后告知用户「greenfield 分支结束，进入 STEP 3 选技术栈」。
 
@@ -117,11 +117,12 @@
 
 5. **按目录拆模块**：每个顶层源码目录（或核心子系统）建一个 `docs/product/NN-name.md`，同样标 `[REVERSE-ENGINEERED]`。先把现状写下来（不写未来计划），未来再用 product-change-standardizer 增量演化。
 
-6. **追溯 feature-list（两阶段）**：
-   - **Phase A · 追溯已完成**：把现有主要能力，按"用户能做到 X"的颗粒度抽出 **不超过 15 个** feature，全部 `status: "done"`，`completed_at: <今天 ISO 时间戳>`，`notes: "Implemented before bootstrap; reverse-engineered from code at commit <git rev-parse HEAD>"`。**不超过 15 的硬上限**：避免把 30k LOC 拆成 200 个无意义的小条目淹没用户。15 是上限不是下限，10 个就够也行。
-   - **Phase B · 前瞻待办**：问用户「现在最想加什么功能 / 修什么 bug？列 3-5 个」，每个建一个 `pending` feature，写到 `docs/features/F0XX.json` 里。这是用户真正会推进的入口。
+6. **准备追溯 feature-list 的素材（两阶段）**：
+   - **Phase A · 追溯已完成**：把现有主要能力，按"用户能做到 X"的颗粒度整理成 **不超过 15 个** feature 候选。**不超过 15 的硬上限**：避免把 30k LOC 拆成 200 个无意义的小条目淹没用户。15 是上限不是下限，10 个就够也行。
+   - **Phase B · 前瞻待办**：问用户「现在最想加什么功能 / 修什么 bug？列 3-5 个」，记录为 `pending` feature 候选。这是用户真正会推进的入口。
+   - 此处只确认候选清单，不写 feature-list；实际文件在 STEP 3 创建 coding rules 后统一生成。
 
-7. **可选：调 pick-refactor-smell**：让它扫一遍代码，把发现的 must_fix / suggest 写到对应追溯 feature 的 `notes` 里。这给用户一个开干就能见效的 backlog。
+7. **记录代码气味入口**：如果用户希望首轮就有重构 backlog，记下该选择；等 STEP 3 生成 feature 文件后再执行扫描并写入对应 `notes`。
 
 8. 完成后告知用户「legacy 分支结束，进入 STEP 3 选技术栈」。
 
@@ -173,6 +174,13 @@
    EOF
    ```
    验证：`python3 -m json.tool docs/methodology-config.json > /dev/null`
+
+6. **生成 feature-list（必须在 coding rules 之后）**：
+   - **greenfield**：按 CLI 类型启动 generate-feature-list，让它读取 `docs/product.md`、`docs/product/*.md` 与刚创建的 `docs/coding_rules.md`，输出 `docs/feature-list.json`、`docs/features/F0XX.json` 和 `docs/feature-list-revisions.json`。
+   - **legacy**：基于 STEP 2b 已确认的候选清单生成同样三类文件。已实现能力全部标为 `done`，`completed_at` 填当前 ISO 时间戳，`notes` 写 `Implemented before bootstrap; reverse-engineered from code at commit <git rev-parse HEAD>`；前瞻待办标为 `pending`。
+   - 生成后立即按 `methodology/02-feature-list-schema.md` 做 JSON、id ↔ 文件名、`meta.total_features` 和依赖方向自检。
+
+7. **legacy 可选代码气味扫描**：如果用户在 STEP 2b 选择了首轮扫描，现在调用 pick-refactor-smell，把发现的 must_fix / suggest 写入对应追溯 feature 的 `notes`。
 
 ---
 
