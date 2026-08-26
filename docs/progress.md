@@ -9,6 +9,7 @@ F023 - Convert the default example into a complete English reference project
 - Started at `2026-08-26T11:38:31Z`.
 - Confirmed the scope is the existing greenfield todo reference project and the single legacy adoption walkthrough; no translated workflow-source tree will be added.
 - Confirmed that all Product, Feature, Coding Rules, Progress-style guidance, and walkthrough prose become natural English while Feature IDs, detail files, counts, dependencies, statuses, paths, and JSON structure remain consistent.
+- Converted the greenfield TodoMate Product overview, module specification, Coding Rules, Feature index, and all five Feature details to natural English without changing their machine contracts.
 
 ## Context notes
 

@@ -1,51 +1,51 @@
-# AI 辅助开发 · 代码最佳实践（TodoMate 项目）
+# AI-assisted development · Coding Rules for TodoMate
 
-> 本项目使用 Yaya Loop 初始化。第 1 层与第 2 层从 kit template 直接复制；第 3 层 / 第 4 层引用 web-frontend + typescript 的 stub。
+> This project was initialized with Yaya Loop. Layers 1 and 2 come from the kit template; Layers 3 and 4 reference the web-frontend and TypeScript stubs.
 >
-> 第 1+2 层内容详见 kit 的 `methodology/templates/coding_rules.md.tmpl`（首次拷贝时已粘贴到此处，下方略去重复，仅保留引擎/语言层引用）。
+> See `methodology/templates/coding_rules.md.tmpl` in the kit for the complete Layers 1 and 2. This shortened reference example shows their structure and retains the platform and language references.
 
 ---
 
-# 第一部分 · 协作契约
+# Part 1 · Collaboration contract
 
-（完整文本见 kit template，本示例文件为简化版仅展示结构）
+(See the kit template for the complete text. This example is intentionally abbreviated.)
 
-## 1.2 工作流约束
+## 1.2 Workflow constraints
 
-- 实现 feature 时必须通过 `execute-next-feature` skill / prompt 走完整流程，不允许跳过预检查或人工验证阶段直接写代码。
-- AI 不能自行将 feature 标记为 done，必须经人工验证后由人类口头/文字确认。
-- 占位资源必须以 `_placeholder_` 为前缀命名（如有），并在 feature 的 notes 中登记。
+- Implement every Feature through the full `execute-next-feature` Skill or Prompt. Do not skip preflight or human acceptance and go directly to implementation.
+- An AI must never mark a Feature `done` by itself. A human must explicitly confirm acceptance in speech or writing.
+- Name every placeholder resource with the `_placeholder_` prefix and record it in the Feature notes.
 
-**执行 execute-next-feature 时，阶段 0 出关报告（含规则原文 + 行号引用）和阶段 6 代码气味扫描是流程硬约束，不是可选步骤。最终 commit message 必须包含当前 feature id 且 `must_fix: 0` 的完整 `Code smell scan: pass` 证据行，否则会被 git commit-msg hook 阻断。**
-
----
-
-# 第二部分 · 通用设计模式与架构原则
-
-（完整文本见 kit template，本示例略）
-
-要点：
-- 首选命令模式（凡是"做一件事"封装成命令类）
-- 数据与表现分离（数据层不感知 UI）
-- 状态用状态机管理
-- 反模式：God Object、UI 回调写业务、裸单例、状态散落、预先抽象、魔法数字
+**For `execute-next-feature`, the Stage 0 exit report—including verbatim rules and line references—and the Stage 6 code-smell scan are hard gates. The final commit message must include the current Feature ID and the complete `Code smell scan: pass` evidence line with `must_fix: 0`, or the Git commit-msg Hook will reject it.**
 
 ---
 
-# 第三部分 · 引擎 / 平台最佳实践
+# Part 2 · General design patterns and architecture principles
 
-## 3.1 当前平台
+(See the kit template for the complete text.)
+
+Key points:
+- Prefer the Command pattern: represent each action as a command object.
+- Separate data from presentation; the data layer must not know about the UI.
+- Manage state with an explicit state machine where state transitions are non-trivial.
+- Avoid God Objects, business logic in UI callbacks, unguarded singletons, scattered state, premature abstraction, and magic numbers.
+
+---
+
+# Part 3 · Engine and platform practices
+
+## 3.1 Current platform
 
 web-frontend（Vite + React 18 + TypeScript）
 
-请遵循: @docs/coding-rules/engine-rules.md
+Follow: @docs/coding-rules/engine-rules.md
 
 ---
 
-# 第四部分 · 编程语言最佳实践
+# Part 4 · Programming-language practices
 
-## 4.1 当前语言
+## 4.1 Current language
 
 TypeScript 5.x
 
-请遵循: @docs/coding-rules/language-rules.md
+Follow: @docs/coding-rules/language-rules.md

@@ -1,55 +1,55 @@
 # TodoMate · MVP
 
-> 当前版本：**V0.1 · 单设备本地 Todo 应用**
+> Current version: **V0.1 · Single-device local Todo application**
 
-## 一句话定位
+## One-line positioning
 
-5 分钟看完"打开页面 → 输入待办 → 勾选完成 → 删除已完成"的完整链路，验证一个纯前端 Todo 应用的最小可行形态。
+Validate the minimum viable form of a frontend-only Todo application through a five-minute loop: open the page, enter a task, mark it complete, and clear completed tasks.
 
-## 用户画像
+## Target users
 
-- **主要用户**：个人开发者，习惯 Markdown TODO 文件，想试试更可视化的版本。
-- **使用场景**：MVP 阶段先供开发者自测，同事 demo 时也用。
-- **使用频率**：每天若干次，单次 30 秒到 5 分钟。
+- **Primary user:** An individual developer who normally keeps tasks in Markdown and wants to try a more visual alternative.
+- **Usage context:** Developer self-testing during the MVP phase and occasional demos to colleagues.
+- **Usage frequency:** Several times per day, for 30 seconds to five minutes at a time.
 
-## 核心循环
+## Core loop
 
-### V0.1 闭环
+### V0.1 loop
 
 ```
-1. 用户打开页面，看到空的 todo 列表 + 顶部输入框
-2. 输入文本，回车，新增一条 todo（默认未完成态）
-3. 点击 todo 行的复选框，切换完成/未完成
-4. 完成的 todo 显示删除线 + 灰色
-5. 点击「清空已完成」按钮，所有 done 的 todo 从列表移除
-6. 关闭页面再打开，所有数据还在（localStorage 持久化）
+1. The user opens the page and sees an empty Todo list with an input at the top.
+2. The user enters text and presses Enter to add an incomplete Todo.
+3. The user selects a Todo's checkbox to toggle its completion state.
+4. Completed Todos appear gray with strikethrough text.
+5. The user selects "Clear completed" to remove every completed Todo.
+6. The user closes and reopens the page; all remaining data persists in localStorage.
 ```
 
-整条链路任一环节缺失，本版本不达标。
+This release is incomplete if any step in this loop is missing.
 
-## 模块清单
+## Module list
 
-| 序号 | 文件 | 模块名 | 状态 |
+| No. | File | Module | Status |
 |------|------|--------|------|
-| 01 | [01-tasks.md](./product/01-tasks.md) | Todo 列表 | draft |
+| 01 | [01-tasks.md](./product/01-tasks.md) | Todo list | draft |
 
-## 模块依赖关系
+## Module dependencies
 
 ```
 infrastructure ──→ 01-tasks
 ```
 
-## 整体视觉风格基调
+## Visual direction
 
-- 极简扁平：白底 + 黑字 + 一种点缀色（蓝灰）
-- 字体：系统默认无衬线，行间距宽松
-- 完成态用删除线 + 50% 透明
-- 没有动画与阴影，专注内容
+- Minimal and flat: white background, black text, and one blue-gray accent color.
+- Use the system sans-serif font with generous line spacing.
+- Completed items use strikethrough text at 50% opacity.
+- No animation or shadows; keep attention on the content.
 
-## 整体音效风格基调
+## Audio direction
 
-无音效（纯前端 Todo 不需要）。
+No audio. This frontend-only Todo application does not need sound effects.
 
-## 变更历史
+## Change history
 
-- 2026-05-25：项目初始化，定义 V0.1 MVP 闭环范围。
+- 2026-05-25: Initialized the project and defined the V0.1 MVP loop.

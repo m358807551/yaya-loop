@@ -9,12 +9,12 @@
     "total_features": 5,
     "details_dir": "docs/features/",
     "revisions_file": "docs/feature-list-revisions.json",
-    "notes": "按「基础设施 → 数据层 → 交互层 → 持久化」顺序拆解，F001 是基础设施，F002 引入数据层，F003-F005 逐项承载用户可观察交互。"
+    "notes": "Decomposed in infrastructure → data layer → interaction layer → persistence order. F001 establishes the infrastructure, F002 introduces the data layer, and F003–F005 each deliver a user-observable interaction."
   },
   "features": [
     {
       "id": "F001",
-      "title": "搭建 Vite + React + TS 项目骨架，渲染空白页",
+      "title": "Create the Vite + React + TypeScript project skeleton and render a minimal page",
       "status": "done",
       "depends_on": [],
       "estimated_scope": "small",
@@ -22,7 +22,7 @@
     },
     {
       "id": "F002",
-      "title": "Todo 数据类型与 localStorage 读写工具",
+      "title": "Add the Todo data type and localStorage read/write utilities",
       "status": "pending",
       "depends_on": ["F001"],
       "estimated_scope": "small",
@@ -30,7 +30,7 @@
     },
     {
       "id": "F003",
-      "title": "渲染 todo 列表 + 输入框新增 todo",
+      "title": "Render the Todo list and add Todos from an input",
       "status": "pending",
       "depends_on": ["F002"],
       "estimated_scope": "medium",
@@ -38,7 +38,7 @@
     },
     {
       "id": "F004",
-      "title": "切换完成状态 + 删除线样式",
+      "title": "Toggle completion state and apply completed styling",
       "status": "pending",
       "depends_on": ["F003"],
       "estimated_scope": "small",
@@ -46,7 +46,7 @@
     },
     {
       "id": "F005",
-      "title": "清空已完成按钮",
+      "title": "Add the Clear completed button",
       "status": "pending",
       "depends_on": ["F004"],
       "estimated_scope": "small",

@@ -1,14 +1,14 @@
 {
   "id": "F001",
-  "description": "用 Vite + React 18 + TypeScript 模板创建项目；首次 npm run dev 能在浏览器打开一个空白页（标题为 TodoMate）。",
+  "description": "Create the project from the Vite, React 18, and TypeScript template. The first `npm run dev` must open a minimal page titled TodoMate in the browser.",
   "acceptance_criteria": [
-    "npm install 成功无报错",
-    "npm run dev 启动开发服务器，浏览器打开默认页面",
-    "页面标题为 TodoMate（修改 index.html 的 <title>）",
-    "页面 body 内只有一句 <h1>TodoMate</h1>（占位）",
-    "npm run typecheck 通过零错误",
-    "tsconfig 启用 strict 模式"
+    "npm install completes without errors",
+    "npm run dev starts the development server and the default page opens in a browser",
+    "The page title is TodoMate, set through the <title> element in index.html",
+    "The page body contains only the placeholder <h1>TodoMate</h1>",
+    "npm run typecheck completes with zero errors",
+    "tsconfig has strict mode enabled"
   ],
   "source": "infrastructure",
-  "notes": "用 `npm create vite@latest todomate -- --template react-ts` 创建。tsconfig 已带 strict。删除模板自带的 Counter 示例。Code smell scan: 0 must_fix, 0 suggest, 0 acceptable（首次创建无业务代码）。"
+  "notes": "Create the project with `npm create vite@latest todomate -- --template react-ts`. The generated tsconfig already enables strict mode. Remove the template Counter example. Code smell scan: 0 must_fix, 0 suggest, 0 acceptable (the initial skeleton contains no business logic)."
 }

@@ -1,33 +1,33 @@
-# 01-tasks · Todo 列表
+# 01-tasks · Todo list
 
-## 模块定位
+## Module positioning
 
-承载所有 todo 数据 + 全部用户交互。是 MVP 的唯一业务模块。
+Own all Todo data and user interactions. This is the MVP's only business module.
 
-## 功能流程
+## Functional flow
 
 ```
-1. 页面加载 → 从 localStorage 读取 todos，渲染列表
-2. 用户输入文本，回车 → 添加新 todo（id = uuid, text, done=false, createdAt）
-3. 用户点击 checkbox → 切换该 todo 的 done 状态
-4. 用户点击「清空已完成」按钮 → 移除所有 done=true 的 todo
-5. 任何修改 → 写回 localStorage
+1. Page load → read Todos from localStorage and render the list.
+2. User enters text and presses Enter → add a Todo (`id = uuid`, `text`, `done = false`, `createdAt`).
+3. User selects a checkbox → toggle that Todo's `done` state.
+4. User selects "Clear completed" → remove every Todo with `done = true`.
+5. Any change → write the updated list back to localStorage.
 ```
 
-## 数据模型
+## Data model
 
-`Todo` 类型：
+`Todo` type:
 
-| 字段 | 类型 | 默认值 | 说明 |
+| Field | Type | Default | Description |
 |------|------|--------|------|
-| `id` | string (uuid) | 自动生成 | 全局唯一标识 |
-| `text` | string | 必填 | todo 内容，单行 |
-| `done` | boolean | false | 完成状态 |
-| `createdAt` | number (timestamp ms) | Date.now() | 创建时间，用于稳定排序 |
+| `id` | string (UUID) | Generated | Globally unique identifier |
+| `text` | string | Required | Single-line Todo content |
+| `done` | boolean | false | Completion state |
+| `createdAt` | number (timestamp in ms) | `Date.now()` | Creation time used for stable ordering |
 
-存储：`localStorage` 键 `todomate:todos:v1`，值是 `Todo[]` 的 JSON。版本号 v1 留给未来迁移。
+Storage: the localStorage key is `todomate:todos:v1`, and its value is a JSON-encoded `Todo[]`. The `v1` suffix reserves room for future migrations.
 
-## UI 草图
+## UI sketch
 
 ```
 ┌──────────────────────────────────────────┐
@@ -35,41 +35,41 @@
 ├──────────────────────────────────────────┤
 │  [_________________________] [Add ↵]     │
 ├──────────────────────────────────────────┤
-│  [ ] 买菜                                │
-│  [✓] ̶写̶ ̶代̶码̶                              │
-│  [ ] 看电影                              │
-│  [✓] ̶倒̶垃̶圾̶                              │
+│  [ ] Buy groceries                       │
+│  [✓] W̶r̶i̶t̶e̶ ̶c̶o̶d̶e̶                         │
+│  [ ] Watch a movie                       │
+│  [✓] T̶a̶k̶e̶ ̶o̶u̶t̶ ̶t̶h̶e̶ ̶t̶r̶a̶s̶h̶                 │
 ├──────────────────────────────────────────┤
-│             [清空已完成 (2)]              │
+│             [Clear completed (2)]        │
 └──────────────────────────────────────────┘
 ```
 
-关键交互：
-- 输入框聚焦时 → 占位符消失
-- 回车 → 提交并清空输入框
-- 复选框点击 → 立即切换 + 视觉反馈
-- 「清空已完成」按钮显示当前 done 数；为 0 时按钮禁用
+Key interactions:
+- Input receives focus → placeholder disappears.
+- Enter → submit and clear the input.
+- Checkbox selection → toggle immediately and show visual feedback.
+- "Clear completed" displays the current completed count and is disabled when the count is zero.
 
-## 数值规则
+## Numeric rules
 
-- todo 文本最大 200 字符（超出截断）
-- 列表渲染按 `createdAt` 倒序（新的在上）
+- Todo text is limited to 200 characters; truncate any excess.
+- Render the list in descending `createdAt` order, newest first.
 
-## 验收标准
+## Acceptance criteria
 
-1. 打开页面，输入"买菜"，按回车 → 列表新增"买菜"，输入框清空
-2. 点击"买菜"前的复选框 → 文字变删除线 + 灰色
-3. 再点一次 → 恢复正常
-4. 添加 5 条 todo，勾掉其中 2 条，点击「清空已完成」→ 列表只剩 3 条
-5. 刷新页面 → 剩下的 3 条仍在
-6. 输入超过 200 字符的内容 → 只接受前 200 字符
+1. Open the page, enter "Buy groceries," and press Enter → the list gains "Buy groceries" and the input clears.
+2. Select the checkbox beside "Buy groceries" → its text becomes gray and struck through.
+3. Select it again → its normal appearance returns.
+4. Add five Todos, complete two, and select "Clear completed" → three Todos remain.
+5. Refresh the page → the remaining three Todos are still present.
+6. Enter more than 200 characters → only the first 200 characters are accepted.
 
-## 边缘情况
+## Edge cases
 
-- 同名 todo 允许（按 id 区分，本版本不去重）
-- 空字符串不允许（按回车提交时校验，trim 后空则忽略）
-- localStorage 不可用（隐私模式等）：fallback 到内存模式，提示用户「关闭页面后数据会丢失」
+- Duplicate Todo text is allowed; IDs distinguish entries and this release does not deduplicate them.
+- Empty strings are rejected; trim on submission and ignore an empty result.
+- If localStorage is unavailable, such as in a restricted privacy mode, fall back to in-memory storage and warn: "Your data will be lost when you close this page."
 
-## 变更历史
+## Change history
 
-- 2026-05-25：模块初始化。
+- 2026-05-25: Initialized the module.
