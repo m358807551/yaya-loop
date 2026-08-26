@@ -44,6 +44,8 @@ The automated suite covers:
 - English canonical examples and the bilingual README entry points; and
 - current-release version consistency while preserving historical v0.1.0 evidence.
 
+Final F026 automated result: **69 tests passed**. The smoke result refers to repository-owned fixtures, isolated scenario-contract checks, workflow parity checks, and the documented manual procedure. It does not claim that Yaya Loop can automatically execute or certify every external Coding Agent environment.
+
 ## Supported behavior in v0.2.0
 
 - `en` and `zh-CN` are the initially verified document-language values.

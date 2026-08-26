@@ -16,6 +16,9 @@ F026 - Document the upgrade perform the release audit and publish v0.2.0
 - Updated current release surfaces to 0.2.0 while preserving historical v0.1.0 Product, changelog, and Legacy fixture evidence.
 - Added dependency-free release tests for version consistency, historical boundaries, upgrade safety, eight-criterion evidence, support/publication limits, and release-document links.
 - First complete release verification passed with 69 repository tests.
+- Strengthened final release coverage by discovering native/portable workflow pairs from both distribution directories and validating every smoke scenario's Setup, Expected result, Prohibited behavior, and scenario-specific invariants in isolation.
+- Recorded the scope of the automated smoke result without claiming automatic certification of external Coding Agent environments.
+- Final automated verification passed with all 69 tests, JSON parsing, release-link checks, and diff checks successful; implementation is ready for human acceptance. No tag, merge, push, or external release action has been performed.
 
 ## Context notes
 

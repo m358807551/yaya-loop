@@ -37,6 +37,15 @@ class DocumentLanguageCompatibilityTests(unittest.TestCase):
         self.assertIsNotNone(match, f"missing fixture: {name}")
         return json.loads(match.group(1))
 
+    def scenario_section(self, scenario_id):
+        match = re.search(
+            rf"(?m)^## Scenario {re.escape(scenario_id)} · .*?\n(.*?)(?=^## |\Z)",
+            self.scenarios,
+            flags=re.DOTALL | re.MULTILINE,
+        )
+        self.assertIsNotNone(match, f"missing scenario: {scenario_id}")
+        return match.group(1)
+
     def test_english_and_chinese_fixtures_preserve_stable_protocols(self):
         english = self.fixture("en")
         chinese = self.fixture("zh-CN")
@@ -103,26 +112,34 @@ class DocumentLanguageCompatibilityTests(unittest.TestCase):
         self.assertEqual(after["language"], "python")
 
     def test_smoke_scenarios_cover_verified_and_mismatched_languages(self):
-        for scenario in (
-            "Scenario DL-01 · English conversation and English documents",
-            "Scenario DL-02 · Chinese conversation and Simplified Chinese documents",
-            "Scenario DL-03 · Chinese conversation and English documents",
-            "Scenario DL-04 · Legacy configuration without document_language",
-        ):
-            with self.subTest(scenario=scenario):
-                self.assertIn(scenario, self.scenarios)
+        expected = {
+            "DL-01": (
+                "persisted as `en` before Product or Feature generation",
+                "Do not translate JSON keys",
+            ),
+            "DL-02": (
+                "persisted as `zh-CN` before Product or Feature generation",
+                "Do not create localized Methodology, Skill, Prompt, template, Coding Rules library, or Hook trees.",
+            ),
+            "DL-03": (
+                "The stored `document_language` remains `en`.",
+                "Do not change `document_language` to `zh-CN` because the conversation changed.",
+            ),
+            "DL-04": (
+                "Only `document_language` is added; every existing and unknown configuration field is preserved.",
+                "Existing Chinese Product and completed Feature history remains unchanged.",
+                "Do not silently choose `zh-CN`",
+            ),
+        }
+        for scenario_id, invariants in expected.items():
+            section = self.scenario_section(scenario_id)
+            with self.subTest(scenario=scenario_id):
+                for heading in ("### Setup", "### Expected result", "### Prohibited behavior"):
+                    self.assertIn(heading, section)
+                for invariant in invariants:
+                    self.assertIn(invariant, section)
 
-        for invariant in (
-            "The stored `document_language` remains `en`.",
-            "Do not change `document_language` to `zh-CN` because the conversation changed.",
-            "Only `document_language` is added; every existing and unknown configuration field is preserved.",
-            "Existing Chinese Product and completed Feature history remains unchanged.",
-            "Do not silently choose `zh-CN`",
-            "Do not create localized Methodology, Skill, Prompt, template, Coding Rules library, or Hook trees.",
-            "without additional runtime dependencies",
-        ):
-            with self.subTest(invariant=invariant):
-                self.assertIn(invariant, self.scenarios)
+        self.assertIn("without additional runtime dependencies", self.scenarios)
 
     def test_bootstrap_and_contract_preserve_legacy_compatibility(self):
         bootstrap = (REPO_ROOT / "BOOTSTRAP.md").read_text(encoding="utf-8")
@@ -156,7 +173,19 @@ class DocumentLanguageCompatibilityTests(unittest.TestCase):
         self.assertTrue(smoke_link.is_file())
 
     def test_native_and_portable_workflow_bodies_remain_identical(self):
-        for slug, title in self.WORKFLOW_PAIRS.items():
+        native_slugs = {
+            path.parent.name
+            for path in (REPO_ROOT / "claude-code" / "skills").glob("*/SKILL.md")
+        }
+        portable_slugs = {
+            path.name[: -len(".prompt.md")]
+            for path in (REPO_ROOT / "ai-agnostic-prompts").glob("*.prompt.md")
+        }
+        self.assertEqual(native_slugs, portable_slugs)
+        self.assertEqual(native_slugs, set(self.WORKFLOW_PAIRS))
+
+        for slug in sorted(native_slugs):
+            title = self.WORKFLOW_PAIRS[slug]
             native = (
                 REPO_ROOT / "claude-code" / "skills" / slug / "SKILL.md"
             ).read_text(encoding="utf-8")
