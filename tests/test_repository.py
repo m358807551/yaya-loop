@@ -407,6 +407,88 @@ class RepositoryTests(unittest.TestCase):
         self.assertIn("coding-rules-library/engines/_stub-template.md", bootstrap)
         self.assertGreaterEqual(bootstrap.count("docs/coding-rules/engine-rules.md"), 3)
 
+    def test_language_rule_sources_have_no_han_and_preserve_stable_paths(self):
+        languages = REPO_ROOT / "coding-rules-library" / "languages"
+        expected_files = {
+            "_stub-template.md",
+            "csharp.md",
+            "gdscript.md",
+            "python.md",
+            "rust.md",
+            "typescript.md",
+        }
+        self.assertEqual({path.name for path in languages.glob("*.md")}, expected_files)
+
+        han_pattern = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff]")
+        expected_headings = {
+            "_stub-template.md": "# {{LANGUAGE_NAME}} best practices",
+            "csharp.md": "# C# best practices",
+            "gdscript.md": "# GDScript best practices",
+            "python.md": "# Python best practices",
+            "rust.md": "# Rust best practices",
+            "typescript.md": "# TypeScript best practices",
+        }
+        for path in languages.glob("*.md"):
+            content = path.read_text(encoding="utf-8")
+            with self.subTest(path=path.name):
+                self.assertIsNone(han_pattern.search(content))
+                self.assertTrue(content.startswith(expected_headings[path.name]))
+
+        for filename in expected_files - {"gdscript.md"}:
+            content = (languages / filename).read_text(encoding="utf-8")
+            with self.subTest(stub=filename):
+                self.assertIn("**Incomplete stub:**", content)
+                self.assertIn("TODO:", content)
+
+        gdscript = (languages / "gdscript.md").read_text(encoding="utf-8")
+        self.assertNotIn("Incomplete stub", gdscript)
+        self.assertNotIn("TODO:", gdscript)
+        required_gdscript_rules = (
+            "GDScript 2.0",
+            "Godot 4.3 and later",
+            "Type every variable, parameter, and return value",
+            "Untyped Declarations to Warning or Error",
+            "28%–59% performance benefit",
+            "Dictionary[String, ItemData]",
+            "Nested generics support only one typed level",
+            "A failed Object cast returns `null`",
+            "A failed built-in type cast raises a runtime error",
+            "A `.gd` filename must be the `snake_case` form of its `class_name`",
+            "Start Booleans with `is_`, `has_`, `can_`, or `should_`",
+            "Official GDScript member order",
+            "Indent with tabs, not spaces",
+            "assigning `self.x = value` inside the setter for `x` recurses forever",
+            "Use `.emit()` in Godot 4",
+            "Prefer Callable connections",
+            "Invoke a lambda with `.call()`",
+            "Closures capture values at creation time",
+            "A lambda cannot be `static`",
+            "use a direct `for` loop in per-frame or large-array hot paths",
+            "GDScript has no try-catch",
+            "There is no `throw`, `try`, `except`, or `finally` in GDScript",
+            "Return `null` and require the caller to check it",
+            "Use `is_instance_valid(node)`",
+            "Default arrays and dictionaries to empty containers rather than `null`",
+            "GDScript 4 uses `##` documentation comments",
+            "Avoid scattered returns in the middle of a function",
+            "Do not mutate a collection while iterating it",
+            "GDScript uses Python-style `a if condition else b`",
+            "Prefer ordinary `Array[T]`",
+            "Use an Autoload plus a Resource for data that must persist across Scenes",
+            "Combining `@onready` and `@export` on one variable",
+            "String-based `emit_signal(\"name\", args)`",
+            "String-based `connect(\"signal\", self, \"method\")`",
+            "`@warning_ignore(\"unused_variable\")` suppresses one warning temporarily",
+        )
+        for rule in required_gdscript_rules:
+            with self.subTest(gdscript_rule=rule):
+                self.assertIn(rule, gdscript)
+
+        bootstrap = (REPO_ROOT / "BOOTSTRAP.md").read_text(encoding="utf-8")
+        self.assertIn("coding-rules-library/engines/<engine>.md", bootstrap)
+        self.assertIn("`languages/`", bootstrap)
+        self.assertGreaterEqual(bootstrap.count("docs/coding-rules/language-rules.md"), 2)
+
 
 if __name__ == "__main__":
     unittest.main()
