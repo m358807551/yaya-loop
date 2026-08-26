@@ -36,7 +36,7 @@
     {"id":"F022","title":"Convert installation guidance and Hook-facing text to canonical English","status":"done","depends_on":["F010","F014","F015","F016","F017","F018","F019","F020","F021"],"estimated_scope":"medium","completed_at":"2026-08-26T11:37:55Z"},
     {"id":"F023","title":"Convert the default example into a complete English reference project","status":"done","depends_on":["F010","F011","F014","F015","F016","F018","F019","F020"],"estimated_scope":"medium","completed_at":"2026-08-26T12:16:17Z"},
     {"id":"F024","title":"Publish the English README and preserve the complete Chinese README","status":"done","depends_on":["F010","F016","F017","F018","F019","F020","F022","F023"],"estimated_scope":"medium","completed_at":"2026-08-26T12:40:19Z"},
-    {"id":"F025","title":"Add document-language compatibility and smoke-test coverage","status":"in_progress","depends_on":["F010","F011","F012","F013","F014","F015","F016","F017","F018","F019","F020","F021","F022","F023","F024"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F025","title":"Add document-language compatibility and smoke-test coverage","status":"done","depends_on":["F010","F011","F012","F013","F014","F015","F016","F017","F018","F019","F020","F021","F022","F023","F024"],"estimated_scope":"medium","completed_at":"2026-08-26T12:55:20Z"},
     {"id":"F026","title":"Document the upgrade perform the release audit and publish v0.2.0","status":"pending","depends_on":["F025"],"estimated_scope":"small","completed_at":null}
   ]
 }

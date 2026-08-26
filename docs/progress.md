@@ -2,19 +2,11 @@
 
 ## Current work
 
-F025 - Add document-language compatibility and smoke-test coverage
+No Feature is currently in progress.
 
 ## Progress
 
-- Started at `2026-08-26T12:41:10Z` from commit `3ef9c41`.
-- Confirmed all dependencies are done and the working tree is clean on `dev`.
-- Scope is automated configuration, Legacy migration, stable-protocol, and distribution-parity checks plus documented English, Chinese, and mismatched conversation/document-language smoke scenarios.
-- No runtime dependency, workflow-semantic change, or localized executable-source tree will be introduced.
-- Added the canonical document-language smoke guide with English, Simplified Chinese, Chinese-conversation/English-document, and Legacy missing-configuration scenarios plus explicit expected and prohibited behavior.
-- Added paired English/Chinese protocol fixtures and Legacy before/after configuration fixtures that make stable keys, enums, IDs, dependencies, paths, timestamps, placeholders, evidence, unknown-field preservation, and language-specific prose machine-verifiable.
-- Added standard-library regression coverage for Bootstrap and Methodology compatibility rules and exact canonical-body parity across all nine native Skill/portable Prompt pairs.
-- Automated verification passed: all 63 repository tests, JSON parsing, and Git diff checks; no runtime dependency was added.
-- Human acceptance passed on 2026-08-26; fresh-context review is next.
+- F025 completed at `2026-08-26T12:55:20Z` after human acceptance, 63 passing tests, and a fresh-context scan with zero `must_fix` findings.
 
 ## Context notes
 
@@ -22,6 +14,20 @@ F025 - Add document-language compatibility and smoke-test coverage
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T12:55:20Z - F025 completed
+
+Current work:
+
+F025 - Add document-language compatibility and smoke-test coverage
+
+Progress:
+
+- Added four canonical language smoke scenarios and paired English/Chinese stable-protocol fixtures.
+- Added Legacy before/after migration fixtures that preserve unknown fields and established content.
+- Added standard-library compatibility and exact nine-pair distribution-parity tests; all 63 repository tests pass.
+- Human acceptance passed.
+- Code smell scan: pass (feature: F025, must_fix: 0, suggest: 2, acceptable: 0).
 
 ### 2026-08-26T12:41:10Z - F025 started
 
