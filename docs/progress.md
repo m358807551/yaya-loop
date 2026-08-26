@@ -18,6 +18,7 @@ F023 - Convert the default example into a complete English reference project
 - Added the missing greenfield methodology configuration, Progress snapshot, and project-specific web/TypeScript rule files so all Coding Rules references resolve.
 - Completed the legacy Product section set and corrected reconstructed Feature sources and pre-bootstrap evidence to match canonical contracts.
 - All 54 tests and target language, JSON, reference, and diff checks pass after repair; repeated human acceptance is required before the final rescan.
+- Human acceptance passed again after the completeness repair; final independent rescan is next.
 
 ## Context notes
 
