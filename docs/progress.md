@@ -21,6 +21,7 @@ F024 - Publish the English README and preserve the complete Chinese README
 - Human acceptance passed again after the wording repair; final independent rescan is next.
 - Final rescan found one remaining English/Chinese parity gap: the English Legacy summary did not explicitly call reconstructed completed history bounded.
 - Added the bounded-history wording and an exact paired regression assertion; repeated human acceptance is required for this final visible repair.
+- Final repaired documentation received explicit human acceptance; definitive fresh-context rescan is next.
 
 ## Context notes
 
