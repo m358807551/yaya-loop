@@ -9,6 +9,8 @@ F019 - Internationalize Feature-list synchronization workflows
 - Started at `2026-08-26T10:22:46Z`.
 - Confirmed the scope is the Feature-list synchronization Claude Skill and portable Prompt at their stable distribution paths.
 - Confirmed that new and revised Feature prose and revision summaries follow `document_language`, while completed history remains untouched and keys, enums, IDs, paths, anchors, diffs, evidence, and consistency behavior remain stable.
+- Rewrote Feature-list synchronization as an exact native/portable canonical English pair while preserving anchor discovery, complete Git diff and rename analysis, change classification, explicit confirmation, append-only history, status-specific transitions, downstream regression handling, revision logging, validation, commit, exception, and handoff boundaries.
+- Added focused regression coverage for paired-body equivalence, bilingual discovery, language/history boundaries, all seven ordered stages, anchor and diff commands, status-specific transitions, completed-history exceptions, revision schema, validation, commit, exception, and Git safety behavior.
 
 ## Context notes
 
