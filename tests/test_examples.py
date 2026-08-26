@@ -16,6 +16,9 @@ class ExampleProjectTests(unittest.TestCase):
             GREENFIELD_DOCS / "product.md",
             GREENFIELD_DOCS / "product" / "01-tasks.md",
             GREENFIELD_DOCS / "coding_rules.md",
+            GREENFIELD_DOCS / "progress.md",
+            GREENFIELD_DOCS / "coding-rules" / "engine-rules.md",
+            GREENFIELD_DOCS / "coding-rules" / "language-rules.md",
             GREENFIELD_DOCS / "feature-list.json",
             *sorted((GREENFIELD_DOCS / "features").glob("F*.json")),
         ]
@@ -60,6 +63,35 @@ class ExampleProjectTests(unittest.TestCase):
         ):
             self.assertIn(invariant, coding_rules)
 
+        for reference in re.findall(r"@([^\s]+\.md)", coding_rules):
+            with self.subTest(reference=reference):
+                self.assertTrue((GREENFIELD_DOCS.parent / reference).is_file())
+
+        progress = (GREENFIELD_DOCS / "progress.md").read_text(encoding="utf-8")
+        for invariant in (
+            "F002 is the next eligible Feature",
+            "F001 completed",
+            "document_language`: `en",
+            "Code smell scan: pass (feature: F001, must_fix: 0",
+        ):
+            self.assertIn(invariant, progress)
+
+        config = json.loads(
+            (GREENFIELD_DOCS / "methodology-config.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(
+            config,
+            {
+                "document_language": "en",
+                "static_check_cmd": "npm run typecheck && npm test",
+                "engine": "web-frontend",
+                "language": "typescript",
+                "kit_version": "0.1.0",
+                "bootstrap_at": "2026-05-25T10:00:00Z",
+                "bootstrap_mode": "greenfield",
+            },
+        )
+
     def test_greenfield_feature_graph_and_sources_are_consistent(self):
         index = json.loads(
             (GREENFIELD_DOCS / "feature-list.json").read_text(encoding="utf-8")
@@ -96,12 +128,24 @@ class ExampleProjectTests(unittest.TestCase):
         content = path.read_text(encoding="utf-8")
 
         self.assertIsNone(HAN_TEXT.search(content))
+        for inferred_heading in (
+            "## One-line positioning [REVERSE-ENGINEERED]",
+            "## Target users [REVERSE-ENGINEERED]",
+            "## Core loop [REVERSE-ENGINEERED]",
+            "## Module list [REVERSE-ENGINEERED]",
+            "## Module dependencies [REVERSE-ENGINEERED]",
+            "## Visual direction [REVERSE-ENGINEERED]",
+            "## Audio direction [REVERSE-ENGINEERED]",
+        ):
+            self.assertIn(inferred_heading, content)
         required_flow = (
             "## Step 0 · Detect the project state",
             "## Step 1 · Resolve the agent and document language",
             "## Step 2 · Reverse-engineer the existing system",
             "### 2.3 Draft the Product overview",
             "### 2.5 Reconstruct a bounded Feature history",
+            "## Visual direction [REVERSE-ENGINEERED]",
+            "## Audio direction [REVERSE-ENGINEERED]",
             "## Step 3 · Create project-specific Coding Rules",
             "## Step 4 · Initialize Progress and handoff state",
             "## Steps 5–6 · Install the integration and run smoke checks",
@@ -111,6 +155,9 @@ class ExampleProjectTests(unittest.TestCase):
             "docs/features/F0XX.json",
             "static_check_cmd",
             "does not automatically start F016",
+            "product/03-customers.md#data-model",
+            "product/02-inventory.md#inventory-allocation",
+            "Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`",
         )
         for expected in required_flow:
             with self.subTest(expected=expected):

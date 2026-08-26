@@ -14,6 +14,10 @@ F023 - Convert the default example into a complete English reference project
 - Added regression coverage for English-only example prose, Product and Coding Rules contracts, Feature graph and source-anchor consistency, complete legacy adoption stages, and the absence of copied workflow-source trees.
 - Automated verification passed: all 54 repository tests, JSON parsing, Han-text scans for target examples, and Git diff checks.
 - Human acceptance passed on 2026-08-26; fresh-context code-smell review is next.
+- Fresh-context review found four completeness blockers in the reference examples.
+- Added the missing greenfield methodology configuration, Progress snapshot, and project-specific web/TypeScript rule files so all Coding Rules references resolve.
+- Completed the legacy Product section set and corrected reconstructed Feature sources and pre-bootstrap evidence to match canonical contracts.
+- All 54 tests and target language, JSON, reference, and diff checks pass after repair; repeated human acceptance is required before the final rescan.
 
 ## Context notes
 
