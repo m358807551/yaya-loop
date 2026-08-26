@@ -2,30 +2,12 @@
 
 ## Current work
 
-F026 - Document the upgrade perform the release audit and publish v0.2.0
+No Feature is currently in progress.
 
 ## Progress
 
-- Started at `2026-08-26T13:00:56Z` from commit `3da9241`.
-- Confirmed F025 is done, the worktree is clean on `dev`, and F026 has no external resource or runtime-dependency requirements.
-- Approved scope: canonical English upgrade guidance, an eight-criterion internationalization release audit, precise v0.2.0 version updates, unsupported-behavior disclosure, and release consistency tests.
-- Historical v0.1.0 records and Legacy migration fixtures remain historical; established projects must not be translated automatically.
-- Rewrote the upgrade guide as canonical English with a confirmation-based, JSON-aware, non-translating v0.1.0 → v0.2.0 migration, verification, rollback, and release notes.
-- Added the v0.2.0 release audit mapping all eight Internationalization acceptance criteria to evidence and explicitly separating supported behavior, non-goals, and maintainer-controlled publication actions.
-- Updated the Product overview and Internationalization history from planned to implemented for the verified release.
-- Updated current release surfaces to 0.2.0 while preserving historical v0.1.0 Product, changelog, and Legacy fixture evidence.
-- Added dependency-free release tests for version consistency, historical boundaries, upgrade safety, eight-criterion evidence, support/publication limits, and release-document links.
-- First complete release verification passed with 69 repository tests.
-- Strengthened final release coverage by discovering native/portable workflow pairs from both distribution directories and validating every smoke scenario's Setup, Expected result, Prohibited behavior, and scenario-specific invariants in isolation.
-- Recorded the scope of the automated smoke result without claiming automatic certification of external Coding Agent environments.
-- Final automated verification passed with all 69 tests, JSON parsing, release-link checks, and diff checks successful; implementation is ready for human acceptance. No tag, merge, push, or external release action has been performed.
-- Human acceptance passed at `2026-08-26T13:08:37Z`; the mandatory fresh-context Code Smell Scan is next.
-- The first fresh-context scan found one `must_fix`: DL-01 through DL-04 and dual-language suite Pass claims exceeded the recorded static evidence.
-- Executed all four canonical scenarios in separate disposable repositories; 28 scenario assertions passed across questions, confirmations, generated prose, stable protocols, Legacy preservation, and prohibited behavior.
-- Exported the current Kit into separate `en` and `zh-CN` repositories and passed the complete 69-test suite in each configuration.
-- Added structured durable smoke evidence and release-test enforcement; final repository verification and renewed human acceptance remain pending because this repair changes visible release evidence.
-- Repaired repository verification passed with 70 tests, all JSON parsing, release-link checks, and diff checks successful.
-- Renewed human acceptance passed at `2026-08-26T13:17:26Z`; the final fresh-context rescan is pending.
+- F026 completed at `2026-08-26T13:19:27Z` after renewed human acceptance, 70 passing repository tests, executed English/Chinese smoke evidence, and a final fresh-context scan with zero findings.
+- All 26 planned Features are done. The repository contains v0.2.0 release artifacts, but no Git tag, merge, push, GitHub release, or external publication was performed.
 
 ## Context notes
 
@@ -33,6 +15,21 @@ F026 - Document the upgrade perform the release audit and publish v0.2.0
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T13:19:27Z - F026 completed
+
+Current work:
+
+F026 - Document the upgrade perform the release audit and publish v0.2.0
+
+Progress:
+
+- Published canonical English upgrade guidance, an eight-criterion release audit, and consistent v0.2.0 repository surfaces while preserving historical v0.1.0 evidence.
+- Executed DL-01 through DL-04 in disposable repositories and recorded questions, confirmations, generated files, 28 passing scenario assertions, and prohibited-behavior checks.
+- Passed the complete 69-test suite in separate `en` and `zh-CN` Kit exports; the repaired repository suite passes all 70 tests.
+- Renewed human acceptance passed after the evidence repair.
+- Code smell scan: pass (feature: F026, must_fix: 0, suggest: 0, acceptable: 0).
+- Handoff: all 26 planned Features are done; external publication actions remain maintainer-controlled.
 
 ### 2026-08-26T13:00:56Z - F026 started
 
