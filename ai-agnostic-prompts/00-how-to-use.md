@@ -1,64 +1,52 @@
-# AI-Agnostic Prompts · 使用说明
+# AI-agnostic prompts · usage guide
 
-> 本目录是给**非 Claude Code 用户**的（Codex / Aider / Cursor / 等等任何 AI CLI）。每个文件都是一段可以**直接粘贴**到你的 AI 对话窗口的 prompt。
->
-> Claude Code 用户：你不需要这些文件，直接用 `../claude-code/skills/` 即可（Claude Code 自动识别 SKILL.md 的 YAML frontmatter 与触发短语）。
+> This directory is for coding agents that do not load Claude Code Skills directly, including Codex, Aider, Cursor, and similar tools. Each Prompt is a self-contained Markdown workflow.
 
-## 心智模型
+Claude Code users normally use the corresponding files under `claude-code/skills/`, where YAML metadata supports automatic discovery.
 
-- 这 9 个 prompt 一一对应 [methodology/00-overview.md](../methodology/00-overview.md) 提到的"三类 skill"：产品类 5 个、生成类 2 个、执行类 2 个。
-- 每次用户提需求时，你判断属于哪一类，复制对应 prompt 粘给 AI，再加你的具体需求。
-- AI 收到 prompt 后按里面的步骤工作。中途有疑问会问你，按要求回答即可。
+## How to use a Prompt
 
-## 触发短语 → 用哪个 prompt
+Choose the workflow from the table below, then either paste the Prompt into the agent conversation or ask the agent to read the installed file from `docs/methodology-prompts/`.
 
-| 用户场景 / 触发短语 | 用哪个 prompt | 干什么 |
-|------|-------------|--------|
-| 「这是新项目，帮我从零启动」 | [product-init-elicitor.prompt.md](./product-init-elicitor.prompt.md) | 把一句话项目描述结构化进 product.md |
-| 「我想加 X 功能」/「改 Y 行为」/「Z 有 bug」 | [product-change-standardizer.prompt.md](./product-change-standardizer.prompt.md) | 任何产品变更的统一入口，会路由到下面几个 skill |
-| 「这个变更细节我想说清楚」 | [product-spec-elicitor.prompt.md](./product-spec-elicitor.prompt.md) | 对一个变更追问关键模糊点 |
-| 「画个 UI 草图」 | [product-ui-sketcher.prompt.md](./product-ui-sketcher.prompt.md) | 产出 ASCII 线框图（可选 html mockup） |
-| 「这里要什么音效」 | [product-audio-sketcher.prompt.md](./product-audio-sketcher.prompt.md) | 产出音效条目（含 _placeholder_*.wav 占位文件名） |
-| 「生成 feature-list」/「初始化任务列表」 | [generate-feature-list.prompt.md](./generate-feature-list.prompt.md) | 从零一次性拆解 product → feature |
-| 「同步 feature-list」/「product 更新了，刷新一下」 | [sync-feature-list.prompt.md](./sync-feature-list.prompt.md) | product 变更后增量同步 feature-list |
-| 「做下一个 feature」/「实现 F007」/「继续推进」 | [execute-next-feature.prompt.md](./execute-next-feature.prompt.md) | 按 8 阶段流程实现一个 feature |
-| 「挑一个坏味道重构」/「扫一下 suggest」 | [pick-refactor-smell.prompt.md](./pick-refactor-smell.prompt.md) | 从 feature notes 挑一个坏味道 |
+The executable body in each portable Prompt matches its native Skill. Distribution wrappers may differ so each environment can explain discovery and invocation naturally.
 
-## 怎么粘贴
+## English commands and Chinese discovery examples
 
-每个 prompt 文件的内容是完整的 AI 指令。粘贴时**只复制 markdown 内容本身（去掉本目录的 `# X · Y` 标题和首段说明性表格也行）**，AI 拿到指令就开始按步骤执行。
+| User intent | English command example | Concise Chinese trigger | Prompt |
+|---|---|---|---|
+| Initialize Product for a new project | `Initialize this project from my Product idea.` | `从零初始化项目` | [product-init-elicitor.prompt.md](./product-init-elicitor.prompt.md) |
+| Standardize a Product change | `Add X`, `Change Y`, or `Fix Product behavior Z.` | `增加 X` / `修改 Y` / `修复 Z` | [product-change-standardizer.prompt.md](./product-change-standardizer.prompt.md) |
+| Clarify one Product change | `Help me specify this change.` | `把这个变更说清楚` | [product-spec-elicitor.prompt.md](./product-spec-elicitor.prompt.md) |
+| Sketch Product UI | `Sketch the UI for this behavior.` | `画个 UI 草图` | [product-ui-sketcher.prompt.md](./product-ui-sketcher.prompt.md) |
+| Specify Product audio | `Define the audio requirements.` | `这里需要什么音效` | [product-audio-sketcher.prompt.md](./product-audio-sketcher.prompt.md) |
+| Generate the initial Feature plan | `Generate the Feature list.` | `生成 feature-list` | [generate-feature-list.prompt.md](./generate-feature-list.prompt.md) |
+| Synchronize Product changes | `Synchronize the Feature list.` | `同步 feature-list` | [sync-feature-list.prompt.md](./sync-feature-list.prompt.md) |
+| Execute eligible work | `Do the next Feature.` or `Implement F007.` | `做下一个 feature` / `实现 F007` | [execute-next-feature.prompt.md](./execute-next-feature.prompt.md) |
+| Select a refactor smell | `Pick one smell to refactor.` | `挑一个坏味道重构` / `扫一下 suggest` | [pick-refactor-smell.prompt.md](./pick-refactor-smell.prompt.md) |
 
-例子（在你 AI CLI 的输入框）：
-```
-[粘贴 execute-next-feature.prompt.md 的全部内容]
+## Installed-file example
 
-请按上述流程开始。
+```text
+Read docs/methodology-prompts/execute-next-feature.prompt.md and follow it to do the next Feature.
 ```
 
-或者更精简：
+If the agent supports file references, an equivalent command may be:
+
+```text
+@docs/methodology-prompts/execute-next-feature.prompt.md
 ```
-读 docs/methodology-prompts/execute-next-feature.prompt.md 并按其执行
-```
 
-如果你的 AI CLI 支持 `@file` 引用，那就更方便：`@docs/methodology-prompts/execute-next-feature.prompt.md`。
+## Native Skills and portable Prompts
 
-## 重要：质量门兜底
+| Capability | Claude Code Skill | Portable Prompt |
+|---|---|---|
+| Discovery | YAML metadata and triggers | User selects or references the Prompt |
+| Workflow behavior | Canonical executable body | The same canonical executable body |
+| Stage 6 independent review | Delegate to a fresh-context sub-agent | Delegate when supported; otherwise ask the user to run the supplied review in a new independent session and return strict JSON |
+| Completion gate | Claude Hook plus Git Hook | Git Hook; the Prompt must still enforce human acceptance and `must_fix: 0` evidence |
 
-非 Claude Code 用户**没有 PreToolUse hook 能力**，所以"不允许跳过代码气味扫描就标 done"这条硬约束需要靠 git commit-msg hook 兜底。
+The methodology is the same in both distributions. Only discovery and capability-specific fallback mechanics differ.
 
-安装方式见 `../git-hooks/install.md`。安装后，commit 时若把任何 feature 改成 `done`，但 commit message 不含该 feature 专属、`must_fix: 0` 的完整 `Code smell scan: pass` 证据行，commit 会被拒绝。
+## Project-specific adaptation
 
-## 与 Claude Code 版本的差异
-
-| 维度 | Claude Code skills | AI-agnostic prompts |
-|------|-------------------|--------------------|
-| 入口 | YAML frontmatter + 触发短语自动识别 | 用户手动粘贴 prompt |
-| 子 agent 委派（execute 阶段 6） | 调用 Task 工具 | 提示用户"开新会话粘贴本子 prompt" |
-| 阶段 6 质量门 | PreToolUse hook + commit message 双重阻断 | 仅靠 git commit-msg hook |
-| 调试 | Claude Code 内置日志 | 看 AI 输出 + commit 历史 |
-
-方法论层面**没有差异**。只是触发与兜底机制不同。
-
-## 自定义
-
-你可以把每个 prompt 按你的项目实际改造（如调整阶段数、修改自检清单），改完直接生效——这些是纯 markdown，不需要重启任何东西。
+Projects may add compatible constraints, static-check commands, or technology-specific rules. Do not weaken or remove Stage gates, stable evidence, human completion authority, Feature schema fields, or Git safety boundaries.
