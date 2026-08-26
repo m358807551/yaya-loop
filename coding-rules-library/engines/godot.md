@@ -45,7 +45,7 @@ A small Scene-tree change breaks these paths. A node that requires a particular 
 - Prefer editor connections for nodes that already exist in a Scene. Connect runtime-instantiated nodes in code.
 - Connect through `Callable`, such as `button.pressed.connect(_on_pressed)`, rather than a string method name so the editor can check the target.
 - Name signals as past events or changed state: `health_changed`, `died`, or `item_collected`, not imperative names such as `change_health`.
-- Return after emission when appropriate and do not assume what a receiver did. A sender must not depend on whether anyone listened.
+- Emit the signal and return immediately. Do not assume what a receiver did; a sender must not depend on whether anyone listened.
 
 ### 2.4 Event bus for distant communication
 
@@ -77,7 +77,7 @@ Use the bus sparingly:
 - data that persists across Scene changes, such as save data, settings, or current progression
 - global services such as audio, Scene transitions, localization, or input mapping
 - a focused event bus
-- read-mostly global configuration such as game constants or difficulty values
+- read-only global configuration such as game constants or difficulty values
 
 ### 3.2 Inappropriate Autoload uses
 
@@ -123,7 +123,7 @@ Create an `EnemyStats` `.tres` through FileSystem → New → Resource, then edi
 
 1. **One `.tres` file is one shared in-memory Resource.** Mutating it through one node affects every node referencing it.
    - For an independent instance, enable Local to Scene in the Resource Inspector or call `stats = stats.duplicate()`.
-2. **Prefer `.tres` during development.** It is text, reviewable in Git, and diffable. Consider binary `.res` only for release or genuinely large resource data.
+2. **Use `.tres` during development.** It is text, reviewable in Git, and diffable. Use binary `.res` only for release or genuinely large resource data.
 3. **Runtime writes belong under `user://`, not `res://`.** For example, use `ResourceSaver.save(res, "user://save.tres")`.
 4. **A Resource has no `_process`.** It is data and does not participate in the Scene tree.
 5. **A custom Resource does not automatically emit `changed`.** Call `emit_changed()` from a setter:
@@ -156,7 +156,7 @@ Create an `EnemyStats` `.tres` through FileSystem → New → Resource, then edi
 
 ### 5.2 `@onready`: values resolved after the Scene tree is ready
 
-- Use it primarily for child-node references, such as `@onready var sprite: Sprite2D = $Sprite2D`.
+- Use `@onready` only to resolve child-node references after the Scene tree is ready, such as `@onready var sprite: Sprite2D = $Sprite2D`.
 - Never combine `@export` and `@onready` on one variable. `@onready` overwrites the value loaded from the Scene during `_ready()`, and Godot 4 warns about the combination.
 - Give `@onready` variables explicit types for editor completion and checking.
 
@@ -231,7 +231,7 @@ Create an `EnemyStats` `.tres` through FileSystem → New → Resource, then edi
 - Node instantiation has a cost. Pool objects created hundreds of times per second, such as projectiles, particles, or damage numbers.
 - For pooled nodes:
   - use `hide()`, `set_process(false)`, and `set_physics_process(false)`; remove them from the tree when that matches the pool design
-  - do not use `set_deferred("process_mode", ...)` as the primary deactivation mechanism; it is a known performance trap
+  - do not use `set_deferred("process_mode", ...)` to deactivate pooled objects; it is a known performance trap
   - do not leave pooled objects in inherited processing mode while expecting them to consume no CPU
 - Use `MultiMeshInstance2D`, `MultiMeshInstance3D`, or RenderingServer APIs for very large numbers of homogeneous objects.
 - Avoid per-frame string concatenation in hot paths.

@@ -328,7 +328,7 @@ class RepositoryTests(unittest.TestCase):
             with self.subTest(removed_heading=removed_heading):
                 self.assertNotIn(removed_heading, template)
 
-    def test_engine_rule_sources_are_english_at_stable_paths(self):
+    def test_engine_rule_sources_have_no_han_and_preserve_stable_paths(self):
         engines = REPO_ROOT / "coding-rules-library" / "engines"
         expected_files = {
             "_stub-template.md",
@@ -341,10 +341,19 @@ class RepositoryTests(unittest.TestCase):
         self.assertEqual({path.name for path in engines.glob("*.md")}, expected_files)
 
         han_pattern = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff]")
+        expected_headings = {
+            "_stub-template.md": "# {{ENGINE_NAME}} best practices",
+            "backend-service.md": "# Backend service best practices",
+            "godot.md": "# Godot best practices",
+            "unity.md": "# Unity best practices",
+            "unreal.md": "# Unreal Engine best practices",
+            "web-frontend.md": "# Web frontend best practices",
+        }
         for path in engines.glob("*.md"):
             content = path.read_text(encoding="utf-8")
             with self.subTest(path=path.name):
                 self.assertIsNone(han_pattern.search(content))
+                self.assertTrue(content.startswith(expected_headings[path.name]))
 
         for filename in expected_files - {"godot.md"}:
             content = (engines / filename).read_text(encoding="utf-8")
@@ -361,13 +370,18 @@ class RepositoryTests(unittest.TestCase):
             "Golden rule: call down, signal up",
             'get_node("../../SomeNode/SomeOtherNode")',
             "button.pressed.connect(_on_pressed)",
-            "A sender must not depend on whether anyone listened",
+            "Emit the signal and return immediately",
+            "a sender must not depend on whether anyone listened",
             "Appropriate Autoload uses",
+            "read-only global configuration such as game constants or difficulty values",
             "One `.tres` file is one shared in-memory Resource",
+            "Use `.tres` during development",
+            "Use binary `.res` only for release or genuinely large resource data",
             "Local to Scene",
             'ResourceSaver.save(res, "user://save.tres")',
             "A Resource has no `_process`",
             "emit_changed()",
+            "Use `@onready` only to resolve child-node references after the Scene tree is ready",
             "Never combine `@export` and `@onready`",
             "Recommended GDScript member order",
             "Put physics, movement, and collision in `_physics_process`",
@@ -375,7 +389,7 @@ class RepositoryTests(unittest.TestCase):
             "is_instance_valid(self)",
             "Godot 4 uses `instantiate()`, not Godot 3's `instance()`",
             "Destroy with `queue_free()`, not `free()`",
-            'do not use `set_deferred("process_mode", ...)`',
+            'do not use `set_deferred("process_mode", ...)` to deactivate pooled objects',
             "MultiMeshInstance2D",
             "Rising Orphan Nodes",
             "Use `snake_case` for Scene files",
@@ -391,6 +405,7 @@ class RepositoryTests(unittest.TestCase):
         bootstrap = (REPO_ROOT / "BOOTSTRAP.md").read_text(encoding="utf-8")
         self.assertIn("coding-rules-library/engines/<engine>.md", bootstrap)
         self.assertIn("coding-rules-library/engines/_stub-template.md", bootstrap)
+        self.assertGreaterEqual(bootstrap.count("docs/coding-rules/engine-rules.md"), 3)
 
 
 if __name__ == "__main__":
