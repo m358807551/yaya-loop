@@ -2,11 +2,14 @@
 
 ## Current work
 
-No Feature is currently in progress.
+F025 - Add document-language compatibility and smoke-test coverage
 
 ## Progress
 
-- F024 completed at `2026-08-26T12:40:19Z` after final human acceptance, 58 passing tests, and a definitive fresh-context scan with zero `must_fix` or `suggest` findings.
+- Started at `2026-08-26T12:41:10Z` from commit `3ef9c41`.
+- Confirmed all dependencies are done and the working tree is clean on `dev`.
+- Scope is automated configuration, Legacy migration, stable-protocol, and distribution-parity checks plus documented English, Chinese, and mismatched conversation/document-language smoke scenarios.
+- No runtime dependency, workflow-semantic change, or localized executable-source tree will be introduced.
 
 ## Context notes
 
@@ -14,6 +17,16 @@ No Feature is currently in progress.
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T12:41:10Z - F025 started
+
+Current work before F025:
+
+No Feature was in progress.
+
+Progress:
+
+- F024 completed at `2026-08-26T12:40:19Z` after final human acceptance, 58 passing tests, and a definitive fresh-context scan with zero `must_fix` or `suggest` findings.
 
 ### 2026-08-26T12:40:19Z - F024 completed
 
