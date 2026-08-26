@@ -27,7 +27,15 @@ class RefactorWorkflowTests(unittest.TestCase):
         )
         self.assertEqual(native_body, portable_body)
         canonical_prose = native_body
-        for stable_marker in ("`代码气味`", "`重构`", "`未来`", "`推到`"):
+        for stable_marker in (
+            "`代码气味`",
+            "`重构`",
+            "`未来`",
+            "`推到`",
+            "`出过 bug`",
+            "`踩坑`",
+            "`修了 N 次`",
+        ):
             canonical_prose = canonical_prose.replace(stable_marker, "")
         self.assertIsNone(HAN_RE.search(canonical_prose))
         self.assertIsNotNone(HAN_RE.search(native_wrapper))
@@ -81,7 +89,10 @@ class RefactorWorkflowTests(unittest.TestCase):
         for invariant in (
             "High severity — red",
             "at least three files",
-            "caused a bug, pitfall, repeated repair",
+            "caused a bug, pitfall, or repeated repair",
+            "`出过 bug`",
+            "`踩坑`",
+            "`修了 N 次`",
             "blocks at least two pending Features",
             "Medium severity — yellow",
             "hardcoded constants or an SRP/DRY violation",
@@ -91,6 +102,7 @@ class RefactorWorkflowTests(unittest.TestCase):
             "style preferences",
             "resolved or superseded by a later Feature",
             "same-file accumulation",
+            "apply it as a high-severity bonus",
             "Score multiple candidates from the same Feature independently",
         ):
             with self.subTest(invariant=invariant):

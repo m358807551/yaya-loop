@@ -66,7 +66,7 @@ With `document_language: en` and a Chinese conversation, discuss candidates in C
 A candidate is high when any condition holds:
 
 - it affects at least three files, counted from named paths plus concrete impact analysis;
-- notes say it caused a bug, pitfall, repeated repair, `BUG`, or `bug`;
+- notes say it caused a bug, pitfall, or repeated repair, including the stable tokens `BUG`, `bug`, `出过 bug`, `踩坑`, or `修了 N 次`;
 - it blocks at least two pending Features, determined by reverse lookup of index `depends_on`.
 
 ### Medium severity — yellow
@@ -88,7 +88,7 @@ Every other candidate is low, including:
 ### Ranking adjustments
 
 - Score multiple candidates from the same Feature independently.
-- When candidates from different Features reference the same file, label them `same-file accumulation` and increase their priority within the applicable severity.
+- When candidates from different Features reference the same file, label them `same-file accumulation` and apply it as a high-severity bonus, preserving the original scoring effect.
 - When notes define a strong follow-up chain, list the dependency explicitly.
 
 ## Stage 3: report, recommend, and stop
