@@ -8,5 +8,5 @@
     "Native and portable variants preserve equivalent diff revision and consistency behavior"
   ],
   "source": "product/05-internationalization.md#Core flows",
-  "notes": ""
+  "notes": "Human acceptance passed on 2026-08-26. Automated verification: all 35 repository tests passed; the native and portable workflow bodies are byte-for-byte equivalent below their canonical heading; JSON validation and git diff checks passed."
 }
