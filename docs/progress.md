@@ -14,7 +14,7 @@ F024 - Publish the English README and preserve the complete Chinese README
 - Preserved the complete Chinese presentation in `README.zh-CN.md`, added bidirectional text language navigation, and synchronized the newly implemented `document_language`, Legacy walkthrough, Product UI/audio, and repository-entry details across both versions.
 - Added bilingual README regression coverage for language navigation, semantic section parity, support disclaimers, relative-link resolution, English-script boundaries, and conversation-URL exclusion.
 - Automated verification passed: all 58 repository tests and Git diff checks; the Chinese file differs from the pre-F024 README only by the language entry point and synchronized internationalization details.
-- Implementation is ready for human acceptance.
+- Human acceptance passed on 2026-08-26; fresh-context review is next.
 
 ## Context notes
 
