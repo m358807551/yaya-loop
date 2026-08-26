@@ -176,6 +176,12 @@ class RepositoryTests(unittest.TestCase):
             "explicit human acceptance",
             "Code smell scan: pass",
             "must_fix: 0",
+            "verbatim relevant Coding Rules and source line numbers",
+            "register every",
+            "`_placeholder_` resource in the Feature notes",
+            "delegate an independent fresh-context code-smell scan",
+            "this hard gate must produce Feature-specific",
+            "the commit must contain that exact evidence",
             "main` or `master",
             "force-push",
             "reset --hard",
@@ -199,6 +205,10 @@ class RepositoryTests(unittest.TestCase):
         coding_rules = contents["04-coding-rules-4-layers.md"]
         for invariant in (
             "A higher layer wins when rules conflict",
+            "preferred organization for action logic",
+            "trivial pure calculations",
+            "explicit fallback or actionable error when a resource fails to load",
+            "uses assertions to protect invariants",
             "@docs/coding-rules/engine-rules.md",
             "@docs/coding-rules/language-rules.md",
             "must disclose the deviation and reason",

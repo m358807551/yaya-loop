@@ -176,11 +176,10 @@ python3 -m json.tool docs/feature-list-revisions.json > /dev/null
 
 ### ID consistency
 
-All of the following must be equal:
+The two ID sets below must be equal, and `meta.total_features` must equal their cardinality:
 
 - the set of IDs in `feature-list.json` `features[]`
 - the set of filename stems under `docs/features/F*.json`
-- `meta.total_features`
 
 An index entry without a detail file, or a detail file without an index entry, is invalid.
 

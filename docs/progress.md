@@ -10,6 +10,7 @@ F012 - Convert core Methodology specifications to canonical English
 - Rewrote the Methodology overview and Product document structure in natural American English while preserving the standardizer route, human completion authority, document hierarchy, module naming, and Product semantics.
 - Rewrote the Feature three-file schema and four-layer Coding Rules architecture in English while preserving stable fields, enums, dependency direction, status transitions, layer precedence, and completion gates.
 - Added regression checks for English canonical headings, completion and schema invariants, valid embedded JSON examples, and resolvable relative links across the migrated Methodology documents.
+- Restored Stage 0 rule citations, Stage 1 placeholder registration, Stage 6 independent review evidence, the full command-pattern scope, resource-loading fallback, and invariant assertions after fresh-context review detected translation loss; expanded tests to pin each restored rule.
 
 ## Context notes
 

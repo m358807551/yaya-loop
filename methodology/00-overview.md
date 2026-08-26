@@ -64,14 +64,18 @@ Update docs/product.md + docs/product/NN-*.md
    │
    ▼
 [execute-next-feature]
-   ├─ Stage 0: select Feature and cite relevant rules
-   ├─ Stage 1: preflight resources and dependencies
+   ├─ Stage 0: select Feature and produce the fixed exit report with
+   │           verbatim relevant Coding Rules and source line numbers
+   ├─ Stage 1: preflight resources and dependencies; register every
+   │           `_placeholder_` resource in the Feature notes
    ├─ Stage 2: mark in_progress and update Progress
    ├─ Stage 3: implement with focused commits
-   ├─ Stage 4: run configured automated verification
+   ├─ Stage 4: run the project-level static_check_cmd
    ├─ Stage 5: obtain explicit human acceptance
-   ├─ Stage 6: run a fresh-context code-smell scan
-   ├─ Stage 7: mark done with completion evidence
+   ├─ Stage 6: delegate an independent fresh-context code-smell scan;
+   │           this hard gate must produce Feature-specific
+   │           `Code smell scan: pass` evidence with `must_fix: 0`
+   ├─ Stage 7: mark done; the commit must contain that exact evidence
    └─ Stage 8: hand off and stop
 ```
 

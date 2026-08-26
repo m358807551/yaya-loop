@@ -41,12 +41,12 @@ Projects should not modify this layer unless the user's collaboration preference
 
 Layer 2 also lives in the main `coding_rules.md`. It includes:
 
-- the command pattern as the preferred organization for a multi-step operation
+- the command pattern as the preferred organization for action logic—anything that represents doing one thing—except trivial pure calculations, stateless utilities, or cases where established project convention should remain authoritative
 - separation of data and presentation, explicit state machines, layered logic, composition over inheritance, data-driven behavior, pure core rules, dependency injection, and serializable runtime state
 - a pattern selection table
 - anti-patterns such as God Objects, business logic in UI callbacks, pervasive raw singletons, scattered state, premature abstractions, magic values, and long procedural functions
 - organization by feature, single responsibility, minimal entry points, centralized configuration, and avoidance of miscellaneous utility dumping grounds
-- error handling that distinguishes expected failures from exceptional failures and never silently swallows exceptions
+- error handling that distinguishes expected failures from exceptional failures, never silently swallows exceptions, provides an explicit fallback or actionable error when a resource fails to load, and uses assertions to protect invariants that should never be violated
 - measurement before performance optimization
 
 This layer is stable kit content and remains independent of a particular stack.
