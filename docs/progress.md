@@ -13,6 +13,7 @@ F022 - Convert installation guidance and Hook-facing text to canonical English
 - Converted direct Claude Hook failure messages to punctuation-neutral English without changing evidence matching, status comparison, transcript filtering, JSON validation, warnings, or exit behavior.
 - Converted the Git `commit-msg` Hook's documentation, comments, and rejection message to English while preserving its evidence regex, staged-versus-HEAD transition detection, fail-open parsing behavior, return codes, and bypass guidance.
 - Added regression coverage for complete English installation guides, stable commands and inventories, English-only executable Hook sources, preserved executable permissions, Python syntax, evidence-regex fragments, failure return codes, warning behavior, and punctuation-neutral guidance.
+- All 50 repository tests passed, JSON validation and git diff checks passed, Hook executable permissions remained intact, and human acceptance confirmed every F022 criterion.
 
 ## Context notes
 

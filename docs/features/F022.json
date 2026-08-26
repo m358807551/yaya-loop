@@ -8,5 +8,5 @@
     "Installation paths commands and executable permissions remain valid"
   ],
   "source": "product/05-internationalization.md#Explicit non-goals for the first international release",
-  "notes": ""
+  "notes": "Human acceptance passed on 2026-08-26. Automated verification: all 50 repository tests passed; installation guides and Hook sources contain no Chinese prose; Hook syntax, evidence regex fragments, return codes, warnings, paths, commands, and executable permissions were verified."
 }
