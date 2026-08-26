@@ -8,5 +8,5 @@
     "Native and portable variants preserve equivalent decomposition and validation behavior"
   ],
   "source": "product/05-internationalization.md#Language boundaries",
-  "notes": "Human acceptance passed on 2026-08-26. Automated verification: all 30 repository tests passed; the native and portable workflow bodies are byte-for-byte equivalent below their canonical heading; JSON validation and git diff checks passed."
+  "notes": "Human acceptance passed on 2026-08-26. Initial Feature-list generation now uses canonical English instructions across paired Claude Skill and portable Prompt distributions. Durable Feature titles, descriptions, acceptance criteria, source prose, and notes follow document_language while JSON keys, enum values, IDs, dependencies, scopes, timestamps, paths, and validation remain stable. Automated verification: all 30 repository tests passed; the native and portable workflow bodies are byte-for-byte equivalent below their canonical heading; JSON validation and git diff checks passed. TODO: Future test refinement may replace selected substring assertions with structured field-location, initial-value, and routing-order checks. Code smell scan: pass (feature: F018, must_fix: 0, suggest: 1, acceptable: 4)."
 }

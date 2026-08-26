@@ -2,16 +2,11 @@
 
 ## Current work
 
-F018 - Internationalize Feature-list generation workflows
+No Feature is currently in progress.
 
 ## Progress
 
-- Started at `2026-08-26T10:16:36Z`.
-- Confirmed the scope is the initial Feature-list generation Claude Skill and portable Prompt at their stable distribution paths.
-- Confirmed that Feature titles, descriptions, acceptance criteria, source prose, and notes follow `document_language`, while keys, enums, IDs, dependencies, scopes, timestamps, paths, and validation rules remain language-neutral.
-- Rewrote initial Feature-list generation as an exact native/portable English workflow pair while preserving its first-generation versus confirmed-replacement boundary, full input loading, decomposition algorithm, three-file schema, field invariants, destructive-operation confirmation, validation checklist, and execution handoff.
-- Added focused regression coverage for paired-body equivalence, bilingual discovery, document-language behavior, routing and replacement safety, complete input loading, decomposition rules, stable schemas and enum values, self-checks, and execution handoff.
-- All 30 repository tests passed, the paired workflow bodies matched exactly, JSON validation passed, and human acceptance confirmed every F018 criterion.
+- F018 completed at `2026-08-26T10:22:17Z` after human acceptance, 30 passing tests, and a fresh-context scan with zero must_fix findings.
 
 ## Context notes
 
@@ -19,6 +14,20 @@ F018 - Internationalize Feature-list generation workflows
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T10:22:17Z - F018 completed
+
+Current work:
+
+F018 - Internationalize Feature-list generation workflows
+
+Progress:
+
+- Rewrote initial Feature-list generation as an exact native/portable canonical English pair.
+- Preserved initial-generation and confirmed-replacement routing, complete input loading, decomposition rules, the three-file schema, validation, and the no-auto-execution boundary.
+- Made durable Feature prose follow `document_language` while keeping protocol fields stable.
+- Human acceptance passed; all 30 repository tests pass.
+- Code smell scan: pass (feature: F018, must_fix: 0, suggest: 1, acceptable: 4).
 
 ### 2026-08-26T10:16:36Z - F018 started
 
