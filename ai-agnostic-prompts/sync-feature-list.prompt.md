@@ -1,405 +1,361 @@
-# sync-feature-list · prompt
+# Synchronize Feature list · portable prompt
 
-> **触发场景**：当用户要求同步、更新、修订 docs/feature-list.json 以匹配最新的 docs/product.md、docs/product/*.md 或 docs/coding_rules.md 时使用。本 skill 通过 git diff 精确识别源文档变化，增量更新已存在的 feature-list。不用于初次生成（请用 generate-feature-list）。触发短语示例:"同步 feature-list"、"product 更新了，刷新一下任务列表"、"重新对齐 feature-list"、"我改了 product.md，更新一下任务清单"。
+> Use this workflow to incrementally synchronize an existing Feature plan from Git-diffed Product or Coding Rules changes. English triggers: sync feature list, update tasks from Product, realign Feature plan. 中文触发：同步 feature-list、更新任务列表、重新对齐 feature-list。
 >
-> **用法**：把"# sync-feature-list"以下的全部内容粘到你 AI 对话窗口，AI 会按里面的步骤工作。
+> Copy everything from `# Synchronize Feature list` onward into your AI coding agent. It is behaviorally identical to the native Claude Code Skill.
 
 ---
 
+# Synchronize Feature list
 
-# 同步 feature-list
+Run Feature-list synchronization as the seven-stage workflow defined below.
 
-本 skill 把"同步 feature-list"当作有 6 个阶段的工作流来执行。
+The core method is to identify source changes through Git diffs against a recorded anchor. Never infer historical change merely by comparing the current Product with the current Feature plan.
 
-**核心思想：通过 git diff 精确识别源文档的变化，而不是靠对比当前文档与 feature-list 反推变化。**
+## Language and history contract
 
-> 与用户交互一律使用中文。
+Before producing durable Feature content:
 
-## feature-list 文件三层结构
+1. Read `document_language` from `docs/methodology-config.json`.
+2. Resolve missing, invalid, or migration-sensitive configuration through `methodology/05-document-language.md` before writing Feature or revision files.
+3. Use the language of the user's current message for conversation, questions, and the transient diff report.
+4. Write every newly created or substantively revised Feature title, description, acceptance criterion, human-readable `source` fragment, note, revision `user_intent`, and revision `summary` in `document_language`.
+5. Do not translate or rewrite existing completed history solely because its language differs from `document_language`. A `done` Feature is a historical record and changes only through the explicit new-Feature rules below.
+6. Keep JSON keys, enum values, Feature IDs, dependency IDs, paths, commit hashes, timestamps, commands, evidence, and revision structure language-neutral and exactly as specified here.
 
-| 路径 | 角色 | 本 skill 的读写方式 |
-|------|------|------|
-| `docs/feature-list.json` | **主索引**：每个 feature 的 id/title/status/depends_on/estimated_scope/completed_at | 读全文做扫描；新增/修订时双写（索引+详情） |
-| `docs/features/F0XX.json` | **详情**：每个 feature 的 description/acceptance_criteria/source/notes | 按 id 读单个文件；新增/修订时双写 |
-| `docs/feature-list-revisions.json` | **修订日志**：revision_log 数组 | 读末条取上次 anchor；阶段 5 追加一条 |
+With `document_language: en` and a Chinese conversation, discuss the diff in Chinese while writing new durable Feature prose in English. With `document_language: zh-CN` and an English conversation, discuss the diff in English while writing new durable Feature prose in Simplified Chinese. Existing completed prose remains unchanged in either case.
 
----
+## Three-file structure
 
-## 源文档（新结构）
+| Path | Role | Access pattern |
+|---|---|---|
+| `docs/feature-list.json` | Index: each Feature's `id`, `title`, `status`, `depends_on`, `estimated_scope`, and `completed_at` | Read the full index for scanning; update the index together with corresponding details |
+| `docs/features/F0XX.json` | Detail: `id`, `description`, `acceptance_criteria`, `source`, and `notes` | Read details on demand; update each affected detail together with the index |
+| `docs/feature-list-revisions.json` | Append-only `revision_log` | Read the last entry for the previous anchor; append one entry in Stage 5 |
 
-产品文档已拆分为「总览 + 模块」两层，本 skill 关注的源文档是：
+## Source documents
 
-| 路径 | 角色 |
-|------|------|
-| `docs/product.md` | **总览**（项目定位、用户画像、核心循环、模块清单、模块依赖、视觉基调） |
-| `docs/product/NN-xxx.md`（多个文件） | **模块详情**：每个模块的功能流程、数据状态、UI、音效、数值、验收标准、边缘情况 |
-| `docs/coding_rules.md` | 协作契约 + 通用架构原则 + 引擎/语言最佳实践（**技术栈信息也在这里**，含其引入的 engine-rules.md 与 language-rules.md） |
+Synchronization watches:
 
-模块文件可能在两次同步之间被**新增、删除、重命名（含序号变化）、修改**，下面的 diff 流程必须处理全部四种情况。
+- `docs/product.md` for Product-wide intent, module inventory, dependencies, and direction;
+- every `docs/product/NN-xxx.md` module file for behavior, data and state, UI, audio, values, acceptance, and edge cases;
+- `docs/coding_rules.md` and its imported engine and language rules for collaboration, architecture, and technology constraints.
 
----
+Between synchronizations, module files may be added, deleted, renamed—including numeric-prefix changes—or modified. The diff analysis must handle all four cases.
 
-## 全局原则
+## Global invariants
 
-1. **源文档变更通过 git diff 识别，而非靠 AI 推断**。这保证识别精确、可追溯。
-2. **feature-list 是 append-only ledger**：删除即标记 obsolete，修改 done 即新增回归 feature。
-3. **任何已 done 的 feature 不可修改**其 `id` / `description` / `acceptance_criteria`。
-4. **未经用户确认不修改 feature-list.json**。
-5. **AI 不在 main 分支操作**，且修改前工作区必须干净（docs 改动除外）。
-6. **feature-list 相关文件字符串值中禁止裸双引号**：内部不得出现未转义的 `"`（含中文引号 `"…"`）。需引用时用 `\"…\"` 或中文书名号 `「…」`。每次写入下列任一文件后都必须 `python3 -m json.tool <path> > /dev/null` 验证：
-   - `docs/feature-list.json`
-   - `docs/features/F0XX.json`（每个本次改动的详情文件）
-   - `docs/feature-list-revisions.json`
+1. Identify source changes from Git diff, not AI inference, so every update remains precise and traceable.
+2. Treat the Feature plan as an append-only ledger. Removal changes status to `obsolete` or `obsolete_done`; revision of a `done` Feature creates a new Feature.
+3. Never modify a `done` Feature's `id`, `description`, or `acceptance_criteria`. Do not revise its implemented behavior in place; use the status-specific new-Feature rules below. The only other permitted changes are the explicit removal status and note updates or source-path correction defined in Stage 4.
+4. Never modify Feature-list files before explicit user confirmation in Stage 3.
+5. Work only on a non-`main`, non-`master` branch. Before applying changes, the working tree must contain no unrelated modifications.
+6. Never place an unescaped `"` inside a Feature-list JSON string. Escape it as `\"`, or use natural quotation marks appropriate to `document_language` when they cannot be mistaken for JSON delimiters.
+7. After writing any Feature-list JSON, validate `docs/feature-list.json`, `docs/feature-list-revisions.json`, and every affected `docs/features/F0XX.json` with `python3 -m json.tool <path> > /dev/null`.
 
----
+## Stage 0: preflight and anchor
 
-## 阶段 0：前置检查
+**Entry:** the user invokes this workflow.
 
-**进入条件**：用户触发本 skill。
+**Output:** a ready environment and an identified comparison anchor.
 
-**产出**：环境就绪；找到上次同步的锚点。
+1. Check `docs/feature-list.json`.
+   - If it does not exist, direct the user to `generate-feature-list` and stop.
+   - If it exists, read the full index for status, dependency, and count fields. Read `docs/feature-list-revisions.json` when present; on first synchronization it may be absent. Read individual detail files only when Stage 2 mapping or Stage 4 changes require them.
+2. Check Git.
+   - On `main` or `master`, pause and ask the user to switch to a work branch.
+   - If unrelated working-tree changes exist outside source Markdown, ask the user whether to commit, stash, or discard them. Never perform stash, restore, or discard without explicit confirmation.
+   - Uncommitted source Markdown may be analyzed, but it must be committed separately before Stage 4 applies Feature-plan changes so the diff and next anchor remain meaningful.
+3. Determine the anchor commit.
+   - Prefer `synced_at_commit` from the last `revision_log` entry.
+   - If absent, search Git history for the most recent commit touching `docs/feature-list.json` or `docs/features/`.
+   - If none exists, use the commit where `docs/feature-list.json` first appeared.
+   - If no anchor can be found, explain that the workflow must fall back to whole-document comparison and obtain confirmation before continuing.
+4. Report the current branch, anchor hash/date/subject, and counts grouped by Feature status.
 
-**行为**：
+## Stage 1: user prior
 
-1. 检查主索引 `docs/feature-list.json` 是否存在：
-   - 不存在 → 告知用户应使用 `generate-feature-list`，本流程终止。
-   - 存在 → 读取主索引取所有 feature 的当前 status / depends_on 等扫描字段；再读取 `docs/feature-list-revisions.json` 的 revision_log 数组（首次同步时该文件可能尚不存在，按"找不到锚点"处理）。详情文件不必预读，阶段 4 处理具体 feature 时再 `cat docs/features/F0XX.json`。
+**Entry:** Stage 0 passed.
 
-2. 检查 git 环境：
-   - 当前在 `main` 分支 → 暂停，提示切换到工作分支后再继续。
-   - 工作区不干净（除了 `docs/` 下的 md 文件以外有未提交改动）→ 询问用户三选一：
-     a. 先 commit 现有改动
-     b. stash 现有改动
-     c. 放弃现有改动
-   - 工作区只有 `docs/` 下的 md 改动 → 这是预期情况（用户刚改完源文档），继续。
+**Output:** an optional statement of the user's main intent for this synchronization.
 
-3. 确定**对比锚点**（上一次同步时的 git commit）：
-   - 读取 `docs/feature-list-revisions.json` 中 `revision_log` 数组最后一条的 `synced_at_commit` 字段。
-   - 该字段存在 → 用它作为对比锚点。
-   - 该字段不存在（首次使用本 skill 或老版本数据）→ 在 `git log` 中查找最近一次涉及 `docs/feature-list.json` 或 `docs/features/` 的 commit 作为锚点；若也找不到，使用 feature-list.json 首次出现的 commit 作为锚点。
-   - 仍找不到 → 告知用户「无法确定上次同步点，将退化为整文档对比模式」，让用户确认是否继续。
+Ask the user to summarize the source-document change before reading the diff—for example, a new module, a revised scoring rule, or new pause-screen copy. Explain that this helps distinguish semantic changes from editorial changes. If the user asks you to inspect the diff without a prior, continue without one. Store the answer for Stage 2 and the durable revision entry.
 
-4. 输出阶段 0 摘要：
-   - 当前分支
-   - 对比锚点 commit hash + 该 commit 的日期与一行说明
-   - 当前 feature-list 中各状态 feature 的数量统计
+## Stage 2: Git-diff analysis
 
----
+**Entry:** Stage 1 finished or was skipped.
 
-## 阶段 1：收集用户先验
+**Output:** a precise diff report; no files modified.
 
-**进入条件**：阶段 0 完成。
+### 2.1 Collect the complete diff
 
-**产出**：用户的「这次主要想做什么」描述（可选）。
+Inspect committed changes from the anchor to `HEAD` and any remaining source working-tree changes. Cover all source paths and enable rename detection for module files:
 
-**行为**：
+```bash
+git diff <anchor> HEAD -- docs/product.md
+git diff HEAD -- docs/product.md
 
-1. 询问用户：「在我读 git diff 之前，请简要说明这次源文档修改的主要意图（例如：『新增了 03-cultivation 模块』、『修改了得分规则』、『暂停界面加了提示文案』）。这能帮我更准确地理解 diff，避免误判表达调整为语义变化。」
+git diff --stat -M <anchor> HEAD -- docs/product/
+git diff --name-status -M <anchor> HEAD -- docs/product/
+git diff -M <anchor> HEAD -- docs/product/
+git diff -M HEAD -- docs/product/
 
-2. 用户回答 → 记录为本次同步的「用户先验」，会在阶段 2 用到。
-
-3. 用户回复「自己看 diff 即可，不想说」→ 跳过先验，进入阶段 2。
-
-> 这一步可跳过，但**强烈建议不跳过**。带着先验做差异分析，准确率显著高于纯靠 diff 推断。
-
----
-
-## 阶段 2：基于 git diff 的差异分析
-
-**进入条件**：阶段 1 完成。
-
-**产出**：一份精确的差异报告。
-
-**行为**：
-
-### 2.1 拉取 diff（覆盖新结构的全部文件）
-
-按下列顺序执行 git diff。每个命令同时覆盖未提交改动（`<锚点> HEAD` 即可包含已 commit；再补一条 `git diff HEAD -- ...` 获取工作区改动）：
-
-```
-# 总览
-git diff <锚点 commit> -- docs/product.md
-
-# 模块目录的"哪些文件被改动 / 新增 / 删除 / 重命名"
-git diff --stat -M <锚点 commit> -- docs/product/
-git diff --name-status -M <锚点 commit> -- docs/product/
-
-# 模块目录的逐文件内容 diff
-git diff -M <锚点 commit> -- docs/product/
-
-# 编码规则
-git diff <锚点 commit> -- docs/coding_rules.md
+git diff <anchor> HEAD -- docs/coding_rules.md docs/coding-rules/
+git diff HEAD -- docs/coding_rules.md docs/coding-rules/
 ```
 
-`-M` 让 git 识别"重命名/改名"（例如 `02-foo.md` 改名为 `03-foo.md` 时给出 `R` 状态），避免把它误判为"删除一个 + 新增一个"。
+`-M` is mandatory for module paths so a rename such as `02-foo.md` to `03-foo.md` is not misclassified as one deletion plus one addition.
 
-### 2.2 把 diff 分类
+### 2.2 Classify every change
 
-结合阶段 1 的用户先验，把每一处变更分到下列四类之一：
+Use the user prior and actual diff to classify every hunk:
 
-- **a. 实质性新增**：增加了一段全新的产品规则、规则变更、约束；或新增了一个模块文件。
-- **b. 实质性修订**：原有规则的语义变化（数值变了、行为变了、条件变了）；或模块文件被改名但内容相同（仅仅是文件重命名，**视为表达性调整**，除非内容也有实质变化）。
-- **c. 实质性删除**：原本的功能被移除、被列入"明确不做的事"，或整个模块文件被删除。
-- **d. 表达性调整**：仅措辞、排版、错别字修复、纯重命名；语义未变。**不产生任何 feature 变更**。
+- **Substantive addition:** a new Product rule, constraint, or module.
+- **Substantive revision:** changed behavior, value, condition, or meaning.
+- **Substantive removal:** removed behavior, newly explicit exclusion, or deleted module.
+- **Editorial adjustment:** wording, formatting, typo, or pure rename with unchanged meaning. It produces no Feature change.
 
-### 2.3 映射到现有 feature
+A path rename with unchanged content is editorial. A rename plus content change has both a path correction and the appropriate substantive classification.
 
-把 a/b/c 三类变更映射到现有 feature（通过 `source` 字段定位）：
+### 2.3 Map changes to existing Features
 
-- 新增 → 找出对应的新建 feature 占位
-- 修订 → 找出受影响的现有 feature id
-- 删除 → 找出对应的现有 feature id
+Use each detail file's `source` to map additions, revisions, and removals:
 
-**模块文件重命名**：如果一个模块文件改名（如 `02-foo.md` → `03-foo.md`），所有 `source` 引用旧路径的 feature 都需要更新 `source` 字段（仅这一项调整，**不算 feature 变更**，但要在差异报告"路径修正"小节列出）。
+- addition → propose one or more new Features;
+- revision → identify every affected Feature ID;
+- removal → identify every affected Feature ID.
 
-### 2.4 特别考察：done feature 的连带回归
+For a module-file rename, identify every detail whose `source` uses the old path. A source-path correction is reported separately and is not itself a substantive Feature change.
 
-每一个被识别为「修订 done feature」的项，列出**所有 depends_on 包含该 feature 的其他 feature**，提示用户「这些 feature 的实现建立在被修订 feature 的旧行为上，是否需要回归验证？」
+### 2.4 Analyze downstream regression
 
-### 2.5 输出差异报告
+For every substantively revised `done` Feature, list every Feature whose `depends_on` directly contains that ID. Explain that those implementations rely on the old behavior and ask whether explicit regression verification is required.
 
-```
-## 本次差异报告（基于 git diff，锚点 commit: <hash>）
+### 2.5 Report the diff
 
-### 表达性调整（不产生变更）
-- product.md 第 X 节：[一句话描述]，仅措辞调整
-- product/02-foo.md 改名为 product/03-foo.md，内容未变
-- ...
+Render the report in the current conversation language while preserving these sections:
 
-### 路径修正（不算变更，但需要更新 source）
-- 模块文件 product/02-foo.md → product/03-foo.md：F005、F006 的 source 字段需要更新
-- ...
+```markdown
+## Diff report based on anchor `<hash>`
 
-### 实质性变更
+### Editorial adjustments — no Feature change
+- <wording, formatting, typo, or pure rename>
 
-#### 新增 [N 项]
-1. 来源：product/04-combat.md（新增模块文件）
-   变更内容：<一两句话说明>
-   建议处理：新增 feature「<title>」，依赖 [F0XX, F0YY]
-2. ...
+### Source-path corrections
+- `<old path>` → `<new path>`: affected Features <IDs>
 
-#### 修订 [N 项]
-1. 受影响 feature：F0XX (status: <当前状态>)
-   变更内容：<一两句话说明>
-   建议处理：<根据状态决定>
-   连带影响：依赖 F0XX 的 feature [F0YY, F0ZZ] 可能需要回归验证
-2. ...
+### Substantive changes
 
-#### 删除 [N 项]
-1. 受影响 feature：F0XX (status: <当前状态>)
-   变更内容：<一两句话说明>
-   建议处理：<根据状态决定>
-2. ...
+#### Additions — N
+1. Source: <path and section>
+   Change: <brief explanation>
+   Proposed action: add Feature <title>, depends on <IDs>
 
-### 与用户先验的吻合度
-<说明：用户提到的意图是否在 diff 中都找到了对应；diff 中是否有用户没提到的变化（可能是无意中改的）>
+#### Revisions — N
+1. Affected Feature: <ID and status>
+   Change: <brief explanation>
+   Proposed action: <status-dependent action>
+   Downstream impact: <dependent Features that may need regression>
 
-### 待用户决策的事项
-- <例如：F008 修订是否需要触发对 F012、F015 的回归验证 feature>
-- ...
+#### Removals — N
+1. Affected Feature: <ID and status>
+   Change: <brief explanation>
+   Proposed action: <status-dependent action>
+
+### Match with user prior
+<what matched and what the diff revealed unexpectedly>
+
+### Decisions required
+- <each unresolved choice>
 ```
 
-### 2.6 不修改任何文件
+### 2.6 Stop before writing
 
-此阶段**只输出报告**，等待用户确认。
+Stage 2 only reports. Do not modify any file before Stage 3 confirmation.
 
----
+## Stage 3: user review and decision
 
-## 阶段 3：用户审阅与决策
+**Entry:** Stage 2 produced the report.
 
-**进入条件**：阶段 2 输出了差异报告。
+**Output:** an explicit decision for every proposed change.
 
-**产出**：用户对每项变更的最终决策。
+Offer three choices:
 
-**行为**：
+1. Confirm all proposed actions and proceed.
+2. Adjust named actions; revise the report and ask for confirmation again.
+3. Cancel synchronization; stop without modifying files.
 
-1. 提示用户：「请审阅以上差异报告。你可以：
-   a. 确认全部建议，开始执行
-   b. 调整某些项的处理方式（指出哪条改怎么处理）
-   c. 中止本次同步（如发现 diff 与你预期不符，可能需要回头检查 md 文件是否被错误修改）」
+Never enter Stage 4 without explicit confirmation.
 
-2. 用户选 a → 进入阶段 4。
-3. 用户选 b → 记录调整意见，重新输出修订后的差异报告，再次确认。
-4. 用户选 c → 终止本流程，**不修改任何文件**。
+## Stage 4: apply confirmed changes
 
-> **未得到用户明确确认前，绝不进入阶段 4。**
+**Entry:** the user confirmed the final Stage 3 report, and source Markdown is committed separately.
 
----
+**Output:** a consistent index and affected detail files. Every addition or revision must update the correct sides together.
 
-## 阶段 4：执行修改
+### Field ownership
 
-**进入条件**：阶段 3 用户确认。
+| Field | Location |
+|---|---|
+| `id` | index and detail |
+| `title`, `status`, `depends_on`, `estimated_scope`, `completed_at` | index only |
+| `description`, `acceptance_criteria`, `source`, `notes` | detail only |
 
-**产出**：修改后的 `docs/feature-list.json`（主索引）+ 新增/修订的 `docs/features/F0XX.json`（详情）。每次新增或修订必须**同时**写两边，确保 id 集合一致。
+### Additions
 
-### 字段分布提示（决定写哪里）
+- Append `{id, title, status, depends_on, estimated_scope, completed_at}` to the index and create the matching `{id, description, acceptance_criteria, source, notes}` detail.
+- Use the next never-used ID after the highest historical ID. Never reuse an ID left by an obsolete Feature.
+- Initialize `status` to `pending`, `completed_at` to `null`, and detail `notes` to `""`.
+- When a Feature expands a capability supplied by a `done` Feature, say so in its description.
+- Point `source` to the precise module path and section.
+- Write all new human-readable values in `document_language`.
 
-| 字段 | 写入位置 |
-|------|------|
-| `id` | 主索引 + 详情（详情里冗余存一份方便单文件可读） |
-| `title` / `status` / `depends_on` / `estimated_scope` / `completed_at` | 主索引 |
-| `description` / `acceptance_criteria` / `source` / `notes` | 详情 |
+### Removals
 
-### 处理新增项
+| Current status | Confirmed action |
+|---|---|
+| `pending` | Set index `status` to `obsolete`; append a localized timestamped removal reason to detail `notes` |
+| `in_progress` | Set index `status` to `obsolete`; append the reason; warn that written code may require an explicitly authorized rollback |
+| `done` | Set index `status` to `obsolete_done`; append a localized timestamped removal reason to detail `notes`; preserve `id`, `description`, and `acceptance_criteria`; append a new Feature that removes the implemented behavior, with dependencies chosen from actual impact |
+| `obsolete` or `obsolete_done` | Keep status unchanged; append a localized note that exclusion was confirmed again |
 
-- 在主索引 `features` 数组末尾追加 `{id, title, status, depends_on, estimated_scope, completed_at: null}` 条目；同时在 `docs/features/` 下创建 `F0XX.json` 写入 `{id, description, acceptance_criteria, source, notes}`。
-- id 使用未被使用过的下一个（即使中间有 obsolete 留下的空洞也用下一个新 id，**不复用旧 id**）。
-- 初始 `status` 为 `pending`，详情的 `notes` 为空字符串。
-- 如果新 feature 依赖某个已 done feature 的能力扩展，在 description 中明确说明。
-- `source` 精确到模块文件 + 章节。
+Do not translate or substantively rewrite the removed `done` Feature. Its status transition and removal note record the confirmed Product deletion; the new removal Feature carries the implementation work.
 
-### 处理删除项
+### Revisions
 
-| 当前 status | 处理 |
-|------------|------|
-| `pending` | 主索引 `status` 改为 `obsolete`；详情 `notes` 追加「于 <时间戳> 因 product 文档修订移除：<原因>」 |
-| `in_progress` | 主索引 `status` 改为 `obsolete`；详情 `notes` 追加移除原因；并在差异报告的「待用户决策」区提示「已写代码可能需要回滚」 |
-| `done` | 主索引 `status` 改为 `obsolete_done`；详情 `notes` 追加移除原因；**并在末尾新增一个回归 feature**「移除 F00X 引入的 XXX 功能」，依赖关系视情况 |
-| `obsolete` / `obsolete_done` | 不变，但在详情 `notes` 追加一条「再次确认本期不做」 |
+| Current status | Confirmed action |
+|---|---|
+| `pending` | Update detail `description` and `acceptance_criteria`; append a localized timestamped revision note; change index `title` only when the title is affected |
+| `in_progress` | Apply the `pending` action and warn that current implementation may need adjustment |
+| `done` | Do not modify the original index entry or detail. Append a new Feature that revises the implementation for the new Product rule, depends on the original ID, and states the new behavior in its acceptance criteria |
+| `obsolete` or `obsolete_done` | Normally do nothing. If the user wants reactivation, require an explicit decision and append a new Feature |
 
-### 处理修订项
+### Source-path corrections
 
-| 当前 status | 处理 |
-|------------|------|
-| `pending` | 修改详情文件的 `description` / `acceptance_criteria`，`notes` 追加「于 <时间戳> 因 product 文档修订更新」；主索引仅 title 受影响时才改 |
-| `in_progress` | 同 `pending`，并在差异报告的「待用户决策」区提示「当前实现可能需要调整」 |
-| `done` | **不修改原 feature 的任何字段**（主索引条目 + 详情文件都保留为历史档案）。在末尾新增一个 feature「修订 F00X 实现以匹配 <来源> 新版规则」，`depends_on` 包含原 F00X，新建对应的详情文件，acceptance_criteria 写明新行为 |
-| `obsolete` / `obsolete_done` | 一般不处理。若用户希望"重新启用"该功能，应在差异报告的「待用户决策」区由用户明确确认后再新增 feature |
+- Update only the detail `source` path for every affected Feature, including `done` history, so references continue to resolve after a module rename.
+- Record every old-to-new mapping in `source_path_updates`.
+- Do not treat path correction as substantive revision.
 
-### 处理路径修正（模块文件重命名）
+### Downstream regression
 
-- 更新所有受影响 feature **详情文件**（`docs/features/F0XX.json`）的 `source` 字段为新路径。
-- **不修改其他字段**。
-- 不计入「修订」处理。
+For each dependent Feature identified in Stage 2.4:
 
-### 处理连带回归
+- when regression is required, append a Feature named for verifying the dependent behavior after the new revision Feature and depend on that revision Feature;
+- when regression is declined, record the confirmed dependent IDs in the new revision Feature's `notes`.
 
-对阶段 2.4 识别出的「修订 done feature 的连带影响」，按用户在阶段 3 的决策：
+## Stage 5: update metadata, validate, and commit
 
-- 需要回归 → 在末尾新增 feature「回归验证 F0YY 在 F0XX 修订后的行为」，依赖于刚才新增的修订 feature
-- 无需回归 → 不新增，但在修订 feature 的 `notes` 中记录「已与用户确认 F0YY、F0ZZ 无需回归」
+**Entry:** Stage 4 completed.
 
----
+**Output:** updated metadata, one appended revision entry, validation evidence, and a Git commit.
 
-## 阶段 5：更新 meta 与提交
+1. Update `meta.total_features` and set `meta.generated_at` to the synchronization timestamp. Keep `meta.generated_from` exactly:
 
-**进入条件**：阶段 4 完成。
-
-**产出**：更新主索引 meta + 修订日志；git commit。
-
-**行为**：
-
-1. 更新主索引 `docs/feature-list.json` 的 `meta.total_features`、`meta.generated_at`（改为本次同步时间）。`meta.generated_from` 应保持为 `["docs/product.md", "docs/product/**/*.md", "docs/coding_rules.md"]`。
-
-2. 在 `docs/feature-list-revisions.json` 的 `revision_log` 数组末尾追加一条（**不再写入主索引的 meta**）：
-   ```json
-   {
-     "revised_at": "<ISO 8601 时间戳>",
-     "synced_at_commit": "<HEAD commit hash>",
-     "anchor_commit": "<对比锚点 commit hash>",
-     "user_intent": "<阶段 1 收集的用户先验，未收集则为 null>",
-     "summary": "<一句话总结本次修订>",
-     "added": ["F0XX", "F0YY"],
-     "obsoleted": ["F0AA"],
-     "revised_via_new_feature": [{"original": "F0BB", "regression": "F0CC"}],
-     "source_path_updates": [{"feature": "F005", "from": "product/02-foo.md", "to": "product/03-foo.md"}],
-     "depends_on_warnings": ["F0DD", "F0EE"]
-   }
-   ```
-
-   > `synced_at_commit` 是下一次本 skill 运行时的对比锚点，不可省略。
-   > `source_path_updates` 是新增字段，用于追溯模块文件重命名导致的 source 修正。
-
-3. 自检清单（AI 自行核对，不通过则回阶段 4 修复）：
-   - [ ] 没有任何条目被物理删除（主索引 + 详情目录）
-   - [ ] 没有任何已 done feature 的 `id` / `description` / `acceptance_criteria` 被修改（主索引和详情都保持原值）
-   - [ ] 主索引中每个 feature.id 在 `docs/features/` 下都有同名详情文件，反之亦然
-   - [ ] 所有新增 feature 的 id 都是未被使用过的
-   - [ ] 主索引中所有 `depends_on` 引用的 id 都存在
-   - [ ] 所有 `depends_on` 没有指向 `obsolete` / `obsolete_done` 状态的 feature（如有，应在差异报告中已提示）
-   - [ ] 详情文件中所有 `source` 字段指向真实存在的模块文件（含本次重命名后的新路径）
-   - [ ] `docs/feature-list-revisions.json` 末条的 `synced_at_commit` 字段已正确填入
-   - [ ] 主索引 `meta.total_features` 与 features 数组长度一致，并等于 `docs/features/` 下的详情文件数
-   - [ ] `python3 -m json.tool docs/feature-list.json > /dev/null` 通过
-   - [ ] `python3 -m json.tool docs/feature-list-revisions.json > /dev/null` 通过
-   - [ ] 对每个本次新增/修订的详情文件 `python3 -m json.tool docs/features/F0XX.json > /dev/null` 通过
-
-4. 执行 git commit：
-   ```
-   git add docs/feature-list.json docs/feature-list-revisions.json docs/features/
-   git commit -m "chore(sync): update feature-list per docs revision
-
-   Anchor: <锚点 commit 短 hash>
-   Added: <N> features
-   Obsoleted: <N> features
-   Revised via new feature: <N> features
-
-   <一句话总结>"
-   ```
-
-   > 源文档（`docs/product.md`、`docs/product/*.md`、`docs/coding_rules.md`）的改动应在用户调用本 skill **之前**就已 commit。若仍在工作区未提交，应在阶段 0 提示用户先 commit md 改动再来调用本 skill——这样 git diff 才有意义。
-
-5. **不执行 git push**。
-
----
-
-## 阶段 6：交班
-
-**进入条件**：阶段 5 完成。
-
-**产出**：本次同步总结。
-
-**行为**：
-
-1. 输出同步总结：
-   - 「本次同步基于 anchor commit `<hash>` 的差异分析」
-   - 「新增 N 个 feature，废弃 M 个 feature，新增 K 个回归 feature，修正 source 路径 J 处」
-   - 「下一个可执行的 feature：F0XX - <title>」（如果有）
-   - 「需要你额外注意：<列出 obsolete in_progress 的代码回滚提示、需要回归验证的 feature 等>」
-
-2. **不自动开始下一个 feature**，等待用户指令。
-
----
-
-## 异常处理
-
-| 情况 | 处理 |
-|------|------|
-| 找不到对比锚点 | 退化为整文档对比模式，但明确告知用户精度会下降 |
-| diff 显示改动巨大（例如超过 50% 行数变化或新增/删除模块文件超过 3 个） | 暂停，提示用户「这是一次大重构，建议拆分成多次小同步，或考虑用 generate-feature-list 重新生成」 |
-| diff 与用户先验严重不一致 | 暂停，列出不一致点，让用户核对是否修改了不该修改的内容（可能是误改） |
-| `docs/product.md` 的"模块清单"与 `docs/product/` 实际文件不一致 | 暂停，列出差异，让用户先修复总览，不要靠猜测继续 |
-| `feature-list.json` / 详情文件 / `feature-list-revisions.json` 任一存在格式错误（含裸双引号） | 停止，原文报告，不尝试自动修复格式 |
-| 阶段 4 修改过程中报错 | 停止，建议用户 `git restore docs/feature-list.json docs/feature-list-revisions.json docs/features/` 回滚到本次修改前的状态 |
-| 任何 git 命令失败 | 立即停止，原文报告错误，不尝试自动修复 |
-
----
-
-## Git 操作的允许与禁止
-
-继承 execute-next-feature 中的同名约束。简要重述：
-
-- **允许**：在非 main 分支上 `git diff` / `git log` / `git add docs/feature-list.json docs/feature-list-revisions.json docs/features/` / `git commit`
-- **需用户确认**：切换分支、stash、restore
-- **禁止**：force 操作、reset --hard、操作 main 分支、push
-
----
-
-## 流程速查表
-
+```json
+["docs/product.md", "docs/product/**/*.md", "docs/coding_rules.md"]
 ```
-阶段 0：前置检查 ──────── 检查环境、找到对比锚点
-   ↓
-阶段 1：收集用户先验 ─── 询问"这次主要想做什么"
-   ↓
-阶段 2：基于 diff 的差异分析 ── 输出差异报告
-        （覆盖 product.md + product/ 目录 + coding_rules.md）
-   ↓
-阶段 3：用户审阅决策 ─── 等待确认 ──→ 不通过则回阶段 2 调整
-   ↓
-阶段 4：执行修改 ──────── 按规则更新 feature-list（含 source 路径修正）
-   ↓
-阶段 5：更新 meta 与 commit ── 自检、提交
-   ↓
-阶段 6：交班 ──────────── 输出总结、等待指令
+
+2. Append this stable object to `docs/feature-list-revisions.json`; do not write it into index metadata:
+
+```json
+{
+  "revised_at": "<ISO 8601 timestamp>",
+  "synced_at_commit": "<HEAD source-document commit hash>",
+  "anchor_commit": "<comparison anchor commit hash>",
+  "user_intent": "<localized Stage 1 prior, or null>",
+  "summary": "<localized one-sentence revision summary>",
+  "added": ["F0XX", "F0YY"],
+  "obsoleted": ["F0AA"],
+  "revised_via_new_feature": [
+    {"original": "F0BB", "regression": "F0CC"}
+  ],
+  "source_path_updates": [
+    {"feature": "F005", "from": "product/02-foo.md", "to": "product/03-foo.md"}
+  ],
+  "depends_on_warnings": ["F0DD", "F0EE"]
+}
+```
+
+`synced_at_commit` is the next run's anchor and is mandatory. It must identify the committed source-document state analyzed by this synchronization. `source_path_updates` preserves rename traceability, including mappings for immutable completed history.
+
+3. Complete this self-check; return to Stage 4 if any item fails:
+
+- [ ] No Feature entry or detail file was physically deleted.
+- [ ] No `done` Feature's `id`, `description`, or `acceptance_criteria` was modified; any removal status/note update or source-path correction matches the explicit Stage 4 rules.
+- [ ] Index IDs and `docs/features/F*.json` filename stems match one to one.
+- [ ] Every new ID was never used before.
+- [ ] Every `depends_on` ID exists.
+- [ ] No dependency points to `obsolete` or `obsolete_done`; any unavoidable case was raised before writing.
+- [ ] Every non-historical detail `source` resolves to an existing module file and section after renames.
+- [ ] The last revision entry contains the correct `synced_at_commit`.
+- [ ] `meta.total_features`, index length, and detail-file count are equal.
+- [ ] The index, revision log, and every affected detail pass `python3 -m json.tool`.
+
+4. Stage and commit only Feature-plan files:
+
+```text
+git add docs/feature-list.json docs/feature-list-revisions.json docs/features/
+git commit -m "chore(sync): update feature-list per docs revision
+
+Anchor: <short anchor hash>
+Added: <N> features
+Obsoleted: <N> features
+Revised via new feature: <N> features
+
+<localized one-sentence summary>"
+```
+
+Source changes must be in a separate earlier commit. If they are still uncommitted, pause before Stage 4 and ask the user to commit them so `synced_at_commit` can identify the analyzed source state.
+
+5. Never push.
+
+## Stage 6: handoff
+
+**Entry:** Stage 5 completed.
+
+**Output:** a synchronization summary in the current conversation language.
+
+Report:
+
+- the anchor hash used for analysis;
+- counts of added, obsoleted, regression, and source-path-update records;
+- the next executable Feature, when one exists;
+- rollback warnings for obsolete in-progress work and every outstanding regression concern.
+
+Do not automatically start another Feature. Wait for the user's instruction.
+
+## Exception handling
+
+| Condition | Required response |
+|---|---|
+| No anchor can be found | Offer whole-document comparison, disclose reduced precision, and require confirmation |
+| More than about 50% of source lines changed, or more than three module files were added or removed | Pause and recommend smaller synchronizations or explicit `generate-feature-list` regeneration |
+| Diff and user prior conflict materially | Pause, enumerate mismatches, and ask the user to check for unintended source edits |
+| Product module inventory and actual files differ | Pause, list the discrepancy, and require Product repair rather than guessing |
+| Any index, detail, or revision JSON is invalid, including unescaped quotes | Stop and report the original error; do not auto-repair the data |
+| Stage 4 fails while writing | Stop and explain that recovery requires explicit user authorization; do not run restore automatically |
+| Any Git command fails | Stop and report the original error; do not attempt automatic repair |
+
+## Git boundaries
+
+- Allowed on a work branch: `git diff`, `git log`, staging only `docs/feature-list.json`, `docs/feature-list-revisions.json`, and `docs/features/`, then the synchronization commit.
+- Require explicit confirmation: switching branches, stash, restore, or discarding changes.
+- Forbidden: force operations, `reset --hard`, work on `main` or `master`, and push.
+
+## Workflow map
+
+```text
+Stage 0: preflight and anchor
+    ↓
+Stage 1: optional user prior
+    ↓
+Stage 2: Git-diff analysis and report
+    ↓
+Stage 3: explicit user decision ── rejected or adjusted → revise Stage 2 report
+    ↓
+Stage 4: apply confirmed index/detail changes
+    ↓
+Stage 5: update metadata and revision log, validate, commit
+    ↓
+Stage 6: summarize and wait
 ```
