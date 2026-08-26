@@ -2,11 +2,13 @@
 
 ## Current work
 
-No Feature is currently in progress.
+F011 - Convert Product and Feature templates to canonical English rendering sources
 
 ## Progress
 
-- F010 completed at `2026-08-26T05:49:06Z` after human acceptance and a fresh-context scan with zero remaining must_fix findings.
+- Started at `2026-08-26T05:49:06Z`.
+- Added one canonical template rendering contract that preserves required section semantics while localizing human-readable content according to document_language.
+- Rewrote the Product, Product module, Feature detail, and Progress template sources in natural English without changing stable machine protocols.
 
 ## Context notes
 

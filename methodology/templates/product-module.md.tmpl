@@ -1,75 +1,76 @@
-# {{NN}}-{{module-name}} · {{中文模块名}}
+# {{NN}}-{{module-name}} · {{MODULE_DISPLAY_NAME}}
 
-## 模块定位
+## Module positioning
 
-*一两句话：本模块在系统里的角色，与谁交互。*
+*In one or two sentences, explain this module's role in the system and what it interacts with.*
 
-## 功能流程
+## Functional flow
 
-*用户/系统行为的逐步描述，可用 ASCII 图或编号列表。*
+*Describe the user or system behavior step by step. An ASCII diagram or numbered list is welcome.*
 
-```
+```text
 1. ...
 2. ...
 3. ...
 ```
 
-## 数据模型
+## Data model
 
-| 字段 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| *field_name* | *string / int / bool / enum* | *默认* | *字段含义* |
+| Field | Type | Default | Description |
+| --- | --- | --- | --- |
+| *field_name* | *string / int / bool / enum* | *default* | *Meaning of the field* |
 
-## 状态机（如适用）
+## State machine (if applicable)
 
-```
+```text
 state_a ──(condition)──→ state_b
 state_b ──(condition)──→ state_c
 ```
 
-## UI 草图
+## UI sketch
 
-*由 product-ui-sketcher skill 产出 ASCII 线框图。例：*
+*The product-ui-sketcher skill produces the ASCII wireframe. Example:*
 
-```
+```text
 ┌──────────────────────────┐
-│  [按钮1]  [按钮2]         │
+│  [Action 1]  [Action 2]  │
 │                          │
-│  内容区                   │
+│  Content area            │
 │                          │
 └──────────────────────────┘
 ```
 
-关键交互：
-- *点击按钮1 → ...*
-- *点击按钮2 → ...*
+Key interactions:
 
-## 音效条目
+- *Select Action 1 → ...*
+- *Select Action 2 → ...*
 
-| 触发时机 | 文件名 | 风格说明 | 时长 |
-|---------|--------|---------|------|
-| *动作 X 发生时* | *_placeholder_sfx_X.wav* | *短促清脆 / 沉闷有力 / ...* | *0.3s* |
+## Audio entries
 
-## 数值规则
+| Trigger | Filename | Style | Duration |
+| --- | --- | --- | --- |
+| *When action X occurs* | *_placeholder_sfx_X.wav* | *Brief and bright / heavy and muted / ...* | *0.3s* |
 
-*公式 / 阈值 / 配置项。例：*
+## Numeric rules
 
-- *最大值：100*
-- *衰减公式：current = max(0, current - rate * dt)*
+*Record formulas, thresholds, and configuration values. For example:*
 
-## 验收标准
+- *Maximum value: 100*
+- *Decay formula: current = max(0, current - rate * dt)*
 
-*每条是「做完后能怎么验证」的具体陈述。*
+## Acceptance criteria
 
-1. *用户在 X 场景下按 Y，观察 Z 发生*
+*Each item must state a concrete way to verify the completed behavior.*
+
+1. *In context X, the user performs Y and observes Z.*
 2. *...*
 
-## 边缘情况
+## Edge cases
 
-*已知但本版本明确不处理的情况，写明留给后续。*
+*Record known cases intentionally excluded from this version.*
 
-- *情况 A：暂不处理，留给后续 feature*
+- *Case A: Not handled yet; leave it for a later Feature.*
 
-## 变更历史
+## Change history
 
-- *YYYY-MM-DD*：模块初始化。
+- *YYYY-MM-DD*: Initialized the module.

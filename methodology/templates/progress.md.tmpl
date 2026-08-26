@@ -1,19 +1,19 @@
-# 项目进展
+# Project progress
 
-> 本文件是 long-running agent 的"工作记忆外置"。execute-next-feature 各阶段会持续追加内容，避免依赖上下文窗口。
+> This file externalizes the working memory of a long-running agent. The execute-next-feature stages update it continuously so progress does not depend on one conversation context.
 
-## 当前正在做
+## Current work
 
-*由 execute-next-feature 阶段 2 填入：当前 in_progress feature 的 id + title*
+*Filled during execute-next-feature Stage 2 with the current in-progress Feature ID and title.*
 
-## 进展
+## Progress
 
-*由 execute-next-feature 阶段 3 持续追加：每完成一个子步骤一行；遇卡点也记录在此*
+*Updated during execute-next-feature Stage 3 with one line for each completed substep and any blocker.*
 
-## 上下文笔记
+## Context notes
 
-*跨多个 feature 的备忘、设计共识、临时决策。手工维护，execute-next-feature 不自动改这一区。*
+*Durable reminders, design agreements, and temporary decisions shared across Features. Maintained manually; execute-next-feature does not rewrite this section automatically.*
 
-## 历史
+## History
 
-*由 execute-next-feature 阶段 7 归档：每完成一个 feature，把上方「当前正在做」+「进展」搬到这里，加上完成时间戳和 feature id*
+*During execute-next-feature Stage 7, move Current work and Progress here and add the completion timestamp and Feature ID.*

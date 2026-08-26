@@ -22,7 +22,7 @@
     {"id":"F008","title":"Package examples tests and open-source adoption guidance","status":"done","depends_on":["F007"],"estimated_scope":"medium","completed_at":"2026-08-26T05:14:44Z"},
     {"id":"F009","title":"Define the document-language contract and compatibility behavior","status":"done","depends_on":["F008"],"estimated_scope":"small","completed_at":"2026-08-26T05:34:14Z"},
     {"id":"F010","title":"Make Bootstrap select and persist document_language","status":"done","depends_on":["F009"],"estimated_scope":"medium","completed_at":"2026-08-26T05:49:06Z"},
-    {"id":"F011","title":"Convert Product and Feature templates to canonical English rendering sources","status":"pending","depends_on":["F009"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F011","title":"Convert Product and Feature templates to canonical English rendering sources","status":"in_progress","depends_on":["F009"],"estimated_scope":"medium","completed_at":null},
     {"id":"F012","title":"Convert core Methodology specifications to canonical English","status":"pending","depends_on":["F009"],"estimated_scope":"medium","completed_at":null},
     {"id":"F013","title":"Convert the execution specification and Coding Rules template to English","status":"pending","depends_on":["F012"],"estimated_scope":"medium","completed_at":null},
     {"id":"F014","title":"Convert engine Coding Rules to canonical English","status":"pending","depends_on":["F012"],"estimated_scope":"medium","completed_at":null},
