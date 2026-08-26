@@ -2,11 +2,13 @@
 
 ## Current work
 
-No Feature is currently in progress.
+F016 - Internationalize Product initialization and change-standardization workflows
 
 ## Progress
 
-- F015 completed at `2026-08-26T09:42:24Z` after human acceptance, iterative accuracy repairs, 20 passing tests, and a definitive fresh-context scan with zero remaining must_fix findings.
+- Started at `2026-08-26T09:45:28Z`.
+- Confirmed the scope is two paired workflows across four stable distribution files: Product initialization and Product change standardization for Claude Skills and portable Prompts.
+- Confirmed that durable Product output must follow persisted `document_language`, transient conversation follows the user's current language, and native and portable behavior must remain equivalent.
 
 ## Context notes
 
@@ -14,6 +16,16 @@ No Feature is currently in progress.
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T09:45:28Z - F016 started
+
+Current work before F016:
+
+No Feature was in progress.
+
+Progress:
+
+- F015 completed at `2026-08-26T09:42:24Z` after human acceptance, iterative accuracy repairs, 20 passing tests, and a definitive fresh-context scan with zero remaining must_fix findings.
 
 ### 2026-08-26T09:42:24Z - F015 completed
 
