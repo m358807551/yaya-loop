@@ -33,8 +33,8 @@ def _validate_json(path: Path) -> bool:
     except json.JSONDecodeError as e:
         print(f"[HOOK] {path.relative_to(REPO_ROOT)} is invalid JSON: {e}", file=sys.stderr)
         print(
-            "[HOOK] 常见原因：字符串值中直接使用了 ASCII 双引号（\"），"
-            "请改用 \\\" 转义或中文书名号「」替代。",
+            "[HOOK] Common cause: an unescaped ASCII double quote (\") inside a JSON "
+            "string. Escape it as \\\" or use language-appropriate typographic quotation marks.",
             file=sys.stderr,
         )
         return False
