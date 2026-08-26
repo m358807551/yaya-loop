@@ -8,5 +8,5 @@
     "Durable refactor notes follow document_language"
   ],
   "source": "product/05-internationalization.md#Product decisions",
-  "notes": ""
+  "notes": "Human acceptance passed on 2026-08-26. Automated verification: all 46 repository tests passed; the native and portable workflow bodies are byte-for-byte equivalent below their canonical heading; JSON validation and git diff checks passed."
 }

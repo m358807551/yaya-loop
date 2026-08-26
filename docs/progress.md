@@ -12,6 +12,7 @@ F021 - Internationalize refactor selection and portable usage guidance
 - Rewrote refactor-smell selection in canonical English while preserving its three stages, stable scan markers, fixed red/yellow/green rubric, continuous numbering, exactly-one comparative recommendation, read-only boundary, Plan handoff, response routing, and exceptions.
 - Rewrote the portable usage guide in English with direct English commands, concise Chinese discovery examples, all nine Prompt routes, native/portable capability equivalence, independent-review fallback, and non-weakening adaptation guidance.
 - Added focused regression coverage for exact paired bodies, bilingual discovery, document-language and historical-excerpt boundaries, stable scan markers, fixed severity thresholds, continuous numbering, exactly one comparative recommendation, read-only Plan handoff, exceptions, and all portable usage routes.
+- All 46 repository tests passed, the paired workflow bodies matched exactly, JSON validation passed, and human acceptance confirmed every F021 criterion.
 
 ## Context notes
 
