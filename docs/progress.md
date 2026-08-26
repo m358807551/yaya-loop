@@ -9,6 +9,8 @@ F020 - Internationalize Feature execution workflows
 - Started at `2026-08-26T10:35:13Z` under the execution-rule snapshot committed at `8a2debf`.
 - Confirmed the scope is the Feature execution Claude Skill and portable Prompt at their stable distribution paths.
 - Confirmed that Stage 0–8 gates, evidence, human authority, independent review, verification, commits, and Git boundaries remain unchanged; conversation follows the current user language while durable Feature, Progress, acceptance, and handoff prose follows `document_language`.
+- Rewrote the native Feature execution workflow in canonical English against the committed F020 rule snapshot, preserving Stage 0–8 entry gates, fixed reports, human authority, independent JSON review, stable evidence, atomic commits, Progress persistence, exception handling, and Git boundaries.
+- Mirrored the canonical execution body into the portable Prompt and added focused regression coverage for bilingual discovery, language/rule snapshots, all ordered stage gates, selection and approval, implementation and verification, independent review JSON, stable completion evidence, handoff, exceptions, and Git boundaries.
 
 ## Context notes
 
