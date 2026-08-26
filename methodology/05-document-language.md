@@ -32,16 +32,20 @@ The value of `document_language` must be a BCP 47 language tag. Initial verified
 
 Other well-formed BCP 47 tags may be used on a best-effort basis, but the agent must disclose that they are not verified by the initial international release. Yaya Loop's existing `language` field continues to identify the programming language and must not be reused for document language.
 
+Yaya Loop recommends conventional BCP 47 casing: lowercase language, title-case script, and uppercase region. Bootstrap preserves the exact value explicitly confirmed by the user and does not silently normalize it. Empty values, whitespace, and underscore forms such as `zh_CN` are invalid and must be confirmed again in a hyphenated form. Private-use, grandfathered, and other unusual tags require explicit confirmation and remain best-effort rather than verified.
+
 ## 3. Language selection
 
 For a new project:
 
-1. Infer a reasonable default from the language currently used by the user.
+1. Infer a reasonable proposed default from the language currently used by the user.
 2. Ask the user to confirm the proposed document language once.
 3. Persist the confirmed BCP 47 tag before generating durable Product or Feature content.
 4. Use the persisted value as the authority in every later workflow.
 
 If the user's preference cannot be inferred, propose `en` and ask for confirmation. Inference is only a default; country, IP address, timezone, operating-system locale, and account location must not silently select the language.
+
+Every inferred value is non-binding until the user confirms it. If the evidence is mixed or weak, report that uncertainty instead of presenting a dominant language as fact.
 
 ## 4. Content governed by document_language
 
@@ -87,8 +91,8 @@ When rendering an English canonical template into another document language, pre
 
 An existing initialized project may predate this contract. If `docs/methodology-config.json` exists without `document_language`:
 
-1. Inspect the dominant language of `docs/product.md` and the active Product modules.
-2. Propose that language as the migration default and ask the user to confirm it.
+1. Inspect the apparent dominant language of `docs/product.md` and the active Product modules. Active modules are files linked from the module list in `docs/product.md`, excluding entries explicitly marked obsolete or archived; if no usable list exists, inspect current files under `docs/product/` as a fallback.
+2. Present that language only as a non-binding migration proposal and ask the user to confirm it. If no language clearly dominates, report the uncertainty and ask the user to choose.
 3. Persist the confirmed tag without translating existing files.
 4. Record the migration in Progress or upgrade notes appropriate to the project.
 5. Apply the confirmed language to new durable content from that point forward.

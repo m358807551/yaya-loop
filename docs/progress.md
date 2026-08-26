@@ -2,11 +2,15 @@
 
 ## Current work
 
-No Feature is currently in progress.
+F010 - Make Bootstrap select and persist document_language
 
 ## Progress
 
-F009 completed at `2026-08-26T05:34:14Z`. Awaiting the next explicit instruction.
+- Started at `2026-08-26T05:38:17Z`.
+- Added STEP 0.5 to resolve and persist document_language before Product generation for greenfield, legacy, and already-bootstrapped projects.
+- Updated later Bootstrap stages to preserve, verify, and report the confirmed language without translating existing content.
+- Clarified non-binding language inference and BCP 47 confirmation behavior in the canonical contract.
+- Added a repository test that locks Bootstrap ordering, persistence, non-translation, and conversation-language independence.
 
 ## Context notes
 
@@ -41,3 +45,13 @@ Progress:
 - Linked the new contract from the Methodology overview without changing later Bootstrap, template, Skill, Prompt, Hook, example, or README behavior.
 - All acceptance criteria were verified by human review.
 - Fresh-context code-smell scan passed with zero must_fix findings; three implementation clarifications were recorded in F009 notes for later Features.
+
+### 2026-08-26T05:38:17Z - F009 handoff
+
+Current work before F010:
+
+No Feature was in progress.
+
+Progress:
+
+- F009 completed at `2026-08-26T05:34:14Z` and awaited the next explicit instruction.

@@ -1,8 +1,8 @@
 # BOOTSTRAP · 给 AI 的初始化指令
 
-> **AI 读者注意**：本文件是你的执行脚本。从 STEP 0 开始按顺序执行，每一步完成后再进入下一步。**遇到歧义就停下来问用户，不要靠猜测继续。** 6 步全部完成后，目标项目就装好这套方法论了。
+> **AI 读者注意**：本文件是你的执行脚本。从 STEP 0 开始按顺序执行，每一步完成后再进入下一步。**遇到歧义就停下来问用户，不要靠猜测继续。** 全部步骤完成后，目标项目就装好这套方法论了。
 >
-> **重要假设**：用户主语言是中文，你与用户的所有交互使用中文（除非用户主动切换语言）。
+> **Language rule:** Communicate in the language currently used by the user. Resolve and persist the language of durable project documents in STEP 0.5. A change in conversation language must never change the stored document language. Chinese prompt text elsewhere in this file is a semantic example and must be rendered in the current conversation language.
 >
 > Yaya Loop 的根目录位置由用户告诉你，可能是 `~/code/yaya-loop/` 或别的路径。下文用 `<KIT>` 代指。先问用户：「请告诉我这个 yaya-loop 文件夹的绝对路径，比如 `/Users/xxx/code/yaya-loop/`」。拿到后写死在本次会话里。
 
@@ -32,11 +32,57 @@
    | 没有 | 其它任意 | 其它任意 | **legacy** |
 
 4. 输出一行结论给用户：
-   - already-bootstrapped → 「检测到项目已经装过本方法论，跳到 STEP 5 做版本检查与升级。」（参考 `<KIT>/upgrade-notes.md`，本流程在 STEP 5 完成后结束）
+   - already-bootstrapped → 「检测到项目已经装过本方法论，将先完成 STEP 0.5 的文档语言兼容检查，再跳到 STEP 5 做版本检查与升级。」（参考 `<KIT>/upgrade-notes.md`，本流程在 STEP 5 完成后结束）
    - greenfield → 「检测到这是一个新项目（无产品文档、源码很少），将走 greenfield 流程。」
    - legacy → 「检测到这是一个已有代码的项目（X 个源文件、Y 个 commit），将走 legacy 反向工程流程。」
 
 5. 等用户回「继续」或纠正分类（用户可能说「不对，这是个练习项目，按 greenfield 走」）。
+
+---
+
+## STEP 0.5: Resolve document language
+
+**Purpose:** Select and persist the language of durable Product, Feature, and Progress content before any such content is generated.
+
+**Terms:**
+
+- `CONVERSATION_LANGUAGE` is the language currently used by the user. It is not persisted and may change between messages.
+- `DOCUMENT_LANGUAGE` is a confirmed BCP 47 language tag stored as `document_language` in `docs/methodology-config.json`.
+- Initially verified document languages are `en` and `zh-CN`. Other confirmed BCP 47 tags are best-effort and must be disclosed as unverified.
+
+**Do this for every project classification, including already-bootstrapped projects:**
+
+1. Check whether `docs/methodology-config.json` exists and contains a non-empty `document_language` string.
+
+2. If a stored value exists:
+   - Treat it as authoritative. Do not infer a replacement from the current conversation.
+   - Accept an ordinary tag when it uses hyphen-separated BCP 47-style subtags, such as `en`, `zh-CN`, or `pt-BR`.
+   - Recommend conventional casing: lowercase language, title-case script, and uppercase region. Preserve the exact value confirmed by the user; do not silently normalize it.
+   - Empty values, whitespace, and underscore forms such as `zh_CN` are invalid. Stop and ask the user to confirm a replacement such as `zh-CN`.
+   - Private-use, grandfathered, or otherwise unusual tags may continue only after explicit confirmation and must be reported as best-effort.
+   - Record the result as `DOCUMENT_LANGUAGE` and continue without asking again.
+
+3. If the field is missing for a greenfield project:
+   - Infer only a proposed default from `CONVERSATION_LANGUAGE`.
+   - Propose `en` for English conversation or `zh-CN` for Simplified Chinese conversation. If the preference is unclear, propose `en`.
+   - Ask the user to confirm the proposal or provide another BCP 47 tag. Inference is never an automatic decision.
+
+4. If the field is missing for a legacy or already-bootstrapped project:
+   - Inspect `docs/product.md` when it exists and the active Product module files. Active modules are files linked from the module list in `docs/product.md`, excluding entries explicitly marked obsolete or archived. If no usable module list exists, inspect current files under `docs/product/` as a fallback.
+   - Use the apparent dominant Product language only as a non-binding proposal. Do not infer from Feature titles when Product documents are available.
+   - If there is no clear dominant language, say so and ask the user to choose; do not invent confidence.
+   - Ask the user to confirm `DOCUMENT_LANGUAGE`.
+   - Do not translate, rename, or otherwise rewrite any existing Product, Feature, Progress, or history content as part of this compatibility step.
+
+5. Persist a newly confirmed value immediately:
+   - If the config does not exist, create `docs/` if needed and write a valid minimal JSON object containing only `document_language`.
+   - If the config exists, add or replace only `document_language` and preserve every other field.
+   - Validate the result with `python3 -m json.tool docs/methodology-config.json > /dev/null`.
+   - For an existing project, record that the language field was added without translating existing documents in `docs/progress.md` when that file exists.
+
+6. Keep `DOCUMENT_LANGUAGE` fixed for the rest of Bootstrap. Pass it explicitly to every Product or Feature workflow invoked later. If the user asks to change an established document language, stop and follow the explicit migration contract in `<KIT>/methodology/05-document-language.md`; do not edit the field merely because the conversation language changed.
+
+7. If the project is already bootstrapped, continue to STEP 5 after this step. Otherwise continue to STEP 1.
 
 ---
 
@@ -63,6 +109,8 @@
 ---
 
 ## STEP 2：按项目状态走不同分支
+
+Before entering either branch, confirm that `DOCUMENT_LANGUAGE` is loaded from `docs/methodology-config.json`. Pass it explicitly to every elicitor, Skill, or Prompt that may produce durable project knowledge. Internal instruction language does not override the confirmed document language.
 
 ### STEP 2a · Greenfield 分支
 
@@ -159,11 +207,12 @@
 
 5. **记录静态检查命令**：
    问用户：「我之后实现 feature 时，要跑哪个命令做静态检查？例如 `npm run typecheck` / `cargo check` / `mypy .` / `tsc --noEmit`。这个命令必须能快速反馈类型/语法错误，且能在 30 秒内完成。」
-   把答案写入：
+   读取 STEP 0.5 已创建或更新的 `docs/methodology-config.json`，补全下面字段。**必须保留已确认的 `document_language`，不得通过重建配置将其覆盖或遗漏。** 最终结构为：
    ```bash
    mkdir -p docs
    cat > docs/methodology-config.json <<EOF
    {
+     "document_language": "<DOCUMENT_LANGUAGE>",
      "static_check_cmd": "<用户答案>",
      "engine": "<X>",
      "language": "<Y>",
@@ -242,6 +291,11 @@ chmod +x .git/hooks/commit-msg
    for f in docs/features/*.json; do python3 -m json.tool "$f" > /dev/null || echo "BAD: $f"; done
    ```
 
+   Then verify that the persisted document language survived the complete Bootstrap process:
+   ```bash
+   python3 -c "import json; value=json.load(open('docs/methodology-config.json')).get('document_language'); assert isinstance(value, str) and value.strip(), 'missing document_language'; print('document language OK:', value)"
+   ```
+
 3. **id ↔ 文件名交叉检查**：
    ```bash
    python3 -c "
@@ -273,9 +327,10 @@ chmod +x .git/hooks/commit-msg
 向用户输出一段总结，包括：
 1. 本次 bootstrap 走的是 greenfield 还是 legacy 分支。
 2. 产生了哪些文件（按上面的 ls 结果列出）。
-3. 当前 pending 的第一个可启动 feature 是什么。
-4. 用户下一步该做什么（一句话指引）。
-5. 友情提示：bootstrap 完成后，**本 BOOTSTRAP.md 文件不需要被检入用户项目**——它只是装配脚本，方法论的常驻参考是 `<KIT>/methodology/00-overview.md`。
+3. The confirmed `document_language` and whether it was newly added to an existing project without translating content.
+4. 当前 pending 的第一个可启动 feature 是什么。
+5. 用户下一步该做什么（一句话指引）。
+6. 友情提示：bootstrap 完成后，**本 BOOTSTRAP.md 文件不需要被检入用户项目**——它只是装配脚本，方法论的常驻参考是 `<KIT>/methodology/00-overview.md`。
 
 然后停下，把控制权交回用户。**不要自动开始第一个 feature。**
 
@@ -286,6 +341,7 @@ chmod +x .git/hooks/commit-msg
 | 情况 | 处理 |
 |------|------|
 | 用户的项目结构很特殊（monorepo、多语言混合）→ STEP 0/3 难判断 | 停下，让用户告诉你按哪个子目录走 |
+| `document_language` 缺失、无效或无法可靠推断 | 停下，让用户确认一个 BCP 47 tag；不得根据国家、IP、时区或对话切换静默决定 |
 | `<KIT>` 路径找不到 / 文件缺失 | 让用户检查 kit 是否完整解压 |
 | STEP 4 装 hook 时 `.git/hooks/commit-msg` 已存在 | 不要覆盖，提示用户手工合并或备份 |
 | STEP 5 烟囱测试任何一步失败 | 报告失败点，让用户决定继续还是回退 |
@@ -297,6 +353,7 @@ chmod +x .git/hooks/commit-msg
 
 ```
 STEP 0：探测项目状态（already-bootstrapped / greenfield / legacy）
+STEP 0.5：确认并持久化 document_language；已有项目不自动翻译
 STEP 1：探测 AI CLI（claude-code / other）
 STEP 2：按项目状态分支
    2a greenfield → product-init → spec → generate-feature-list
