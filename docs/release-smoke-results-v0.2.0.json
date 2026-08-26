@@ -1,0 +1,128 @@
+{
+  "release": "0.2.0",
+  "executed_at": "2026-08-26T13:13:45Z",
+  "source_commit": "874493a",
+  "runner": "Codex",
+  "method": "Each canonical scenario was executed in a separate disposable repository generated from the current Kit. The runner recorded the language question and confirmation, generated representative Product, Feature, configuration, and Progress files, then evaluated expected and prohibited behavior before discarding the repository.",
+  "canonical_scenarios": "../methodology/06-document-language-smoke-scenarios.md",
+  "scenarios": [
+    {
+      "id": "DL-01",
+      "result": "pass",
+      "agent_questions": [
+        "What language should durable Product, Feature, Progress, and handoff prose use? Based only on this English conversation, I propose en; please confirm or provide another BCP 47 tag."
+      ],
+      "confirmation": "en",
+      "generated_files": [
+        "docs/methodology-config.json",
+        "docs/product.md",
+        "docs/feature-list.json",
+        "docs/features/F900.json",
+        "docs/progress.md"
+      ],
+      "validation_output": [
+        "Confirmed en was persisted before Product and Feature generation.",
+        "Product, Feature list, Feature detail, and Progress use English prose.",
+        "Every generated JSON file parsed successfully."
+      ],
+      "prohibited_behavior_checks": [
+        "No locale, country, IP address, timezone, or operating-system value was used.",
+        "Stable JSON keys, enums, IDs, paths, placeholders, and evidence were not translated."
+      ]
+    },
+    {
+      "id": "DL-02",
+      "result": "pass",
+      "agent_questions": [
+        "持久化的 Product、Feature、Progress 和 Handoff 文档要使用什么语言？仅根据当前中文对话，我建议 zh-CN；请确认或提供其他 BCP 47 标签。"
+      ],
+      "confirmation": "zh-CN",
+      "generated_files": [
+        "docs/methodology-config.json",
+        "docs/product.md",
+        "docs/feature-list.json",
+        "docs/features/F900.json",
+        "docs/progress.md"
+      ],
+      "validation_output": [
+        "Confirmed zh-CN was persisted before Product and Feature generation.",
+        "Product, Feature list, Feature detail, and Progress use Simplified Chinese prose.",
+        "English and Chinese outputs preserve identical stable Feature fields.",
+        "Every generated JSON file parsed successfully."
+      ],
+      "prohibited_behavior_checks": [
+        "Conversation language was not persisted as a second setting.",
+        "No localized Methodology, Skill, Prompt, template, Coding Rules library, or Hook tree was created."
+      ]
+    },
+    {
+      "id": "DL-03",
+      "result": "pass",
+      "agent_questions": [
+        "我已读取 document_language: en。我会用中文沟通，但新增持久化内容继续使用英文；是否确认新增 JSON 资料导入？"
+      ],
+      "confirmation": "Keep document_language en and add profile import.",
+      "generated_files": [
+        "docs/product.md",
+        "docs/feature-list.json",
+        "docs/features/F901.json",
+        "docs/progress.md"
+      ],
+      "validation_output": [
+        "Agent questions and reports used Chinese.",
+        "Stored document_language remained en.",
+        "All new durable Product, Feature list, Feature detail, and Progress prose remained English.",
+        "Every generated JSON file parsed successfully."
+      ],
+      "prohibited_behavior_checks": [
+        "Chinese conversation did not change document_language to zh-CN.",
+        "Chinese conversation text was not copied into durable project knowledge."
+      ]
+    },
+    {
+      "id": "DL-04",
+      "result": "pass",
+      "agent_questions": [
+        "The existing Product appears predominantly Simplified Chinese. That is only a proposal, not a durable choice. Please confirm the BCP 47 tag for new durable prose."
+      ],
+      "confirmation": "en; do not translate existing documents",
+      "generated_files": [
+        "docs/methodology-config.json",
+        "docs/product.md",
+        "docs/feature-list.json",
+        "docs/features/F900.json",
+        "docs/features/F901.json",
+        "docs/progress.md"
+      ],
+      "validation_output": [
+        "Migration added only document_language: en to the existing configuration.",
+        "The unknown team_policy field and every established configuration value were preserved.",
+        "Existing Chinese Product text remained byte-for-byte unchanged and completed F900 history remained Chinese.",
+        "New standalone F901 content uses English and Progress records that no automatic translation occurred.",
+        "Every generated JSON file parsed successfully."
+      ],
+      "prohibited_behavior_checks": [
+        "The apparent Chinese Product language was presented only as a proposal.",
+        "No configuration object replacement, unknown-field loss, automatic translation, or reuse of programming-language language occurred."
+      ]
+    }
+  ],
+  "scenario_validation": {
+    "result": "pass",
+    "assertions_passed": 28
+  },
+  "full_suite_modes": [
+    {
+      "document_language": "en",
+      "result": "pass",
+      "tests_run": 69,
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests"
+    },
+    {
+      "document_language": "zh-CN",
+      "result": "pass",
+      "tests_run": 69,
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests"
+    }
+  ]
+}

@@ -11,12 +11,12 @@ This audit maps every acceptance criterion in [`product/05-internationalization.
 | ID | Product acceptance criterion | Verification evidence | Result |
 | --- | --- | --- | --- |
 | I18N-AC1 | The repository defaults to a complete English README; the complete Simplified Chinese README links back. | `tests/test_readmes.py`: `test_default_readme_is_english_with_bidirectional_language_links`, `test_both_readmes_cover_the_complete_product_story`, and relative-link checks. | Pass |
-| I18N-AC2 | A newly initialized English project produces English Product and Feature prose. | [`../methodology/06-document-language-smoke-scenarios.md`](../methodology/06-document-language-smoke-scenarios.md) DL-01 and the `en` fixture; `tests/test_document_language.py`: stable-protocol and scenario coverage tests; the English Greenfield reference under [`../examples/greenfield-todo-app/`](../examples/greenfield-todo-app/). | Pass |
-| I18N-AC3 | A newly initialized Chinese project produces Chinese Product and Feature prose. | Smoke scenario DL-02 and the `zh-CN` fixture; `test_english_and_chinese_fixtures_preserve_stable_protocols`; Bootstrap's confirmed `zh-CN` path. | Pass |
-| I18N-AC4 | A user may discuss an English-document project in Chinese without changing durable output language. | Smoke scenario DL-03; `test_smoke_scenarios_cover_verified_and_mismatched_languages`; language-contract assertions across Product, Generate, Execute, and refactor workflows. | Pass |
+| I18N-AC2 | A newly initialized English project produces English Product and Feature prose. | Executed DL-01 evidence in [`release-smoke-results-v0.2.0.json`](./release-smoke-results-v0.2.0.json); the `en` protocol fixture and English Greenfield reference under [`../examples/greenfield-todo-app/`](../examples/greenfield-todo-app/). | Pass |
+| I18N-AC3 | A newly initialized Chinese project produces Chinese Product and Feature prose. | Executed DL-02 evidence in `release-smoke-results-v0.2.0.json`; the `zh-CN` protocol fixture; Bootstrap's confirmed `zh-CN` path. | Pass |
+| I18N-AC4 | A user may discuss an English-document project in Chinese without changing durable output language. | Executed DL-03 evidence in `release-smoke-results-v0.2.0.json`; language-contract assertions across Product, Generate, Execute, and refactor workflows. | Pass |
 | I18N-AC5 | Canonical workflow rules have one English source rather than parallel localized implementations. | `test_native_and_portable_workflow_bodies_remain_identical`; workflow-specific pair tests; `test_examples_do_not_duplicate_workflow_source_trees`; canonical-source rules in `methodology/05-document-language.md`. | Pass |
-| I18N-AC6 | Existing projects without language configuration use confirmation-based migration without translation. | Smoke scenario DL-04 and Legacy before/after fixtures; `test_legacy_fixture_adds_only_document_language`; `test_bootstrap_and_contract_preserve_legacy_compatibility`; the v0.1.0 → v0.2.0 procedure in [`../upgrade-notes.md`](../upgrade-notes.md). | Pass |
-| I18N-AC7 | Automated checks operate independently of document language. | Paired fixtures preserve keys, enums, IDs, dependencies, paths, timestamps, placeholder prefixes, and completion evidence; Hook tests run against stable evidence; the complete standard-library suite passes in both language modes. | Pass |
+| I18N-AC6 | Existing projects without language configuration use confirmation-based migration without translation. | Executed DL-04 evidence in `release-smoke-results-v0.2.0.json`; Legacy before/after fixtures; migration contract tests; the v0.1.0 → v0.2.0 procedure in [`../upgrade-notes.md`](../upgrade-notes.md). | Pass |
+| I18N-AC7 | Automated checks operate independently of document language. | `release-smoke-results-v0.2.0.json` records separate 69-test passing runs from disposable current-Kit exports configured with `document_language: en` and `zh-CN`; paired fixtures preserve stable protocols and Hook tests run against stable evidence. | Pass |
 | I18N-AC8 | English-facing documentation limits support claims to verified behavior. | README support disclaimer; the `en` and `zh-CN` verified-value boundary in `methodology/05-document-language.md`; best-effort disclosure and prohibited claims in the smoke guide; release consistency tests. | Pass |
 
 ## Release-wide verification
@@ -44,7 +44,9 @@ The automated suite covers:
 - English canonical examples and the bilingual README entry points; and
 - current-release version consistency while preserving historical v0.1.0 evidence.
 
-Final F026 automated result: **69 tests passed**. The smoke result refers to repository-owned fixtures, isolated scenario-contract checks, workflow parity checks, and the documented manual procedure. It does not claim that Yaya Loop can automatically execute or certify every external Coding Agent environment.
+The initial F026 repository gate passed **69 tests**. The later independent-smoke repair executed DL-01 through DL-04 in separate disposable repositories and passed 28 scenario assertions. It also exported the current Kit twice, configured the copies with `document_language: en` and `zh-CN`, and passed the complete 69-test suite in each copy. Questions, confirmations, generated-file inventories, validation output, and prohibited-behavior checks are recorded in [`release-smoke-results-v0.2.0.json`](./release-smoke-results-v0.2.0.json).
+
+These results verify the repository-owned workflow with Codex as the executing Agent. They do not claim automatic certification of every external Coding Agent implementation or environment.
 
 ## Supported behavior in v0.2.0
 

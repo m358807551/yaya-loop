@@ -103,14 +103,56 @@ class ReleaseV020Tests(unittest.TestCase):
         self.assertEqual(audit.count("| Pass |"), 8)
         for evidence in (
             "test_default_readme_is_english_with_bidirectional_language_links",
-            "test_english_and_chinese_fixtures_preserve_stable_protocols",
-            "test_smoke_scenarios_cover_verified_and_mismatched_languages",
             "test_native_and_portable_workflow_bodies_remain_identical",
-            "test_legacy_fixture_adds_only_document_language",
-            "test_bootstrap_and_contract_preserve_legacy_compatibility",
+            "release-smoke-results-v0.2.0.json",
+            "separate 69-test passing runs",
         ):
             with self.subTest(evidence=evidence):
                 self.assertIn(evidence, audit)
+
+    def test_release_smoke_results_are_structured_and_complete(self):
+        evidence = json.loads(self.read("docs/release-smoke-results-v0.2.0.json"))
+        self.assertEqual(evidence["release"], CURRENT_VERSION)
+        self.assertRegex(
+            evidence["executed_at"], r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$"
+        )
+        self.assertRegex(evidence["source_commit"], r"^[0-9a-f]{7,40}$")
+        self.assertEqual(evidence["runner"], "Codex")
+        self.assertTrue((REPO_ROOT / "docs" / evidence["canonical_scenarios"]).resolve().is_file())
+
+        scenarios = evidence["scenarios"]
+        self.assertEqual(
+            [scenario["id"] for scenario in scenarios],
+            ["DL-01", "DL-02", "DL-03", "DL-04"],
+        )
+        for scenario in scenarios:
+            with self.subTest(scenario=scenario["id"]):
+                self.assertEqual(scenario["result"], "pass")
+                self.assertTrue(scenario["agent_questions"])
+                self.assertTrue(scenario["confirmation"])
+                self.assertIn("docs/product.md", scenario["generated_files"])
+                self.assertIn("docs/feature-list.json", scenario["generated_files"])
+                self.assertIn("docs/progress.md", scenario["generated_files"])
+                self.assertGreaterEqual(len(scenario["validation_output"]), 3)
+                self.assertGreaterEqual(len(scenario["prohibited_behavior_checks"]), 2)
+
+        for scenario in (scenarios[0], scenarios[1], scenarios[3]):
+            self.assertIn("docs/methodology-config.json", scenario["generated_files"])
+
+        self.assertEqual(
+            evidence["scenario_validation"],
+            {"result": "pass", "assertions_passed": 28},
+        )
+        suite_modes = evidence["full_suite_modes"]
+        self.assertEqual(
+            [result["document_language"] for result in suite_modes],
+            ["en", "zh-CN"],
+        )
+        for result in suite_modes:
+            with self.subTest(document_language=result["document_language"]):
+                self.assertEqual(result["result"], "pass")
+                self.assertEqual(result["tests_run"], 69)
+                self.assertIn("unittest discover", result["command"])
 
     def test_release_audit_discloses_publication_and_support_boundaries(self):
         audit = self.read("docs/release-audit-v0.2.0.md")
