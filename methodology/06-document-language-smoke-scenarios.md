@@ -20,7 +20,7 @@ The following paired snapshots describe the same pending Feature. Natural-langua
     "static_check_cmd": "python3 -m unittest discover -s tests -v",
     "engine": "example-engine",
     "language": "python",
-    "kit_version": "0.1.0",
+    "kit_version": "0.2.0",
     "bootstrap_at": "2026-08-26T00:00:00Z",
     "bootstrap_mode": "greenfield"
   },
@@ -55,7 +55,7 @@ The following paired snapshots describe the same pending Feature. Natural-langua
     "static_check_cmd": "python3 -m unittest discover -s tests -v",
     "engine": "example-engine",
     "language": "python",
-    "kit_version": "0.1.0",
+    "kit_version": "0.2.0",
     "bootstrap_at": "2026-08-26T00:00:00Z",
     "bootstrap_mode": "greenfield"
   },

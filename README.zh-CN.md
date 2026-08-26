@@ -10,7 +10,7 @@ Yaya Loop 是一套面向长期 AI 编程的开发工作流。
 
 **Product → Feature → Implement → Verify → Review → Ship → Next Feature ↺**
 
-当前版本：`v0.1.0`
+当前版本：`v0.2.0`
 
 核心方法论、Godot 与 GDScript 规则来自真实项目实践；其他语言和技术栈的规则仍在持续补充。
 

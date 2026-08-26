@@ -10,7 +10,7 @@ It breaks Product requirements into small, bounded, independently verifiable Fea
 
 **Product → Feature → Implement → Verify → Review → Ship → Next Feature ↺**
 
-Current release: `v0.1.0`
+Current release: `v0.2.0`
 
 The core methodology and the Godot and GDScript rules come from real project experience. Rules for other languages and stacks are still being expanded.
 

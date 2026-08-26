@@ -106,7 +106,7 @@ class ExampleProjectTests(unittest.TestCase):
                 "static_check_cmd": "npm run typecheck && npm test",
                 "engine": "web-frontend",
                 "language": "typescript",
-                "kit_version": "0.1.0",
+                "kit_version": "0.2.0",
                 "bootstrap_at": "2026-05-25T10:00:00Z",
                 "bootstrap_mode": "greenfield",
             },
