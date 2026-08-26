@@ -23,6 +23,7 @@ F023 - Convert the default example into a complete English reference project
 - Replaced the abbreviated Greenfield Coding Rules with the complete rendered four-layer template; completed the Todo module section inventory and archived F001 Progress correctly.
 - Reworked the Legacy module order, statuses, complete section outline, and Feature sources, then added exact template, machine-state, and Markdown-anchor regression checks.
 - All 54 tests and language, JSON, link/reference, anchor, template-rendering, and diff checks pass; the final visible repair requires repeated human acceptance.
+- Final repaired documentation received explicit human acceptance; final fresh-context rescan is next.
 
 ## Context notes
 
