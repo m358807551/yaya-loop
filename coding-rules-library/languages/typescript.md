@@ -1,46 +1,46 @@
-# TypeScript 编程最佳实践
+# TypeScript best practices
 
-> Stub 版本：未填充。请按 stub 章节逐项与 AI 协作补全。
-> 适用版本：TypeScript 5.4+
+> **Incomplete stub:** Collaboratively complete each section with the AI before treating this as a field-tested rules source.
+> Applies to: TypeScript 5.4 and later
 
-## 1. 静态类型与 strict 模式
+## 1. Static typing and strict mode
 
-TODO：tsconfig 必启 strict 全套；`any` / `unknown` / `never` 的边界；`as` 类型断言的滥用警惕。
+TODO: Enable the complete `strict` family in tsconfig; define the boundaries among `any`, `unknown`, and `never`; treat unjustified `as` assertions as a warning sign.
 
-## 2. 命名约定
+## 2. Naming conventions
 
-TODO：PascalCase 类型 / camelCase 变量与函数 / CONSTANT_CASE 常量；接口前缀 `I` 之争（本项目选哪边）；type vs interface 的选择标准。
+TODO: Define PascalCase for types, camelCase for variables and functions, and CONSTANT_CASE for constants; decide whether interfaces use an `I` prefix; define when to use `type` versus `interface`.
 
-## 3. 模块组织
+## 3. Module organization
 
-TODO：barrel files (`index.ts`) 利弊；named export vs default export；circular import 检测。
+TODO: Document the tradeoffs of barrel files such as `index.ts`; choose named or default exports; detect and prevent circular imports.
 
-## 4. 控制流与错误处理
+## 4. Control flow and error handling
 
-TODO：异常 vs Result 模式（neverthrow / fp-ts）；early return；Discriminated Union 表达可能失败的返回。
+TODO: Choose between exceptions and a Result pattern such as neverthrow or fp-ts; prefer guard clauses where they clarify flow; represent fallible returns with discriminated unions when appropriate.
 
-## 5. 集合与函数式 API
+## 5. Collections and functional APIs
 
-TODO：数组 `map` / `filter` / `reduce` 的可读性边界；`for...of` 与 `forEach` 的选择；不可变数据结构（Immer / structuredClone）。
+TODO: Set readability boundaries for array `map`, `filter`, and `reduce`; choose between `for...of` and `forEach`; define appropriate uses of Immer and `structuredClone` for immutable updates.
 
-## 6. 异步与并发
+## 6. Asynchronous work and concurrency
 
-TODO：async/await 全链路；AbortController 取消；Promise.all / Promise.allSettled / Promise.race 的边界。
+TODO: Preserve async/await through the call chain; use `AbortController` for cancellation; define when to use `Promise.all`, `Promise.allSettled`, and `Promise.race`.
 
-## 7. 类型工具与高级类型
+## 7. Utility and advanced types
 
-TODO：常用工具类型（`Pick` / `Omit` / `Partial` / `Required` / `Record`）；条件类型与映射类型的可读性边界；`satisfies` 何时用。
+TODO: Define appropriate uses of `Pick`, `Omit`, `Partial`, `Required`, and `Record`; limit conditional and mapped types when they harm readability; explain when `satisfies` is preferable to an annotation or assertion.
 
-## 8. lint / format
+## 8. Linting and formatting
 
-TODO：ESLint + Prettier 配置基线；typescript-eslint 严格规则集；import 排序规则。
+TODO: Define an ESLint and Prettier baseline, select typescript-eslint strict rule sets, and establish import ordering.
 
-## 9. 反模式速查
+## 9. Anti-pattern checklist
 
-TODO：`any` 满天飞、`as` 强转绕过类型、空 catch、Promise 未 await、`Object.assign` 替代 spread。
+TODO: Cover pervasive `any`, `as` assertions that bypass the type system, empty catch blocks, unawaited Promises, and `Object.assign` used where object spread is clearer.
 
-## 10. 社区参考
+## 10. Community references
 
-- TypeScript 官方手册：https://www.typescriptlang.org/docs/handbook/intro.html
-- typescript-eslint 推荐规则：https://typescript-eslint.io/rules/
-- Type Challenges（提升类型功力）：https://github.com/type-challenges/type-challenges
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+- [typescript-eslint rules](https://typescript-eslint.io/rules/)
+- [Type Challenges](https://github.com/type-challenges/type-challenges)

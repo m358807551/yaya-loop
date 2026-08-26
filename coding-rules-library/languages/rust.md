@@ -1,54 +1,54 @@
-# Rust 编程最佳实践
+# Rust best practices
 
-> Stub 版本：未填充。请按 stub 章节逐项与 AI 协作补全。
-> 适用版本：Rust 1.75+（Edition 2021）
+> **Incomplete stub:** Collaboratively complete each section with the AI before treating this as a field-tested rules source.
+> Applies to: Rust 1.75 and later (Edition 2021)
 
-## 1. 类型系统与所有权
+## 1. Type system and ownership
 
-TODO：所有权 / 借用 / 生命周期心智模型；`Clone` 何时是设计气味；`Copy` 适用边界；类型转换（`as` / `From` / `TryFrom`）的优先级。
+TODO: Establish a practical model for ownership, borrowing, and lifetimes; identify when `Clone` is a design smell; define the boundary for `Copy`; prefer `From` and `TryFrom` over unjustified `as` casts.
 
-## 2. 命名约定
+## 2. Naming conventions
 
-TODO：snake_case 函数与变量 / PascalCase 类型与 trait / SCREAMING_SNAKE_CASE 常量；getter 不带 `get_` 前缀；构造方法 `new` / `with_xxx` / `try_new`。
+TODO: Define snake_case for functions and variables, PascalCase for types and traits, SCREAMING_SNAKE_CASE for constants, getters without a `get_` prefix, and constructors named `new`, `with_xxx`, or `try_new`.
 
-## 3. 项目组织
+## 3. Project organization
 
-TODO：crate / module / file 的对应关系；`mod.rs` vs 同名文件；workspace 适用场景；feature flags 的最低门槛。
+TODO: Define how crates, modules, and files correspond; choose between `mod.rs` and same-named module files; identify when to use a workspace; set a minimum bar for feature flags.
 
-## 4. 错误处理
+## 4. Error handling
 
-TODO：`Result<T, E>` 全链路；`?` 操作符；错误类型设计（thiserror / anyhow 的选择）；panic 的合法边界。
+TODO: Propagate `Result<T, E>` through the call chain and use `?`; define application and library error types; choose between thiserror and anyhow; restrict panic to documented invariant failures.
 
-## 5. 集合与迭代
+## 5. Collections and iteration
 
-TODO：Vec / VecDeque / HashMap / BTreeMap 选型；Iterator trait 的链式调用；`collect::<Result<_, _>>()` 模式。
+TODO: Choose among `Vec`, `VecDeque`, `HashMap`, and `BTreeMap`; set readability boundaries for Iterator chains; document patterns such as `collect::<Result<_, _>>()`.
 
-## 6. 异步与并发
+## 6. Asynchronous work and concurrency
 
-TODO：tokio vs async-std vs smol；`Send + Sync` 约束；channel 选型（mpsc / oneshot / broadcast）；`spawn` 与任务生命周期。
+TODO: Choose among Tokio, async-std, and smol; document `Send + Sync` constraints; select among mpsc, oneshot, and broadcast channels; define ownership and shutdown for spawned tasks.
 
-## 7. 性能与内存
+## 7. Performance and memory
 
-TODO：Box / Rc / Arc 的选择；Cow<'_, T> 的使用场景；零拷贝 (`&str` / `&[u8]`)；何时该 `#[inline]`。
+TODO: Choose among `Box`, `Rc`, and `Arc`; define appropriate uses of `Cow<'_, T>` and zero-copy `&str` or `&[u8]`; require evidence before adding `#[inline]`.
 
-## 8. unsafe 边界
+## 8. Unsafe boundaries
 
-TODO：使用 unsafe 的合法理由；如何最小化 unsafe 块；常见 UB 模式（aliasing / lifetime extension / uninit memory）。
+TODO: Define legitimate reasons for unsafe code, minimize each unsafe block, and document common undefined-behavior hazards such as aliasing, lifetime extension, and uninitialized memory.
 
-## 9. 文档与测试
+## 9. Documentation and tests
 
-TODO：`///` 文档注释 + doctest；`#[cfg(test)]` 模块；integration test 目录约定；cargo doc 风格。
+TODO: Define `///` documentation and doctests, `#[cfg(test)]` modules, integration-test directory conventions, and cargo doc style.
 
-## 10. lint / format
+## 10. Linting and formatting
 
-TODO：rustfmt 配置；clippy 默认 + 推荐 lint 集；CI 必跑 `cargo fmt --check && cargo clippy -- -D warnings`。
+TODO: Define rustfmt configuration and the default and recommended Clippy lints; require CI to run `cargo fmt --check` and `cargo clippy -- -D warnings`.
 
-## 11. 反模式速查
+## 11. Anti-pattern checklist
 
-TODO：unwrap 满天飞、Clone 滥用、`mut` 滥用、过度泛型 / where 子句、`Arc<Mutex<_>>` 替代借用、忽视 lifetime warnings。
+TODO: Cover pervasive `unwrap`, unnecessary `Clone` and `mut`, over-generalized types and `where` clauses, `Arc<Mutex<_>>` used instead of borrowing, and ignored lifetime warnings.
 
-## 12. 社区参考
+## 12. Community references
 
-- Rust API Guidelines：https://rust-lang.github.io/api-guidelines/
-- Rust by Example：https://doc.rust-lang.org/rust-by-example/
-- The Rustonomicon（unsafe 必读）：https://doc.rust-lang.org/nomicon/
+- [Rust API Guidelines](https://rust-lang.github.io/api-guidelines/)
+- [Rust by Example](https://doc.rust-lang.org/rust-by-example/)
+- [The Rustonomicon](https://doc.rust-lang.org/nomicon/)

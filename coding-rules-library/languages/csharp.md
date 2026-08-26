@@ -1,50 +1,50 @@
-# C# 编程最佳实践
+# C# best practices
 
-> Stub 版本：未填充。请按 stub 章节逐项与 AI 协作补全。
-> 适用版本：C# 12 / .NET 8+
+> **Incomplete stub:** Collaboratively complete each section with the AI before treating this as a field-tested rules source.
+> Applies to: C# 12 / .NET 8 and later
 
-## 1. 静态类型与 nullable
+## 1. Static typing and nullable references
 
-TODO：启用 nullable reference types；`?` 与 `!` 的边界；何时该 `required`。
+TODO: Enable nullable reference types; define the boundaries for `?` and `!`; explain when to use `required`.
 
-## 2. 命名约定
+## 2. Naming conventions
 
-TODO：PascalCase 与 camelCase 的边界；接口前缀 `I`；async 方法后缀 `Async`；私有字段 `_camelCase`。
+TODO: Define the boundaries between PascalCase and camelCase; the `I` prefix for interfaces; the `Async` suffix for asynchronous methods; and `_camelCase` for private fields.
 
-## 3. 文件成员顺序
+## 3. Member order
 
-TODO：using / namespace / class / 字段 / 构造 / 属性 / 方法的顺序；Microsoft 官方推荐。
+TODO: Define the order of using directives, namespace declarations, classes, fields, constructors, properties, and methods, based on Microsoft's official guidance.
 
-## 4. 控制流与异常
+## 4. Control flow and exceptions
 
-TODO：异常 vs Result<T, E> 模式；early return vs single exit；using / using-declaration / IAsyncDisposable。
+TODO: Define exceptions versus a `Result<T, E>` pattern; guard clauses versus a single exit; and the use of `using`, using declarations, and `IAsyncDisposable`.
 
-## 5. 集合与 LINQ
+## 5. Collections and LINQ
 
-TODO：IEnumerable / IReadOnlyList / IList / List 的选择；LINQ 的性能边界（避免热路径 lazy 链）；ToList vs ToArray。
+TODO: Define when to expose `IEnumerable`, `IReadOnlyList`, `IList`, or `List`; set performance boundaries for LINQ, especially lazy chains on hot paths; and choose between `ToList` and `ToArray`.
 
-## 6. 异步与并发
+## 6. Asynchronous work and concurrency
 
-TODO：async/await 全链路；ConfigureAwait(false) 的位置；CancellationToken 全链路透传；ValueTask 适用场景。
+TODO: Require async/await through the full call chain; define where `ConfigureAwait(false)` belongs; propagate `CancellationToken`; and restrict `ValueTask` to justified cases.
 
-## 7. 内存与性能
+## 7. Memory and performance
 
-TODO：struct vs class；Span<T> / Memory<T> 适用；ArrayPool；string 拼接（StringBuilder / string interpolation）。
+TODO: Define `struct` versus `class`; appropriate uses of `Span<T>`, `Memory<T>`, and `ArrayPool`; and string construction with interpolation or `StringBuilder`.
 
-## 8. 文档与 XML 注释
+## 8. Documentation and XML comments
 
-TODO：`///` 写公共 API；`<summary>` / `<param>` / `<returns>` 的最低门槛。
+TODO: Require `///` for public APIs and define minimum expectations for `<summary>`, `<param>`, and `<returns>`.
 
-## 9. lint / format
+## 9. Linting and formatting
 
-TODO：dotnet format / EditorConfig / Roslyn analyzers；StyleCop / SonarLint 的取舍。
+TODO: Choose a baseline using `dotnet format`, EditorConfig, and Roslyn analyzers, and document the tradeoffs of StyleCop and SonarLint.
 
-## 10. 反模式速查
+## 10. Anti-pattern checklist
 
-TODO：async void、catch (Exception)、struct 大于 16 字节、可变 struct、Dispose 模式忘写。
+TODO: Cover `async void`, broad `catch (Exception)`, structs larger than 16 bytes, mutable structs, and missing Dispose patterns.
 
-## 11. 社区参考
+## 11. Community references
 
-- Microsoft C# 编码约定：https://learn.microsoft.com/dotnet/csharp/fundamentals/coding-style/coding-conventions
-- C# Language Design：https://github.com/dotnet/csharplang
-- .NET API Guidelines：https://learn.microsoft.com/dotnet/standard/design-guidelines/
+- [Microsoft C# coding conventions](https://learn.microsoft.com/dotnet/csharp/fundamentals/coding-style/coding-conventions)
+- [C# language design](https://github.com/dotnet/csharplang)
+- [.NET Framework design guidelines](https://learn.microsoft.com/dotnet/standard/design-guidelines/)

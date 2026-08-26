@@ -1,57 +1,57 @@
-# {{LANGUAGE_NAME}} 编程最佳实践
+# {{LANGUAGE_NAME}} best practices
 
-> Stub 版本：未填充。建议在前 3 个 feature 实现过程中由 AI + 用户协作补全。
-> 安装方式：BOOTSTRAP STEP 3 由 AI 复制本文件为 `docs/coding-rules/language-rules.md`，引导用户填关键章节。
-> 适用版本：{{LANGUAGE_VERSION}}
+> **Incomplete stub:** Collaboratively complete this document with the AI during the first three Features.
+> Installation: During BOOTSTRAP STEP 3, the AI copies this file to `docs/coding-rules/language-rules.md` and asks the user to complete the key sections.
+> Applies to: {{LANGUAGE_VERSION}}
 
-## 必填章节（按 stub 顺序逐一填充）
+## Required sections
 
-凡新填一节，删除该节顶部的 `TODO` 标记。所有 TODO 都消失时，本文件升级为「实战版」。
+Complete the sections in order. Remove a section's `TODO` marker when that section is complete. This document becomes a field-tested rules source only after every TODO has been resolved.
 
 ---
 
-## 1. 静态类型与类型检查
+## 1. Static typing and type checking
 
-TODO：本语言类型系统强度（静态 / 渐进 / 动态）？是否启用 strict 模式？泛型支持？
+TODO: Document the strength of this language's type system (static, gradual, or dynamic), whether strict mode must be enabled, and how generics should be used.
 
-## 2. 命名约定
+## 2. Naming conventions
 
-TODO：变量 / 函数 / 类 / 常量 / 模块 / 文件名分别用什么大小写风格？布尔 / 函数命名风格？
+TODO: Define casing for variables, functions, classes, constants, modules, and filenames, including conventions for Boolean values and function names.
 
-## 3. 文件成员顺序与代码组织
+## 3. Member order and code organization
 
-TODO：模块内部成员的标准顺序（import → 常量 → 类型 → 函数 → main）？官方推荐 vs 社区惯例？
+TODO: Define the standard order within a module, such as imports, constants, types, functions, and the main entry point. Distinguish official guidance from community convention.
 
-## 4. 控制流与错误处理
+## 4. Control flow and error handling
 
-TODO：错误处理范式（异常 / Result / null）？资源清理（finally / defer / context manager / Drop）？早返回 vs 单一出口的偏好？
+TODO: Define the error-handling model (exceptions, Result, or null), resource cleanup (finally, defer, context manager, or Drop), and the preference between guard clauses and a single exit.
 
-## 5. 集合与迭代
+## 5. Collections and iteration
 
-TODO：标准集合类型与性能特征？遍历时修改容器的陷阱？函数式 API（map/filter/reduce）的偏好和性能开销？
+TODO: Document the standard collection types and their performance characteristics, mutation hazards during iteration, and the readability and performance boundaries for functional APIs such as map, filter, and reduce.
 
-## 6. 并发与异步
+## 6. Concurrency and asynchronous work
 
-TODO：异步模型（async/await / goroutine / actor / event loop）？常见死锁 / 竞态 / 取消语义？
+TODO: Document the asynchronous model (async/await, goroutines, actors, or event loop), common deadlock and race hazards, and cancellation semantics.
 
-## 7. 内存与生命周期
+## 7. Memory and lifetimes
 
-TODO：GC vs 手动管理 vs 所有权？引用 / 复制语义？常见泄漏模式？
+TODO: Explain garbage collection, manual management, or ownership; reference versus copy semantics; and common leak patterns.
 
-## 8. 文档字符串约定
+## 8. Documentation conventions
 
-TODO：注释/文档字符串语法？哪些 API 必须写？工具生成的标记格式（如 `///` / `"""` / `##` / JSDoc / rustdoc）？
+TODO: Define comment and documentation syntax, which APIs require documentation, and tool-recognized forms such as `///`, `"""`, `##`, JSDoc, or rustdoc.
 
-## 9. 标准 lint / format 工具
+## 9. Standard linting and formatting tools
 
-TODO：项目应启用哪个 linter / formatter？关键规则集？
+TODO: Identify the project's linter and formatter and the essential rule sets to enable.
 
-## 10. 反模式速查
+## 10. Anti-pattern checklist
 
-TODO：本语言常见踩坑清单（如 Python 默认参数可变性 / JS this 绑定 / Rust 生命周期对齐）。
+TODO: List common language-specific traps, such as mutable Python defaults, JavaScript `this` binding, or incorrect Rust lifetime alignment.
 
-## 11. 社区参考
+## 11. Community references
 
-- [TODO 官方文档链接]
-- [TODO 风格指南链接（如 PEP8 / Microsoft C# Conventions / Rust API Guidelines）]
-- [TODO 著名样板项目链接]
+- [TODO: official documentation]
+- [TODO: style guide, such as PEP 8, Microsoft C# conventions, or the Rust API Guidelines]
+- [TODO: a respected reference project]
