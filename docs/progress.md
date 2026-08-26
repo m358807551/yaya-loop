@@ -13,7 +13,7 @@ F023 - Convert the default example into a complete English reference project
 - Rebuilt the legacy adoption walkthrough as a complete natural-English reference covering read-only discovery, language selection, reverse-engineered Product and Feature state, Coding Rules, Progress, installation, validation, and gradual rollout.
 - Added regression coverage for English-only example prose, Product and Coding Rules contracts, Feature graph and source-anchor consistency, complete legacy adoption stages, and the absence of copied workflow-source trees.
 - Automated verification passed: all 54 repository tests, JSON parsing, Han-text scans for target examples, and Git diff checks.
-- Implementation is ready for human acceptance.
+- Human acceptance passed on 2026-08-26; fresh-context code-smell review is next.
 
 ## Context notes
 
