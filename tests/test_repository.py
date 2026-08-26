@@ -493,6 +493,81 @@ class RepositoryTests(unittest.TestCase):
                 with self.subTest(stub=filename, topic=topic):
                     self.assertIn(topic, content)
 
+        required_stub_headings = {
+            "_stub-template.md": (
+                "Static typing and type checking",
+                "Naming conventions",
+                "Member order and code organization",
+                "Control flow and error handling",
+                "Collections and iteration",
+                "Concurrency and asynchronous work",
+                "Memory and lifetimes",
+                "Documentation conventions",
+                "Standard linting and formatting tools",
+                "Anti-pattern checklist",
+                "Community references",
+            ),
+            "csharp.md": (
+                "Static typing and nullable references",
+                "Naming conventions",
+                "Member order",
+                "Control flow and exceptions",
+                "Collections and LINQ",
+                "Asynchronous work and concurrency",
+                "Memory and performance",
+                "Documentation and XML comments",
+                "Linting and formatting",
+                "Anti-pattern checklist",
+                "Community references",
+            ),
+            "python.md": (
+                "Static typing and type hints",
+                "Naming conventions",
+                "Module organization",
+                "Control flow and exceptions",
+                "Collections and iteration",
+                "Asynchronous work and concurrency",
+                "Data classes and immutability",
+                "Documentation and typing tools",
+                "Linting and formatting",
+                "Anti-pattern checklist",
+                "Community references",
+            ),
+            "rust.md": (
+                "Type system and ownership",
+                "Naming conventions",
+                "Project organization",
+                "Error handling",
+                "Collections and iteration",
+                "Asynchronous work and concurrency",
+                "Performance and memory",
+                "Unsafe boundaries",
+                "Documentation and tests",
+                "Linting and formatting",
+                "Anti-pattern checklist",
+                "Community references",
+            ),
+            "typescript.md": (
+                "Static typing and strict mode",
+                "Naming conventions",
+                "Module organization",
+                "Control flow and error handling",
+                "Collections and functional APIs",
+                "Asynchronous work and concurrency",
+                "Utility and advanced types",
+                "Linting and formatting",
+                "Anti-pattern checklist",
+                "Community references",
+            ),
+        }
+        for filename, headings in required_stub_headings.items():
+            content = (languages / filename).read_text(encoding="utf-8")
+            actual_headings = tuple(
+                re.findall(r"(?m)^## \d+\. (.+)$", content)
+            )
+            with self.subTest(stub=filename):
+                self.assertEqual(actual_headings, headings)
+
         gdscript = (languages / "gdscript.md").read_text(encoding="utf-8")
         self.assertNotIn("Incomplete stub", gdscript)
         self.assertNotIn("TODO:", gdscript)
@@ -521,6 +596,7 @@ class RepositoryTests(unittest.TestCase):
             "use a direct `for` loop in per-frame or large-array hot paths",
             "GDScript has no try-catch",
             "Assertions are ignored in non-debug builds",
+            "their conditions are not evaluated in release exports",
             "An assertion expression must never contain side effects",
             "There is no `throw`, `try`, `except`, or `finally` in GDScript",
             "Return `null` and require the caller to check it",
@@ -532,6 +608,7 @@ class RepositoryTests(unittest.TestCase):
             "GDScript uses Python-style `a if condition else b`",
             "Prefer ordinary `Array[T]`",
             "Use an Autoload plus a Resource for data that must persist across Scenes",
+            "Node and Object `==` compares reference identity, not value equality",
             "Combining `@onready` and `@export` on one variable",
             "String-based `emit_signal(\"name\", args)`",
             "String-based `connect(\"signal\", self, \"method\")`",

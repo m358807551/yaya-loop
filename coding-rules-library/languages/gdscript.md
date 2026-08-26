@@ -250,7 +250,7 @@ button.pressed.connect(_on_button_pressed)
 button.pressed.connect(_on_button_pressed.bind("attack"))
 timer.timeout.connect(_on_timeout, CONNECT_ONE_SHOT)
 some_signal.connect(_on_some_signal, CONNECT_DEFERRED)
-button.pressed.connect(func(): print("clicked"))
+button.pressed.connect(func() -> void: print("clicked"))
 
 # Godot 3 style: do not use.
 button.connect("pressed", self, "_on_button_pressed")
@@ -271,7 +271,9 @@ sorted.sort_custom(func(a: Enemy, b: Enemy) -> bool: return a.threat > b.threat)
 var visible_enemies: Array[Enemy] = enemies.filter(
 	func(enemy: Enemy) -> bool: return enemy.is_visible()
 )
-var damages: Array = enemies.map(func(enemy: Enemy) -> int: return enemy.attack)
+var damages: Array[int] = []
+for enemy: Enemy in enemies:
+	damages.append(enemy.attack)
 var total: int = enemies.reduce(
 	func(accumulator: int, enemy: Enemy) -> int: return accumulator + enemy.attack,
 	0,
@@ -297,7 +299,7 @@ var increment := func() -> void: counter += 1
 increment.call()
 print(counter) # Still 0.
 
-var items := []
+var items: Array[int] = []
 var add_item := func() -> void: items.append(1)
 add_item.call()
 print(items) # [1]
@@ -505,7 +507,7 @@ static func _static_init() -> void:
 - Scattered returns in the middle of a function.
 - Pervasive `Variant`: reduced static checking and performance.
 - Lambdas in per-frame or other hot paths without measurement.
-- Comparing or accessing a freed Node without first calling `is_instance_valid`.
+- Node and Object `==` compares reference identity, not value equality. Never compare or access an Object that may have been freed without first calling `is_instance_valid`.
 - Using `null` instead of `[]` or `{}` as a collection default.
 - Printing every frame; use a counter, a breakpoint, or targeted logging.
 
