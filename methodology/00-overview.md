@@ -90,4 +90,5 @@
 | feature-list.json / F0XX.json / revisions.json 的 schema | [02-feature-list-schema.md](./02-feature-list-schema.md) |
 | execute-next-feature 的 8 阶段细节 | [03-execute-loop.md](./03-execute-loop.md) |
 | coding_rules.md 的 4 层结构怎么装 | [04-coding-rules-4-layers.md](./04-coding-rules-4-layers.md) |
+| Document language and compatibility contract | [05-document-language.md](./05-document-language.md) |
 | 想直接用 | 回到 [../README.md](../README.md) 或 [../BOOTSTRAP.md](../BOOTSTRAP.md) |

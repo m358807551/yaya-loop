@@ -2,14 +2,13 @@
 
 ## Current work
 
-No Feature is currently in progress. The repository is defining its initial self-hosted Product and Feature backlog.
+F009 - Define the document-language contract and compatibility behavior
 
 ## Progress
 
-- 2026-08-26: Confirmed that self-hosted Product documents cover the complete Yaya Loop product.
-- 2026-08-26: Confirmed English as the document language while maintainer conversation may remain Chinese.
-- 2026-08-26: Drafted the Product overview, five product modules, repository rules, and self-hosted methodology configuration.
-- 2026-08-26: Generated the initial self-hosted Feature plan with eight reverse-engineered completed Features and eighteen pending internationalization Features.
+- Started at `2026-08-26T05:30:31Z`.
+- Added the canonical document-language contract covering BCP 47 configuration, rendering boundaries, stable protocols, legacy compatibility, and explicit language migration.
+- Linked the new contract from the Methodology overview without changing later Bootstrap, template, Skill, Prompt, Hook, example, or README behavior.
 
 ## Context notes
 
@@ -18,4 +17,15 @@ No Feature is currently in progress. The repository is defining its initial self
 
 ## History
 
-No completed self-hosted Features have been recorded yet.
+### 2026-08-26T05:30:31Z - Self-hosting initialization
+
+Current work before F009:
+
+No Feature was in progress. The repository was defining its initial self-hosted Product and Feature backlog.
+
+Progress:
+
+- Confirmed that self-hosted Product documents cover the complete Yaya Loop product.
+- Confirmed English as the document language while maintainer conversation may remain Chinese.
+- Drafted the Product overview, five product modules, repository rules, and self-hosted methodology configuration.
+- Generated the initial self-hosted Feature plan with eight reverse-engineered completed Features and eighteen pending internationalization Features.
