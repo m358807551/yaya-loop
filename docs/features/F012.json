@@ -8,5 +8,5 @@
     "A rule-by-rule review finds no removed gate or weakened normative requirement"
   ],
   "source": "product/05-internationalization.md#Product decisions",
-  "notes": ""
+  "notes": "Human review confirmed all acceptance criteria on 2026-08-26. The core tool-independent Overview, Product structure, Feature schema, and four-layer Coding Rules architecture now use natural American English while retaining stable paths, schemas, dependency direction, status transitions, layer precedence, human acceptance, fresh-context review, and Git safety gates. Commit b6eb5a6 restored several rules that the initial translation had compressed too far and added explicit regression assertions. TODO (F025): consider a narrowly scoped Han-character check with allowances for legitimate quoted examples instead of checking only known legacy headings. TODO (F025): consider validating Markdown fragments and selected non-link repository path references in addition to linked file existence. Code smell scan: pass (feature: F012, must_fix: 0, suggest: 2, acceptable: 3)."
 }

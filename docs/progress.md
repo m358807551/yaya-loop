@@ -2,15 +2,11 @@
 
 ## Current work
 
-F012 - Convert core Methodology specifications to canonical English
+No Feature is currently in progress.
 
 ## Progress
 
-- Started at `2026-08-26T06:54:12Z`.
-- Rewrote the Methodology overview and Product document structure in natural American English while preserving the standardizer route, human completion authority, document hierarchy, module naming, and Product semantics.
-- Rewrote the Feature three-file schema and four-layer Coding Rules architecture in English while preserving stable fields, enums, dependency direction, status transitions, layer precedence, and completion gates.
-- Added regression checks for English canonical headings, completion and schema invariants, valid embedded JSON examples, and resolvable relative links across the migrated Methodology documents.
-- Restored Stage 0 rule citations, Stage 1 placeholder registration, Stage 6 independent review evidence, the full command-pattern scope, resource-loading fallback, and invariant assertions after fresh-context review detected translation loss; expanded tests to pin each restored rule.
+- F012 completed at `2026-08-26T07:07:29Z` after human acceptance and a fresh-context scan with zero remaining must_fix findings.
 
 ## Context notes
 
@@ -88,3 +84,19 @@ Progress:
 - Expanded the required-section regression inventory after fresh-context review found that several contractually required Product headings were not yet pinned by tests.
 - All acceptance criteria were verified by human review.
 - Fresh-context review passed after its one must_fix test-coverage finding was repaired; no non-blocking suggestions remain.
+
+### 2026-08-26T07:07:29Z - F012 completed
+
+Current work:
+
+F012 - Convert core Methodology specifications to canonical English
+
+Progress:
+
+- Started at `2026-08-26T06:54:12Z`.
+- Rewrote the Methodology overview and Product document structure in natural American English while preserving the standardizer route, human completion authority, document hierarchy, module naming, and Product semantics.
+- Rewrote the Feature three-file schema and four-layer Coding Rules architecture in English while preserving stable fields, enums, dependency direction, status transitions, layer precedence, and completion gates.
+- Added regression checks for English canonical headings, completion and schema invariants, valid embedded JSON examples, and resolvable relative links across the migrated Methodology documents.
+- Restored Stage 0 rule citations, Stage 1 placeholder registration, Stage 6 independent review evidence, the full command-pattern scope, resource-loading fallback, and invariant assertions after fresh-context review detected translation loss; expanded tests to pin each restored rule.
+- All acceptance criteria were verified by human review.
+- Fresh-context code-smell scan passed with zero remaining must_fix findings; two non-blocking test improvements were recorded in F012 notes for F025.
