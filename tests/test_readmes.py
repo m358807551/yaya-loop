@@ -56,7 +56,7 @@ class ReadmeInternationalizationTests(unittest.TestCase):
             ("### Greenfield", "### Greenfield"),
             ("### Legacy", "### Legacy"),
             (
-                "representative completed Features",
+                "a bounded set of representative completed Features",
                 "一组有上限、具有代表性的已完成 Feature",
             ),
             (

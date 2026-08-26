@@ -19,6 +19,8 @@ F024 - Publish the English README and preserve the complete Chinese README
 - Repaired both language versions and added paired semantic assertions for independent-review failure behavior, bounded completed history, and explicitly confirmed future work.
 - All 58 tests and relative-link, language-boundary, conversation-URL, and diff checks pass after repair; repeated human acceptance is required.
 - Human acceptance passed again after the wording repair; final independent rescan is next.
+- Final rescan found one remaining English/Chinese parity gap: the English Legacy summary did not explicitly call reconstructed completed history bounded.
+- Added the bounded-history wording and an exact paired regression assertion; repeated human acceptance is required for this final visible repair.
 
 ## Context notes
 

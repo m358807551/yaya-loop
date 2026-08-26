@@ -423,7 +423,7 @@ Once initialized, Features can be executed one by one.
 For an existing project, Yaya Loop first studies the current code and then reconstructs:
 
 - current Product capabilities;
-- representative completed Features;
+- a bounded set of representative completed Features;
 - likely future work confirmed by the user;
 - project-specific Coding Rules; and
 - known code smells.
