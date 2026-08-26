@@ -568,6 +568,74 @@ class RepositoryTests(unittest.TestCase):
             with self.subTest(stub=filename):
                 self.assertEqual(actual_headings, headings)
 
+        required_stub_todos = {
+            "_stub-template.md": (
+                "TODO: Document the strength of this language's type system (static, gradual, or dynamic), whether strict mode must be enabled, and how generics should be used.",
+                "TODO: Define casing for variables, functions, classes, constants, modules, and filenames, including conventions for Boolean values and function names.",
+                "TODO: Define the standard order within a module, such as imports, constants, types, functions, and the main entry point. Distinguish official guidance from community convention.",
+                "TODO: Define the error-handling model (exceptions, Result, or null), resource cleanup (finally, defer, context manager, or Drop), and the preference between guard clauses and a single exit.",
+                "TODO: Document the standard collection types and their performance characteristics, mutation hazards during iteration, and the readability and performance boundaries for functional APIs such as map, filter, and reduce.",
+                "TODO: Document the asynchronous model (async/await, goroutines, actors, or event loop), common deadlock and race hazards, and cancellation semantics.",
+                "TODO: Explain garbage collection, manual management, or ownership; reference versus copy semantics; and common leak patterns.",
+                "TODO: Define comment and documentation syntax, which APIs require documentation, and tool-recognized forms such as `///`, `\"\"\"`, `##`, JSDoc, or rustdoc.",
+                "TODO: Identify the project's linter and formatter and the essential rule sets to enable.",
+                "TODO: List common language-specific traps, such as mutable Python defaults, JavaScript `this` binding, or incorrect Rust lifetime alignment.",
+            ),
+            "csharp.md": (
+                "TODO: Enable nullable reference types; define the boundaries for `?` and `!`; explain when to use `required`.",
+                "TODO: Define the boundaries between PascalCase and camelCase; the `I` prefix for interfaces; the `Async` suffix for asynchronous methods; and `_camelCase` for private fields.",
+                "TODO: Define the order of using directives, namespace declarations, classes, fields, constructors, properties, and methods, based on Microsoft's official guidance.",
+                "TODO: Define exceptions versus a `Result<T, E>` pattern; guard clauses versus a single exit; and the use of `using`, using declarations, and `IAsyncDisposable`.",
+                "TODO: Define when to expose `IEnumerable`, `IReadOnlyList`, `IList`, or `List`; set performance boundaries for LINQ, especially lazy chains on hot paths; and choose between `ToList` and `ToArray`.",
+                "TODO: Require async/await through the full call chain; define where `ConfigureAwait(false)` belongs; propagate `CancellationToken`; and restrict `ValueTask` to justified cases.",
+                "TODO: Define `struct` versus `class`; appropriate uses of `Span<T>`, `Memory<T>`, and `ArrayPool`; and string construction with interpolation or `StringBuilder`.",
+                "TODO: Require `///` for public APIs and define minimum expectations for `<summary>`, `<param>`, and `<returns>`.",
+                "TODO: Choose a baseline using `dotnet format`, EditorConfig, and Roslyn analyzers, and document the tradeoffs of StyleCop and SonarLint.",
+                "TODO: Cover `async void`, broad `catch (Exception)`, structs larger than 16 bytes, mutable structs, and missing Dispose patterns.",
+            ),
+            "python.md": (
+                "TODO: Require type hints for every public API; decide whether to use `from __future__ import annotations`; define when to use `TypeVar`, `ParamSpec`, and `Self`.",
+                "TODO: Define snake_case for functions and variables, PascalCase for classes, CONSTANT_CASE for constants, lowercase module names, `_` for non-public names, and the narrow boundary for `__` name mangling.",
+                "TODO: Define the role of `__init__.py` and re-exports; choose between relative and absolute imports; explain regular packages versus namespace packages.",
+                "TODO: Define the preference for guard clauses; the boundary between EAFP and LBYL; a custom exception hierarchy; `finally` versus context managers; and appropriate use of the `else` clause on `try`.",
+                "TODO: Choose among list, tuple, set, and dict; define when a comprehension remains readable and when to expand it into a loop; explain the memory benefit of generators; prohibit unsafe mutation during iteration.",
+                "TODO: Define the boundaries among asyncio, threading, and multiprocessing; cover `async with` and `async for`; preserve task cancellation through `CancelledError`; account for the GIL when selecting concurrency.",
+                "TODO: Choose among `dataclass`, `pydantic.BaseModel`, and `attrs`; define when to use `frozen=True`; justify uses of `__slots__`.",
+                "TODO: Select one docstring style from Google, NumPy, or reStructuredText and define a baseline for mypy or pyright and Ruff.",
+                "TODO: Prefer Ruff or define a justified flake8, isort, and Black stack; record enabled rule sets and CI integration.",
+                "TODO: Cover mutable defaults such as `def f(x=[])`, wildcard imports, bare `except`, list mutation during iteration, dictionaries used as enums, and business logic in `__init__.py`.",
+            ),
+            "rust.md": (
+                "TODO: Establish a practical model for ownership, borrowing, and lifetimes; identify when `Clone` is a design smell; define the boundary for `Copy`; prefer `From` and `TryFrom` over unjustified `as` casts.",
+                "TODO: Define snake_case for functions and variables, PascalCase for types and traits, SCREAMING_SNAKE_CASE for constants, getters without a `get_` prefix, and constructors named `new`, `with_xxx`, or `try_new`.",
+                "TODO: Define how crates, modules, and files correspond; choose between `mod.rs` and same-named module files; identify when to use a workspace; set a minimum bar for feature flags.",
+                "TODO: Propagate `Result<T, E>` through the call chain and use `?`; define application and library error types; choose between thiserror and anyhow; restrict panic to documented invariant failures.",
+                "TODO: Choose among `Vec`, `VecDeque`, `HashMap`, and `BTreeMap`; set readability boundaries for Iterator chains; document patterns such as `collect::<Result<_, _>>()`.",
+                "TODO: Choose among Tokio, async-std, and smol; document `Send + Sync` constraints; select among mpsc, oneshot, and broadcast channels; define ownership and shutdown for spawned tasks.",
+                "TODO: Choose among `Box`, `Rc`, and `Arc`; define appropriate uses of `Cow<'_, T>` and zero-copy `&str` or `&[u8]`; require evidence before adding `#[inline]`.",
+                "TODO: Define legitimate reasons for unsafe code, minimize each unsafe block, and document common undefined-behavior hazards such as aliasing, lifetime extension, and uninitialized memory.",
+                "TODO: Define `///` documentation and doctests, `#[cfg(test)]` modules, integration-test directory conventions, and cargo doc style.",
+                "TODO: Define rustfmt configuration and the default and recommended Clippy lints; require CI to run `cargo fmt --check` and `cargo clippy -- -D warnings`.",
+                "TODO: Cover pervasive `unwrap`, unnecessary `Clone` and `mut`, over-generalized types and `where` clauses, `Arc<Mutex<_>>` used instead of borrowing, and ignored lifetime warnings.",
+            ),
+            "typescript.md": (
+                "TODO: Enable the complete `strict` family in tsconfig; define the boundaries among `any`, `unknown`, and `never`; treat unjustified `as` assertions as a warning sign.",
+                "TODO: Define PascalCase for types, camelCase for variables and functions, and CONSTANT_CASE for constants; decide whether interfaces use an `I` prefix; define when to use `type` versus `interface`.",
+                "TODO: Document the tradeoffs of barrel files such as `index.ts`; choose named or default exports; detect and prevent circular imports.",
+                "TODO: Choose between exceptions and a Result pattern such as neverthrow or fp-ts; prefer guard clauses where they clarify flow; represent fallible returns with discriminated unions when appropriate.",
+                "TODO: Set readability boundaries for array `map`, `filter`, and `reduce`; choose between `for...of` and `forEach`; define appropriate uses of Immer and `structuredClone` for immutable updates.",
+                "TODO: Preserve async/await through the call chain; use `AbortController` for cancellation; define when to use `Promise.all`, `Promise.allSettled`, and `Promise.race`.",
+                "TODO: Define appropriate uses of `Pick`, `Omit`, `Partial`, `Required`, and `Record`; limit conditional and mapped types when they harm readability; explain when `satisfies` is preferable to an annotation or assertion.",
+                "TODO: Define an ESLint and Prettier baseline, select typescript-eslint strict rule sets, and establish import ordering.",
+                "TODO: Cover pervasive `any`, `as` assertions that bypass the type system, empty catch blocks, unawaited Promises, and `Object.assign` used where object spread is clearer.",
+            ),
+        }
+        for filename, todos in required_stub_todos.items():
+            content = (languages / filename).read_text(encoding="utf-8")
+            actual_todos = tuple(re.findall(r"(?m)^TODO: .+$", content))
+            with self.subTest(stub=filename):
+                self.assertEqual(actual_todos, todos)
+
         gdscript = (languages / "gdscript.md").read_text(encoding="utf-8")
         self.assertNotIn("Incomplete stub", gdscript)
         self.assertNotIn("TODO:", gdscript)
@@ -617,6 +685,24 @@ class RepositoryTests(unittest.TestCase):
         for rule in required_gdscript_rules:
             with self.subTest(gdscript_rule=rule):
                 self.assertIn(rule, gdscript)
+
+        required_typed_examples = (
+            "button.pressed.connect(func() -> void: print(\"clicked\"))",
+            "func(a: Enemy, b: Enemy) -> bool",
+            "func(enemy: Enemy) -> bool",
+            "func(accumulator: int, enemy: Enemy) -> int",
+            "var damages: Array[int] = []",
+            "var items: Array[int] = []",
+            "for index: int in range(",
+        )
+        for example in required_typed_examples:
+            with self.subTest(typed_example=example):
+                self.assertIn(example, gdscript)
+        self.assertGreaterEqual(gdscript.count("for enemy: Enemy in"), 4)
+        self.assertNotRegex(gdscript, r"(?m)^\s*for\s+\w+\s+in\s+")
+        self.assertNotRegex(gdscript, r"func\([^)]*\)(?!\s*->)")
+        self.assertNotIn(":= []", gdscript)
+        self.assertNotIn(": Array =", gdscript)
 
         bootstrap = (REPO_ROOT / "BOOTSTRAP.md").read_text(encoding="utf-8")
         self.assertIn("coding-rules-library/engines/<engine>.md", bootstrap)

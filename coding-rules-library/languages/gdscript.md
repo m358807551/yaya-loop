@@ -360,7 +360,7 @@ if not file:
 	return
 
 func find_enemy_by_id(id: int) -> Enemy:
-	for enemy in enemies:
+	for enemy: Enemy in enemies:
 		if enemy.id == id:
 			return enemy
 	return null
@@ -434,15 +434,15 @@ Mutation can skip elements or move indexes out of bounds. Build a filtered colle
 ```gdscript
 enemies = enemies.filter(func(enemy: Enemy) -> bool: return not enemy.is_dead)
 
-for index in range(enemies.size() - 1, -1, -1):
+for index: int in range(enemies.size() - 1, -1, -1):
 	if enemies[index].is_dead:
 		enemies.remove_at(index)
 
 var to_remove: Array[Enemy] = []
-for enemy in enemies:
+for enemy: Enemy in enemies:
 	if enemy.is_dead:
 		to_remove.append(enemy)
-for enemy in to_remove:
+for enemy: Enemy in to_remove:
 	enemies.erase(enemy)
 ```
 

@@ -14,6 +14,7 @@ F015 - Convert programming-language Coding Rules to canonical English
 - Added regression coverage for the exact language-rule file set, English-only canonical prose, explicit stub status, detailed GDScript invariants, and the unchanged Bootstrap destination path; all 20 repository tests pass.
 - Human acceptance passed. Fresh-context review found six blocking accuracy and regression issues: correct Godot 4 setter semantics, consistently typed examples, release-build assertion behavior, typed-signal guidance, and deeper per-language stub coverage.
 - The first repair passed all tests, but the independent rescan found four remaining gaps: three untyped recommended examples, incomplete stub heading coverage, a missing release non-evaluation test anchor, and omitted Node reference-equality guidance.
+- A final independent scan found that four loop examples still lacked explicit types and that tests protected stub headings rather than every actionable TODO clause; the final repair upgrades both areas to exhaustive checks.
 
 ## Context notes
 
