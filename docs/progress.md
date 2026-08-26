@@ -19,6 +19,7 @@ F026 - Document the upgrade perform the release audit and publish v0.2.0
 - Strengthened final release coverage by discovering native/portable workflow pairs from both distribution directories and validating every smoke scenario's Setup, Expected result, Prohibited behavior, and scenario-specific invariants in isolation.
 - Recorded the scope of the automated smoke result without claiming automatic certification of external Coding Agent environments.
 - Final automated verification passed with all 69 tests, JSON parsing, release-link checks, and diff checks successful; implementation is ready for human acceptance. No tag, merge, push, or external release action has been performed.
+- Human acceptance passed at `2026-08-26T13:08:37Z`; the mandatory fresh-context Code Smell Scan is next.
 
 ## Context notes
 
