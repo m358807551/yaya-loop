@@ -2,19 +2,11 @@
 
 ## Current work
 
-F017 - Internationalize Product specification UI and audio workflows
+No Feature is currently in progress.
 
 ## Progress
 
-- Started at `2026-08-26T09:57:43Z`.
-- Confirmed the scope is three paired workflows across six stable files: Product specification, UI sketching, and audio sketching.
-- Confirmed that durable prose follows `document_language` while mode values, patch keys, ASCII conventions, paths, `_placeholder_` names, and sfx/bgm identifiers remain stable.
-- Rewrote the native and portable Product specification elicitors as an exact English workflow pair, preserving all four modes, mandatory risk questions, deletion confirmation, reviewable AI defaults, UI/audio trigger operations, completed-Feature impact handling, and the stable patch schema.
-- Rewrote the native and portable Product UI sketchers as an exact English workflow pair, preserving the complete ASCII symbol contract, single-CTA rule, required Product output semantics, optional one-file HTML/Tailwind exploration, stable mockup paths, and a document-language-aware HTML `lang` attribute.
-- Rewrote the native and portable Product audio sketchers as an exact English workflow pair, preserving focused elicitation, duration bands, countdown/completion/interruption boundaries, SFX/BGM requirements, stable `_placeholder_` filenames, and language-neutral return keys.
-- Added focused regression coverage for exact native/portable workflow equivalence, canonical English bodies, bilingual discovery wrappers, language mismatch behavior, stable Product patch keys, ASCII/HTML UI conventions, and the complete SFX/BGM contract.
-- All 25 repository tests passed, all three paired workflow bodies matched exactly, JSON validation passed, and human acceptance confirmed every F017 criterion.
-- Fresh-context review restored canonical handling for missing, invalid, and migration-sensitive document-language configuration and the complete standalone Tailwind HTML scaffold contract.
+- F017 completed at `2026-08-26T10:15:56Z` after human acceptance, semantic repair, 25 passing tests, and a fresh-context scan with zero remaining must_fix or suggest findings.
 
 ## Context notes
 
@@ -22,6 +14,21 @@ F017 - Internationalize Product specification UI and audio workflows
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T10:15:56Z - F017 completed
+
+Current work:
+
+F017 - Internationalize Product specification UI and audio workflows
+
+Progress:
+
+- Rewrote Product specification, UI sketching, and audio sketching Skills and portable Prompts as canonical English paired workflows.
+- Made durable Product prose follow `document_language` while preserving stable patch keys, ASCII conventions, UI paths, sfx/bgm identifiers, and `_placeholder_` filenames.
+- Added exact-pair and semantic regression coverage; all 25 repository tests pass.
+- Human acceptance passed.
+- Fresh-context review restored canonical language-configuration handling and the complete standalone Tailwind HTML contract before passing.
+- Code smell scan: pass (feature: F017, must_fix: 0, suggest: 0, acceptable: 3).
 
 ### 2026-08-26T09:57:43Z - F017 started
 
