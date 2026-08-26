@@ -8,5 +8,5 @@
     "The contract introduces no parallel localized workflow source trees"
   ],
   "source": "product/05-internationalization.md#Product decisions",
-  "notes": ""
+  "notes": "Human review confirmed all acceptance criteria on 2026-08-26. The contract persists only document_language; conversation follows the user's current language. Canonical executable sources remain English and machine protocols remain stable. No localized workflow source trees or automatic project translation were introduced. TODO: Before F010 implements inference, define active Product modules and make dominant-language inference explicitly non-binding when evidence is weak. TODO: Before configuration validation, decide BCP 47 case normalization, invalid-tag behavior, and treatment of private-use or grandfathered tags. TODO: When implementing stable protocol checks, limit path and identifier restrictions to Yaya Loop-defined structural paths, filenames, schema fields, and public identifiers."
 }
