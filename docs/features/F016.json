@@ -8,5 +8,5 @@
     "Native and portable variants preserve equivalent questions routing boundaries and outputs"
   ],
   "source": "product/05-internationalization.md#Language boundaries",
-  "notes": ""
+  "notes": "Human review confirmed all acceptance criteria on 2026-08-26. Product initialization and Product change standardization now use canonical English instructions across paired Claude Skills and portable Prompts. Each pair has an exactly equivalent workflow body beneath its distribution-specific wrapper, while English and concise Chinese trigger examples remain discoverable. Both workflows read document_language before producing durable Product knowledge, keep conversation language transient, preserve stable protocol identifiers, and explicitly cover en/zh-CN mismatch scenarios. Fresh-context review restored the unconditional 2-4 choices plus custom-answer rule and the pre-existing Feature routing boundary: new modules and large refactors use generate-feature-list, while small existing-module changes and Product bugs use sync-feature-list. TODO: If repository contract coverage continues growing, split Product-workflow checks out of tests/test_repository.py into a focused module or several narrower tests. Code smell scan: pass (feature: F016, must_fix: 0, suggest: 1, acceptable: 3)."
 }

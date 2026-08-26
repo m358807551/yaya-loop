@@ -2,17 +2,11 @@
 
 ## Current work
 
-F016 - Internationalize Product initialization and change-standardization workflows
+No Feature is currently in progress.
 
 ## Progress
 
-- Started at `2026-08-26T09:45:28Z`.
-- Confirmed the scope is two paired workflows across four stable distribution files: Product initialization and Product change standardization for Claude Skills and portable Prompts.
-- Confirmed that durable Product output must follow persisted `document_language`, transient conversation follows the user's current language, and native and portable behavior must remain equivalent.
-- Rewrote the native and portable Product initialization elicitors in canonical English, retained concise English and Chinese trigger discovery, preserved the complete three-stage question inventory, and added an explicit conversation-versus-document language contract.
-- Rewrote the native and portable Product change standardizers in canonical English, replaced embedded localized template copies with the canonical rendering contract, preserved all seven routing/write/sync/report stages and boundaries, and made wrong-language child output a blocking condition.
-- Made each native and portable workflow body byte-equivalent beneath its distribution wrapper, added English/Chinese mismatch smoke cases, and added regression coverage for bilingual triggers, complete question and route inventories, stable output keys, language ordering, and workflow boundaries; all 21 tests pass.
-- Human acceptance passed. Fresh-context review found two semantic regressions: the unconditional choice-plus-custom question rule had been weakened, and new-module/large-refactor Feature routing had changed during translation. Both rules were restored and added to regression coverage.
+- F016 completed at `2026-08-26T09:56:35Z` after human acceptance, semantic repair, 21 passing tests, and a fresh-context scan with zero remaining must_fix findings.
 
 ## Context notes
 
@@ -20,6 +14,21 @@ F016 - Internationalize Product initialization and change-standardization workfl
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T09:56:35Z - F016 completed
+
+Current work:
+
+F016 - Internationalize Product initialization and change-standardization workflows
+
+Progress:
+
+- Rewrote Product initialization and Product change-standardization Skills and portable Prompts as canonical English paired workflows.
+- Added persisted document-language behavior, transient conversation-language behavior, bilingual trigger discovery, mismatch smoke cases, and exact native/portable body equivalence.
+- Preserved the complete initialization question inventory, seven-step standardizer flow, write boundaries, failure handling, and Feature routing semantics.
+- Human acceptance passed; all 21 tests pass.
+- Fresh-context scan restored two weakened rules before passing.
+- Code smell scan: pass (feature: F016, must_fix: 0, suggest: 1, acceptable: 3).
 
 ### 2026-08-26T09:45:28Z - F016 started
 
