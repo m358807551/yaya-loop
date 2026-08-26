@@ -2,11 +2,13 @@
 
 ## Current work
 
-No Feature is currently in progress.
+F018 - Internationalize Feature-list generation workflows
 
 ## Progress
 
-- F017 completed at `2026-08-26T10:15:56Z` after human acceptance, semantic repair, 25 passing tests, and a fresh-context scan with zero remaining must_fix or suggest findings.
+- Started at `2026-08-26T10:16:36Z`.
+- Confirmed the scope is the initial Feature-list generation Claude Skill and portable Prompt at their stable distribution paths.
+- Confirmed that Feature titles, descriptions, acceptance criteria, source prose, and notes follow `document_language`, while keys, enums, IDs, dependencies, scopes, timestamps, paths, and validation rules remain language-neutral.
 
 ## Context notes
 
@@ -14,6 +16,16 @@ No Feature is currently in progress.
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T10:16:36Z - F018 started
+
+Current work before F018:
+
+No Feature was in progress.
+
+Progress:
+
+- F017 completed at `2026-08-26T10:15:56Z` after human acceptance, semantic repair, 25 passing tests, and a fresh-context scan with zero remaining must_fix or suggest findings.
 
 ### 2026-08-26T10:15:56Z - F017 completed
 

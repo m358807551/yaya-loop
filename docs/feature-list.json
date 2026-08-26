@@ -29,7 +29,7 @@
     {"id":"F015","title":"Convert programming-language Coding Rules to canonical English","status":"done","depends_on":["F012"],"estimated_scope":"medium","completed_at":"2026-08-26T09:42:24Z"},
     {"id":"F016","title":"Internationalize Product initialization and change-standardization workflows","status":"done","depends_on":["F009","F011","F012"],"estimated_scope":"medium","completed_at":"2026-08-26T09:56:35Z"},
     {"id":"F017","title":"Internationalize Product specification UI and audio workflows","status":"done","depends_on":["F016"],"estimated_scope":"medium","completed_at":"2026-08-26T10:15:56Z"},
-    {"id":"F018","title":"Internationalize Feature-list generation workflows","status":"pending","depends_on":["F009","F011","F012"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F018","title":"Internationalize Feature-list generation workflows","status":"in_progress","depends_on":["F009","F011","F012"],"estimated_scope":"medium","completed_at":null},
     {"id":"F019","title":"Internationalize Feature-list synchronization workflows","status":"pending","depends_on":["F018"],"estimated_scope":"medium","completed_at":null},
     {"id":"F020","title":"Internationalize Feature execution workflows","status":"pending","depends_on":["F009","F011","F013"],"estimated_scope":"medium","completed_at":null},
     {"id":"F021","title":"Internationalize refactor selection and portable usage guidance","status":"pending","depends_on":["F009","F012"],"estimated_scope":"medium","completed_at":null},
