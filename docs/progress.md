@@ -2,11 +2,13 @@
 
 ## Current work
 
-No Feature is currently in progress.
+F014 - Convert engine Coding Rules to canonical English
 
 ## Progress
 
-- F013 completed at `2026-08-26T07:15:56Z` after human acceptance and a fresh-context scan with zero remaining must_fix findings.
+- Started at `2026-08-26T07:17:02Z`.
+- Rewrote the generic engine stub and the backend, Unity, Unreal, and web-frontend stubs in natural American English while keeping them visibly incomplete, actionable, and at their stable installation paths.
+- Rewrote the complete Godot 4.3+ engine rules in English while preserving Scene composition, call-down/signal-up communication, Autoload, Resource, export/onready, lifecycle, performance, naming, signal-connection, anti-pattern, and debugging constraints.
 
 ## Context notes
 

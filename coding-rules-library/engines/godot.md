@@ -1,58 +1,58 @@
-# Godot 编程最佳实践
+# Godot best practices
 
-> 本文件作为 `coding_rules.md` 第三部分（引擎最佳实践）的外部引入。
-> 适用版本：**Godot 4.3+**（多数实践对 4.x 通用）。
-> 本文件只覆盖 Godot 引擎特有的最佳实践，不重复主文件已经写过的通用原则。
-
----
-
-## 一、核心理念：场景即可复用对象
-
-在 Godot 里，**场景（Scene）不是"关卡"，而是"可复用的节点组合"**。一个按钮、一个敌人、一个 HUD、一个关卡都是场景。理解这一点之前的所有"组织方式"都会走偏。
-
-- **任何足够独立的功能单元都应该成为一个独立场景**：角色、敌人、子弹、UI 面板、可拾取物。
-- **场景应该能在编辑器里"单独运行"**（点 Play Scene 按钮）。如果一个场景脱离上下文就崩，说明它对外部依赖太重。
-- **场景树按"逻辑关系"组织，而不是按"空间关系"**。比如玩家不一定要放在 `Room` 节点下，即使他在房间里——除非空间从属关系真的有意义。
+> This file is imported as Layer 3, engine practices, of `coding_rules.md`.
+> **Supported version:** Godot 4.3 and later; most guidance applies to Godot 4.x.
+> This file covers Godot-specific behavior and does not repeat general principles from the main Coding Rules.
 
 ---
 
-## 二、节点通信的铁律
+## 1. Core model: scenes are reusable objects
 
-> 这是 Godot 项目最容易腐烂的地方，规则一旦立住，整个项目结构会清爽很多。
+In Godot, a Scene is not merely a level. It is a reusable composition of nodes. A button, enemy, HUD, and level can each be a Scene.
 
-### 2.1 黄金法则："Call down, signal up"
+- Give every sufficiently independent unit its own Scene: characters, enemies, projectiles, UI panels, and pickups.
+- A Scene should run independently through Play Current Scene. Failure outside its parent context indicates excessive external dependency.
+- Organize the Scene tree by logical ownership rather than incidental spatial proximity. A player need not be a child of `Room` merely because the player is currently inside it.
 
-- **向下调用**：父节点调用子节点用 `get_node()` 或 `$NodePath` 是 OK 的。
-- **向上通信**：子节点要让父节点或同级节点知道事情发生，**一律用信号**，不要用 `get_parent()`。
-- **同级通信**：通过共同的父节点中转——信号发到父亲，父亲调用兄弟。
+---
 
-### 2.2 禁止的反模式
+## 2. Node communication
 
-绝对不要写这样的代码：
+> Communication structure is one of the most common sources of long-term coupling in Godot projects.
+
+### 2.1 Golden rule: call down, signal up
+
+- **Call down:** A parent may call a child through `get_node()` or `$NodePath`.
+- **Signal up:** A child reports events to parents or peers through signals, not `get_parent()`.
+- **Communicate across siblings through their common parent:** the child emits, and the parent coordinates the sibling.
+
+### 2.2 Prohibited tree-path coupling
+
+Do not write paths such as:
 
 ```gdscript
-# 全部是反模式
+# All of these are anti-patterns.
 get_node("../../SomeNode/SomeOtherNode")
 get_parent().get_parent().get_node("SomeNode")
 get_tree().get_root().get_node("SomeNode/SomeOtherNode")
 ```
 
-原因：场景树一变，这些路径全废。一个能 `get_parent()` 的节点，就没法单独运行测试，也没法在别的场景里复用。
+A small Scene-tree change breaks these paths. A node that requires a particular chain of parents cannot run independently or be reused safely.
 
-### 2.3 信号的正确用法
+### 2.3 Signals
 
-- **自定义信号用 `signal` 关键字声明**，用 `signal_name.emit(args)` 触发（Godot 4 语法）。
-- **优先在编辑器面板里连接信号**，对预先存在的节点；运行时实例化的节点在代码里 `connect`。
-- **连接信号用 `Callable`**：`button.pressed.connect(_on_pressed)` 而不是字符串方法名，能让编辑器静态检查方法存在性。
-- **信号名用过去式或事件名**：`health_changed`、`died`、`item_collected`，不是 `change_health` 这种命令式。
-- **emit 后立即返回，不要假设接收方做了什么**——发送方不应该关心有没有人在听。
+- Declare a custom signal with `signal` and emit it with `signal_name.emit(args)`, using Godot 4 syntax.
+- Prefer editor connections for nodes that already exist in a Scene. Connect runtime-instantiated nodes in code.
+- Connect through `Callable`, such as `button.pressed.connect(_on_pressed)`, rather than a string method name so the editor can check the target.
+- Name signals as past events or changed state: `health_changed`, `died`, or `item_collected`, not imperative names such as `change_health`.
+- Return after emission when appropriate and do not assume what a receiver did. A sender must not depend on whether anyone listened.
 
-### 2.4 跨场景/远距离通信：事件总线
+### 2.4 Event bus for distant communication
 
-当两个节点距离太远，逐级转发信号变成"信号迷宫"时，引入一个 **autoload 事件总线**：
+When forwarding signals through several Scene levels becomes a signal maze, use a focused autoload event bus:
 
 ```gdscript
-# Events.gd（注册为 autoload）
+# Events.gd, registered as an autoload
 extends Node
 
 signal player_died
@@ -60,51 +60,50 @@ signal score_changed(new_score: int)
 signal level_completed(level_id: String)
 ```
 
-任意节点都可以 `Events.player_died.emit()` 或 `Events.score_changed.connect(_on_score_changed)`。
+Any node may call `Events.player_died.emit()` or connect with `Events.score_changed.connect(_on_score_changed)`.
 
-**克制使用**：事件总线滥用会让数据流变得不可追踪。原则是——
-- **同一场景内、近距离的通信，不要走总线**，直接信号连接。
-- 只有**跨场景、跨模块、链路过长**时才用总线。
-- 总线信号要分类清楚（玩家事件、UI 事件、关卡事件等），不要堆成一个 God Object。
+Use the bus sparingly:
 
----
-
-## 三、Autoload（单例）使用规范
-
-### 3.1 什么时候用 Autoload
-
-合适的场景：
-
-- **跨场景持久数据**：玩家存档、设置、当前进度（`change_scene_to_file()` 会销毁旧场景，autoload 不会）。
-- **全局服务**：音频管理器、场景切换器、本地化、输入映射。
-- **事件总线**（见 2.4）。
-- **只读全局配置**：游戏常量、难度参数。
-
-### 3.2 什么时候不要用 Autoload
-
-- 只在一个场景里用的状态——直接放节点里。
-- 仅仅是"想全局访问方便"——优先考虑通过 `@export` 传引用、或者用 Resource 共享数据。
-- 业务逻辑不要塞进 autoload，autoload 越长越大就是 God Object 的预兆。
-
-### 3.3 Autoload 编码规范
-
-- **命名用 PascalCase**：`PlayerData`、`AudioManager`、`Events`。从代码里直接当作全局名访问。
-- **Autoload 节点应该是无表现层的**，纯数据 + 信号 + 公开方法，不要挂渲染节点。
-- **读多写少**：autoload 写操作越多，耦合越严重。优先暴露查询方法和信号，让外部"通知"它，而不是外部直接改它的字段。
+- Do not route nearby communication inside one Scene through the bus.
+- Use it for cross-Scene, cross-module, or otherwise impractically long communication paths.
+- Group bus signals by domain. Do not let one event-bus script become a God Object.
 
 ---
 
-## 四、Resource：数据驱动的核心工具
+## 3. Autoload conventions
 
-> Godot 的 `Resource` 类系统是它最强大、也最被新手忽略的特性，类似 Unity 的 ScriptableObject。
+### 3.1 Appropriate Autoload uses
 
-### 4.1 何时用 Resource
+- data that persists across Scene changes, such as save data, settings, or current progression
+- global services such as audio, Scene transitions, localization, or input mapping
+- a focused event bus
+- read-mostly global configuration such as game constants or difficulty values
 
-- **静态数据**：物品定义、技能数值、敌人参数、关卡配置、对话脚本。
-- **配置文件**：相比 JSON，Resource 在 Inspector 里可视化编辑、类型安全、能引用其他 Resource 和 Texture。
-- **跨节点共享状态**：把数据装进 Resource，多个节点 `@export var data: PlayerStats` 引用同一份。
+### 3.2 Inappropriate Autoload uses
 
-### 4.2 自定义 Resource 标准写法
+- state used only inside one Scene
+- convenience-only global access when an `@export` reference or shared Resource provides an explicit dependency
+- domain behavior that makes the autoload grow into a God Object
+
+### 3.3 Autoload implementation
+
+- Use PascalCase names such as `PlayerData`, `AudioManager`, and `Events`; they become global identifiers.
+- Keep Autoload nodes free of presentation. They should expose data, signals, and focused public methods rather than render nodes.
+- Prefer read-heavy interfaces. Frequent external field mutation increases coupling; expose queries and meaningful commands or signals instead.
+
+---
+
+## 4. Resource: the core data-driven tool
+
+Godot's `Resource` is comparable to Unity's ScriptableObject and should be used deliberately.
+
+### 4.1 When to use Resource
+
+- static definitions such as items, skills, enemy parameters, level configuration, and dialogue
+- typed, Inspector-editable configuration that may reference other Resources or Textures
+- shared data referenced by several nodes, for example `@export var data: PlayerStats`
+
+### 4.2 Custom Resource shape
 
 ```gdscript
 # res://resources/enemy_stats.gd
@@ -118,16 +117,17 @@ extends Resource
 @export var loot_table: Array[ItemData] = []
 ```
 
-然后在 FileSystem 右键 → New → Resource → `EnemyStats`，创建 `.tres` 文件，在 Inspector 里填数值。
+Create an `EnemyStats` `.tres` through FileSystem → New → Resource, then edit it in the Inspector.
 
-### 4.3 Resource 的几个关键陷阱
+### 4.3 Resource traps
 
-1. **同一 `.tres` 文件在内存中只有一份**：多个节点 `@export` 引用同一个 `.tres`，**修改其中一个会影响全部**。这是优点也是陷阱。
-   - 如果需要每个节点独立的副本：在 Resource Inspector 里勾选 `Local to Scene`，或者在代码里 `stats = stats.duplicate()`。
-2. **`.tres` vs `.res`**：文本格式 vs 二进制。开发期一律用 `.tres`，对 git 友好、可读、能手动 diff。`.res` 只在最终发布或大体积资源（如关卡数据）才考虑。
-3. **运行时只能写入 `user://`，不能写入 `res://`**。存档之类用 `ResourceSaver.save(res, "user://save.tres")`。
-4. **Resource 没有 `_process`**，它不是节点，不参与场景树。它就是数据。
-5. **自定义 Resource 不会自动触发 `changed` 信号**——需要在 setter 里 `emit_changed()`：
+1. **One `.tres` file is one shared in-memory Resource.** Mutating it through one node affects every node referencing it.
+   - For an independent instance, enable Local to Scene in the Resource Inspector or call `stats = stats.duplicate()`.
+2. **Prefer `.tres` during development.** It is text, reviewable in Git, and diffable. Consider binary `.res` only for release or genuinely large resource data.
+3. **Runtime writes belong under `user://`, not `res://`.** For example, use `ResourceSaver.save(res, "user://save.tres")`.
+4. **A Resource has no `_process`.** It is data and does not participate in the Scene tree.
+5. **A custom Resource does not automatically emit `changed`.** Call `emit_changed()` from a setter:
+
    ```gdscript
    @export var hp: int:
        set(value):
@@ -136,173 +136,166 @@ extends Resource
                emit_changed()
    ```
 
-### 4.4 数据驱动的典型流程
+### 4.4 Typical data-driven flow
 
-1. 设计期：用 Resource 定义数据结构（`ItemData`、`SkillData`）。
-2. 配置期：在 FileSystem 里批量创建 `.tres` 文件（每件物品一个）。
-3. 运行期：用 `load("res://items/sword.tres")` 或 `@export` 引用。
-4. 改数值：直接在 Inspector 改 `.tres`，**不需要碰代码**。
+1. Define structures such as `ItemData` and `SkillData` with Resource scripts.
+2. Create one `.tres` file per configured item or skill.
+3. Load it at runtime with `load("res://items/sword.tres")` or assign it through `@export`.
+4. Change values in the Inspector without changing code.
 
 ---
 
-## 五、`@export` 和 `@onready` 的正确使用
+## 5. Correct use of `@export` and `@onready`
 
-### 5.1 `@export`：暴露给设计者
+### 5.1 `@export`: designer-adjustable values and references
 
-- **凡是"非程序员也应该能调"的参数**，都用 `@export` 暴露：速度、血量、冷却时间、关卡时长。
-- **类型必须显式标注**：`@export var speed: float = 100.0`，不要让类型推断。
-- **节点引用也用 `@export`**：`@export var target: Node2D`。比 `get_node("../../Target")` 灵活得多——在 Inspector 里拖拽连接，场景树结构变化不影响。
-- 复杂导出修饰符在编辑器有专门支持：`@export_range(0, 100)`、`@export_file("*.json")`、`@export_color_no_alpha`、`@export_enum("Easy", "Normal", "Hard")`。
+- Expose parameters a designer should adjust, such as speed, health, cooldown, or level duration.
+- Write explicit types: `@export var speed: float = 100.0`.
+- Export node references such as `@export var target: Node2D` instead of depending on paths such as `../../Target`.
+- Use Inspector-aware modifiers when appropriate: `@export_range(0, 100)`, `@export_file("*.json")`, `@export_color_no_alpha`, and `@export_enum("Easy", "Normal", "Hard")`.
 
-### 5.2 `@onready`：场景树准备好后再求值
+### 5.2 `@onready`: values resolved after the Scene tree is ready
 
-- **专用于获取子节点引用**：`@onready var sprite: Sprite2D = $Sprite2D`。
-- **绝对不要把 `@export` 和 `@onready` 标在同一个变量上**——`@onready` 会在 `_ready()` 阶段覆盖 `@export` 从场景文件加载的值，Godot 4 已经把这个组合标记为 warning。
-- **`@onready` 也要写类型**，让编辑器自动补全。
+- Use it primarily for child-node references, such as `@onready var sprite: Sprite2D = $Sprite2D`.
+- Never combine `@export` and `@onready` on one variable. `@onready` overwrites the value loaded from the Scene during `_ready()`, and Godot 4 warns about the combination.
+- Give `@onready` variables explicit types for editor completion and checking.
 
-### 5.3 GDScript 文件成员顺序（官方推荐）
+### 5.3 Recommended GDScript member order
 
-按这个顺序写，新加成员时不要乱插：
-
-```
+```text
 1. @tool
 2. class_name
 3. extends
-4. # 文档字符串（可选）
+4. Documentation comments, when needed
 5. signals
 6. enums
 7. constants
-8. @export 变量
-9. 普通公开变量
-10. 私有变量（_ 开头）
-11. @onready 变量
-12. _init / _ready / _process / _physics_process
-13. 其他公开方法
-14. 私有方法
+8. @export variables
+9. public variables
+10. private variables prefixed with _
+11. @onready variables
+12. _init, _ready, _process, and _physics_process
+13. other public methods
+14. private methods
 ```
 
 ---
 
-## 六、生命周期与帧
+## 6. Lifecycle and frames
 
-### 6.1 几个回调的区别
+### 6.1 Callback roles
 
-| 回调 | 何时调用 | 用途 |
-|------|---------|------|
-| `_init()` | 对象创建时（场景树还没构建） | 初始化与场景无关的内部状态 |
-| `_enter_tree()` | 节点加入场景树时 | 注册到外部系统 |
-| `_ready()` | 节点及其所有子节点都已进入场景树 | **获取子节点引用、连接信号** |
-| `_process(delta)` | 每帧（渲染帧） | 动画、UI 更新 |
-| `_physics_process(delta)` | 每物理帧（固定步长，默认 60Hz） | 移动、碰撞、AI |
-| `_exit_tree()` | 节点离开场景树 | 反注册、释放资源 |
+| Callback | Timing | Intended use |
+| --- | --- | --- |
+| `_init()` | Object creation, before the Scene tree exists | Internal state independent of the Scene tree |
+| `_enter_tree()` | Node enters the Scene tree | Registration with external systems |
+| `_ready()` | Node and all children have entered the tree | Child references and signal connections |
+| `_process(delta)` | Every rendered frame | Animation and UI updates |
+| `_physics_process(delta)` | Every fixed physics frame, 60 Hz by default | Movement, collision, and AI |
+| `_exit_tree()` | Node leaves the Scene tree | Deregistration and cleanup |
 
-### 6.2 规则
+### 6.2 Lifecycle rules
 
-- **物理、移动、碰撞放 `_physics_process`**：固定步长，可重现，跨帧率一致。
-- **纯视觉、UI 放 `_process`**：变化时间步，配合 `delta` 插值就好。
-- **没有更新需求的节点不要保留空的 `_process`**：哪怕是空函数也会被引擎每帧调用。如果不需要，直接删掉，或者用 `set_process(false)` / `set_physics_process(false)` 关掉。
-- **`_ready()` 只在节点初次进入场景树时调用一次**——`add_child()` 会触发，`reparent` 不会再触发。
-- **不要在 `_init` 里访问 `$Child`**：那时候子节点还没建好，会拿到 null。
+- Put physics, movement, and collision in `_physics_process` for fixed-step reproducibility.
+- Put presentation and UI work in `_process` and use `delta` for interpolation.
+- Remove empty `_process` or `_physics_process` callbacks. Even empty enabled callbacks run every frame; disable them explicitly with `set_process(false)` or `set_physics_process(false)` when needed.
+- `_ready()` runs the first time a node enters the Scene tree. `add_child()` triggers it; reparenting an already-ready node does not run it again.
+- Do not access `$Child` in `_init()` because child nodes do not exist yet.
 
-### 6.3 `await` 和协程
+### 6.3 `await` and coroutines
 
-- `await signal_name` / `await get_tree().create_timer(1.0).timeout`：暂停当前函数，等信号或计时器。
-- **协程中的节点可能在 `await` 期间被销毁**，恢复后要检查 `is_instance_valid(self)` 或 `is_queued_for_deletion()`，否则操作已释放节点会崩。
-- 这是 Godot 4 一个已知坑：`queue_free()` 后协程仍可能再跑一帧。
-
----
-
-## 七、场景切换与节点生命周期
-
-### 7.1 场景切换
-
-- **`get_tree().change_scene_to_file("res://levels/level2.tscn")`**：切换主场景，**销毁旧场景下所有节点**（autoload 除外）。
-- **`change_scene_to_packed(packed_scene)`**：用预加载好的 PackedScene 切换，避免运行时 IO 卡顿。
-- **大场景预加载**：`var next_scene = preload("res://levels/big_level.tscn")` 或 `ResourceLoader.load_threaded_request()`。
-
-### 7.2 创建和销毁节点
-
-- **实例化**：`var enemy = enemy_scene.instantiate(); add_child(enemy)`。注意是 `instantiate()`，不是 Godot 3 的 `instance()`。
-- **销毁**：用 `queue_free()`，**不要用 `free()`**——`queue_free` 在帧末统一销毁，避免遍历过程中删除导致的崩溃。
-- **检查节点有效性**：用 `is_instance_valid(node)`，特别是异步代码恢复后。
+- `await signal_name` and `await get_tree().create_timer(1.0).timeout` suspend the current function until the signal fires.
+- A node may be destroyed while a coroutine is suspended. After resuming, check `is_instance_valid(self)` or `is_queued_for_deletion()` before using it.
+- `queue_free()` may still allow a coroutine to resume on a later frame; code must handle that lifetime boundary.
 
 ---
 
-## 八、性能注意事项（Godot 特有）
+## 7. Scene changes and node lifetime
 
-> 通用原则参考主文件 2.7。这里只列 Godot 特有的。
+### 7.1 Changing Scenes
 
-- **节点实例化是有成本的**。Godot 4 比 3 快很多，但每秒上百次的 `instantiate()` 仍然会卡顿。子弹、粒子、伤害数字这类高频对象用对象池。
-- **对象池实现：**
-  - 池里的对象用 `hide()` + `set_process(false)` + `set_physics_process(false)` + 从场景树 `remove_child()`，或者只是设置 `visible = false`。
-  - **不要用 `set_deferred("process_mode", ...)`** 来停用池化对象——这是已知性能陷阱。
-  - 池中对象不要放在 `process` 模式 `INHERIT` 下还指望省 CPU。
-- **海量同质对象用 `MultiMeshInstance2D` / `MultiMeshInstance3D`** 或直接 `RenderingServer` API，绕过场景树开销。粒子、子弹幕、tile 装饰物的常见做法。
-- **避免每帧字符串拼接**：`print("hp: " + str(hp))` 这种放热路径会有 GC 压力。
-- **`get_node()` 有路径查找成本**：在 `_process` 里反复调用同一个 `get_node` 是反模式，缓存到 `@onready` 变量里。
-- **`Orphan Nodes` 是泄漏信号**：在 Debugger → Monitors 里看，数字一直涨说明有节点 `remove_child` 后没 `queue_free`。
+- `get_tree().change_scene_to_file("res://levels/level2.tscn")` replaces the main Scene and destroys every node in the old Scene except Autoloads.
+- `change_scene_to_packed(packed_scene)` uses a preloaded PackedScene and avoids runtime I/O at the transition.
+- For large Scenes, use `preload("res://levels/big_level.tscn")` or `ResourceLoader.load_threaded_request()`.
 
----
+### 7.2 Creating and destroying nodes
 
-## 九、编辑器使用约定
-
-### 9.1 文件系统
-
-- **按功能（场景）分目录**：`scenes/player/` 下放 `player.tscn`、`player.gd`、`player.png`、`player_walk.tres`。同一个功能的所有相关资源在一起，不要 `scenes/`、`scripts/`、`textures/` 这种按类型分。
-- **第三方资产统一放 `addons/`**，包含 LICENSE。
-- **不希望显示的目录放空的 `.gdignore` 文件**（如脚本模板目录、临时工作目录）。
-- **文件夹颜色**：右键 → Set Folder Color，用颜色区分核心模块、addon、临时目录。
-
-### 9.2 命名约定（Godot 特有部分）
-
-- **场景文件、脚本文件、目录用 `snake_case`**：`player_controller.gd`、`enemy_data.tres`。
-- **C# 脚本文件用 `PascalCase`**（C# 文件名要和类名一致）。
-- **场景内节点名用 `PascalCase`**：`PlayerSprite`、`HealthBar`，方便 `$PlayerSprite` 这种引用。
-- **GDScript 的 `class_name` 用 `PascalCase`**：`class_name PlayerStats`。
-- **某场景专属的子资源加前缀**：`player_idle.tres`、`player_run.tres`，方便搜索定位。
-
-### 9.3 静态类型与警告
-
-- **Godot 4.2+ 启用 Untyped Declarations 警告**（Project Settings → Debug → GDScript）：强制所有变量、函数返回值标类型。带来更好的自动补全和编译期错误。
-- **简写类型推断用 `:=`**：`var enemies := []`、`var speed := 100.0`。
-- **删除前用 "View Owners"**：FileSystem 里右键资源 → View Owners，检查谁在用，避免误删导致引用断裂。
+- Instantiate with `var enemy = enemy_scene.instantiate(); add_child(enemy)`. Godot 4 uses `instantiate()`, not Godot 3's `instance()`.
+- Destroy with `queue_free()`, not `free()`. Deferred destruction avoids deleting a node while collections or callbacks are being traversed.
+- Use `is_instance_valid(node)` when a reference may outlive the node, especially after asynchronous work resumes.
 
 ---
 
-## 十、信号连接的两种方式：编辑器 vs 代码
+## 8. Godot-specific performance
 
-| 方式 | 何时用 |
-|------|--------|
-| 编辑器面板连接 | 场景里**预先存在的节点**之间的连接（如按钮 → 主控脚本） |
-| 代码 `connect()` | 运行时**实例化**的节点（如子弹生成后连接 `body_entered`） |
-
-- **编辑器连接的好处**：连接关系在 `.tscn` 文件里可见，git diff 能看到。
-- **编辑器连接的坏处**：跨文件追踪困难，重构方法名容易漏掉。
-- **代码连接的好处**：所有依赖关系集中在 `_ready()` 里，一眼看完。
-- **代码连接的坏处**：阅读场景文件时看不到连接关系。
-
-**项目内统一一种风格**，不要混用。本项目（在 `game_coding_rules.md` 1.1 第 4 条之下）默认：**编辑器内的同场景静态连接走面板，跨场景或动态实例化走代码**。
+- Node instantiation has a cost. Pool objects created hundreds of times per second, such as projectiles, particles, or damage numbers.
+- For pooled nodes:
+  - use `hide()`, `set_process(false)`, and `set_physics_process(false)`; remove them from the tree when that matches the pool design
+  - do not use `set_deferred("process_mode", ...)` as the primary deactivation mechanism; it is a known performance trap
+  - do not leave pooled objects in inherited processing mode while expecting them to consume no CPU
+- Use `MultiMeshInstance2D`, `MultiMeshInstance3D`, or RenderingServer APIs for very large numbers of homogeneous objects.
+- Avoid per-frame string concatenation in hot paths.
+- Cache repeated `get_node()` lookups in `@onready` variables rather than resolving the same path every frame.
+- Rising Orphan Nodes in Debugger → Monitors indicates nodes removed from the tree without being freed.
 
 ---
 
-## 十一、Godot 特有的反模式速查
+## 9. Editor conventions
 
-- **`get_parent()` / `get_node("../X")`**：见 2.2。
-- **`$Child` 在 `_init()` 里访问**：节点还没建好。
-- **@export + @onready 标在同一变量**：见 5.2。
-- **空的 `_process` / `_physics_process`**：白白消耗每帧调用。
-- **每帧 `get_node()`**：缓存到 `@onready` 变量。
-- **`free()` 替代 `queue_free()`**：遍历删除会崩。
-- **Resource 共享被忽视**：以为每个节点持有独立副本，结果改一个影响一片。
-- **autoload 越长越大**：变成 God Object，所有跨模块依赖都塞进去。
-- **场景树里搜索节点用 `find_child` / `get_tree().get_nodes_in_group()` 在热路径**：开销不低，缓存结果。
-- **信号名用命令式**（`set_health` 而不是 `health_changed`）：搞混了"我让你做什么"和"我发生了什么"。
+### 9.1 File organization
+
+- Organize by feature or Scene. Keep `player.tscn`, `player.gd`, `player.png`, and `player_walk.tres` together under an area such as `scenes/player/` rather than separating every file type.
+- Put third-party assets under `addons/` and retain their licenses.
+- Add an empty `.gdignore` to directories that should not be imported or displayed by Godot.
+- Folder colors may distinguish core modules, addons, and temporary areas.
+
+### 9.2 Godot naming
+
+- Use `snake_case` for Scene files, script files, and directories: `player_controller.gd` and `enemy_data.tres`.
+- Use `PascalCase` for C# files because filenames must match class names.
+- Use `PascalCase` for node names inside Scenes, such as `PlayerSprite` and `HealthBar`.
+- Use `PascalCase` for GDScript `class_name`, such as `PlayerStats`.
+- Prefix Scene-specific subresources by owner, such as `player_idle.tres` and `player_run.tres`.
+
+### 9.3 Static types and warnings
+
+- In Godot 4.2 and later, enable the Untyped Declarations warning under Project Settings → Debug → GDScript so variables and function returns require types.
+- Use `:=` for concise inference, such as `var enemies := []` and `var speed := 100.0`.
+- Before deleting a resource, use FileSystem → View Owners to find references and avoid broken dependencies.
 
 ---
 
-## 十二、调试与验证工具
+## 10. Editor and code signal connections
 
-- **Debugger → Profiler**：在你怀疑性能问题时开，先测后改。
-- **Debugger → Monitors**：实时看 FPS、Process Time、Draw Calls、Node Count、Orphan Nodes。Node Count 持续上涨 = 泄漏。
-- **Remote 场景树**：游戏运行时切到 Remote 标签，看实际的场景树结构。新手常被"场景里看到的"和"运行时实际的"差异坑到。
-- **Play Scene（F6）**：单独运行当前场景，验证场景的独立性（参考第一节）。如果场景跑不起来，说明对外部依赖太重。
+| Connection style | Use it for |
+| --- | --- |
+| Editor panel | Connections between nodes that already exist in one Scene |
+| Code `connect()` | Runtime-instantiated nodes |
+
+- Editor connections are visible in `.tscn` and Git diffs, but method-name refactors can be harder to trace across files.
+- Code connections centralize dependencies in `_ready()`, but they are not visible when inspecting the Scene file.
+- Keep one project convention. By default, use editor connections for static nodes inside one Scene and code for cross-Scene or dynamically instantiated nodes.
+
+---
+
+## 11. Godot anti-pattern checklist
+
+- `get_parent()` or `get_node("../X")` for upward communication
+- `$Child` access inside `_init()`
+- `@export` and `@onready` on the same variable
+- empty `_process` or `_physics_process` callbacks
+- repeated `get_node()` calls every frame
+- `free()` where `queue_free()` is required
+- assuming each node has a private copy of a shared Resource
+- an ever-growing Autoload that becomes a God Object
+- `find_child()` or `get_tree().get_nodes_in_group()` in a hot path without caching
+- imperative signal names such as `set_health` instead of event names such as `health_changed`
+
+---
+
+## 12. Debugging and verification tools
+
+- **Debugger → Profiler:** measure suspected performance problems before optimizing.
+- **Debugger → Monitors:** inspect FPS, Process Time, Draw Calls, Node Count, and Orphan Nodes. Continuously rising Node Count can indicate a leak.
+- **Remote Scene tree:** inspect the actual runtime tree rather than assuming it matches the editor view.
+- **Play Current Scene, F6:** verify Scene independence. A Scene that cannot run alone likely has excessive external dependencies.
