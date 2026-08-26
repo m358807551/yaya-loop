@@ -713,6 +713,136 @@ class RepositoryTests(unittest.TestCase):
         self.assertIn("`languages/`", bootstrap)
         self.assertGreaterEqual(bootstrap.count("docs/coding-rules/language-rules.md"), 2)
 
+    def test_product_init_and_standardizer_are_language_aware_equivalent_pairs(self):
+        workflow_pairs = {
+            "Product initialization elicitor": (
+                REPO_ROOT / "claude-code" / "skills" / "product-init-elicitor" / "SKILL.md",
+                REPO_ROOT / "ai-agnostic-prompts" / "product-init-elicitor.prompt.md",
+            ),
+            "Product change standardizer": (
+                REPO_ROOT / "claude-code" / "skills" / "product-change-standardizer" / "SKILL.md",
+                REPO_ROOT / "ai-agnostic-prompts" / "product-change-standardizer.prompt.md",
+            ),
+        }
+        han_pattern = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff]")
+        bodies = {}
+        for title, (skill_path, prompt_path) in workflow_pairs.items():
+            skill = skill_path.read_text(encoding="utf-8")
+            prompt = prompt_path.read_text(encoding="utf-8")
+            heading = f"# {title}\n"
+            skill_body = heading + skill.split(heading, 1)[1]
+            prompt_body = heading + prompt.split(heading, 1)[1]
+            bodies[title] = skill_body
+            with self.subTest(workflow=title):
+                self.assertEqual(skill_body, prompt_body)
+                self.assertIsNone(han_pattern.search(skill_body))
+                self.assertIn("document_language", skill_body)
+                self.assertIn("docs/methodology-config.json", skill_body)
+                self.assertIn("language the user is currently using", skill_body)
+                self.assertIn("document_language: en", skill_body)
+                self.assertIn("document_language: zh-CN", skill_body)
+                self.assertIn("Chinese conversation", skill_body)
+                self.assertIn("English conversation", skill_body)
+
+        init_skill = workflow_pairs["Product initialization elicitor"][0].read_text(
+            encoding="utf-8"
+        )
+        init_prompt = workflow_pairs["Product initialization elicitor"][1].read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("Initialize the Product", init_skill)
+        self.assertIn("初始化产品", init_skill)
+        self.assertIn("Initialize the Product", init_prompt)
+        self.assertIn("初始化产品", init_prompt)
+
+        init = bodies["Product initialization elicitor"]
+        self.assertLess(init.index("## Language contract"), init.index("## Stage 1"))
+        for question in (
+            "Q1.1 One-line positioning",
+            "Q1.2 Target users",
+            "Q1.3 Core loop",
+            "Q1.4 Differentiation",
+            "Q1.5 Initial module list",
+            "Q1.6 Visual direction",
+            "Q1.7 Audio direction",
+            "M.1 Module positioning",
+            "M.2 Functional flow",
+            "M.3 Data model",
+            "M.4 State machine",
+            "M.5 Persistence",
+            "M.6 Primary UI",
+            "M.7 Interactive elements",
+            "M.8 UI intent",
+            "M.9 Audio trigger inventory",
+            "M.10 Tunable values",
+            "M.11 Acceptance criteria",
+            "M.12 Edge cases",
+            "Q3.1 Module dependencies",
+            "Q3.2 Global priority",
+        ):
+            with self.subTest(init_question=question):
+                self.assertIn(question, init)
+        for stable_key in (
+            "overview:",
+            "one_liner:",
+            "modules:",
+            "display_name:",
+            "acceptance_criteria:",
+            "dependencies:",
+            "nice_to_have:",
+        ):
+            with self.subTest(init_key=stable_key):
+                self.assertIn(stable_key, init)
+
+        standardizer_skill = workflow_pairs["Product change standardizer"][0].read_text(
+            encoding="utf-8"
+        )
+        standardizer_prompt = workflow_pairs["Product change standardizer"][1].read_text(
+            encoding="utf-8"
+        )
+        for trigger in ("initialize", "add", "fix", "做一个 XXX", "增加", "修复"):
+            with self.subTest(standardizer_trigger=trigger):
+                self.assertIn(trigger, standardizer_skill)
+                self.assertIn(trigger, standardizer_prompt)
+
+        standardizer = bodies["Product change standardizer"]
+        self.assertLess(
+            standardizer.index("## Language contract"),
+            standardizer.index("## Step 1"),
+        )
+        for step in range(1, 8):
+            with self.subTest(standardizer_step=step):
+                self.assertRegex(standardizer, rf"(?m)^## Step {step}: ")
+        for route in (
+            "A. Initialization",
+            "B. New module",
+            "C. Existing module",
+            "D. Product bug",
+            "E. Cross-module",
+        ):
+            with self.subTest(standardizer_route=route):
+                self.assertIn(route, standardizer)
+        for invariant in (
+            "the single source of truth for Product intent",
+            "Product documents first, synchronize the Feature plan second",
+            "methodology/templates/product.md.tmpl",
+            "methodology/templates/product-module.md.tmpl",
+            "preserve unrelated content",
+            "run `generate-feature-list`",
+            "run `sync-feature-list`",
+            "Never report synchronization as successful merely because it was invoked",
+            "Do not implement code or start execution inside this workflow",
+            "Never silently edit a completed Feature",
+            "never perform a destructive rollback automatically",
+            "durable prose in the wrong language, do not write it",
+        ):
+            with self.subTest(standardizer_invariant=invariant):
+                self.assertIn(invariant, standardizer)
+
+        for removed_embedded_heading in ("## 模块定位", "## 一句话定位", "## 变更历史"):
+            with self.subTest(removed_heading=removed_embedded_heading):
+                self.assertNotIn(removed_embedded_heading, standardizer)
+
 
 if __name__ == "__main__":
     unittest.main()

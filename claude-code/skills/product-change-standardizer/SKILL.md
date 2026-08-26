@@ -15,7 +15,7 @@ priority: high
 
 1. `docs/product.md` and `docs/product/*.md` are the single source of truth for Product intent.
 2. Every Product change must update Product documents first, synchronize the Feature plan second, and enter implementation only afterward.
-3. This Skill is the only Product writer. Elicitors and sketchers return structured data; this Skill persists it.
+3. This workflow is the only Product writer. Elicitors and sketchers return structured data; this workflow persists it.
 4. Product documents describe **what**, not **how**. Keep technology choices and implementation details in Coding Rules, code, or implementation notes.
 5. Never make a Product decision on the user's behalf.
 
@@ -25,10 +25,12 @@ Before asking for or writing a Product change:
 
 1. Read `docs/methodology-config.json` and resolve `document_language`.
 2. If it is missing or invalid, follow `methodology/05-document-language.md` and obtain confirmation before writing durable content.
-3. Converse in the language currently used by the user.
+3. Converse in the language the user is currently using.
 4. Render every new or substantively rewritten Product heading and human-readable value in `document_language`.
 5. Preserve stable paths, ASCII slugs, schema keys, enum values, Skill names, Feature IDs, and other protocol identifiers.
 6. Do not translate existing content merely because configuration was added or conversation language changed. A language migration requires an explicit, scoped plan.
+
+Smoke cases: with `document_language: en` and a Chinese conversation, converse in Chinese but write English Product content; with `document_language: zh-CN` and an English conversation, converse in English but write Simplified Chinese Product content.
 
 ## Product structure and templates
 
@@ -83,9 +85,9 @@ Choose exactly one route:
 
 ## Step 3: Run the selected elicitor
 
-For initialization, call `product-init-elicitor` with the user's short description. It returns a complete overview and module draft, while UI wireframes and complete audio entries may remain pending.
+For initialization, run `product-init-elicitor` with the user's short description. It returns a complete overview and module draft, while UI wireframes and complete audio entries may remain pending.
 
-For states B through E, call `product-spec-elicitor` with:
+For states B through E, run `product-spec-elicitor` with:
 
 - the change description
 - the selected mode
@@ -98,13 +100,13 @@ The elicitor asks only questions that materially affect the change and returns a
 
 For every new or changed UI area:
 
-1. Call `product-ui-sketcher` with its Product behavior and interactions.
+1. Run `product-ui-sketcher` with its Product behavior and interactions.
 2. Receive an ASCII wireframe and intent statement.
 3. Ask whether to create an optional standalone HTML and Tailwind exploration under `docs/ui-mockups/`.
 
 For every new or changed audio area:
 
-1. Call `product-audio-sketcher` with its functional flow.
+1. Run `product-audio-sketcher` with its functional flow.
 2. Obtain trigger, style, duration, and other required Product details.
 3. Assign recognizable `_placeholder_*.wav` names when final assets do not exist.
 
@@ -112,7 +114,7 @@ These child workflows follow the same conversation and document-language boundar
 
 ## Step 5: Write Product documents
 
-This Skill performs all writes:
+This workflow performs all writes:
 
 1. **Initialization:** render the canonical overview and module templates into `document_language`.
 2. **New module:** create `docs/product/NN-<slug>.md` with the next valid dependency-ordered number.
@@ -125,8 +127,8 @@ Before writing, show destructive or foundational changes for a second confirmati
 
 ## Step 6: Synchronize Features
 
-- For an initialized Product with no real Feature plan, or an explicitly authorized replacement, call `generate-feature-list`.
-- For every incremental Product change, including a new module, existing behavior change, or bug correction, call `sync-feature-list`.
+- For an initialized Product with no real Feature plan, or an explicitly authorized replacement, run `generate-feature-list`.
+- For every incremental Product change, including a new module, existing behavior change, or bug correction, run `sync-feature-list`.
 
 Wait for the selected workflow to finish and inspect its result. Never report synchronization as successful merely because it was invoked. Do not rewrite completed Feature history; create explicit follow-up work when completed behavior must change.
 
@@ -140,7 +142,7 @@ Report:
 - affected Feature states
 - every placeholder resource
 
-Ask whether the Product documents are satisfactory and whether the user wants to start `execute-next-feature`. Do not implement code or start execution inside this Skill.
+Ask whether the Product documents are satisfactory and whether the user wants to start `execute-next-feature`. Do not implement code or start execution inside this workflow.
 
 ## Boundaries
 

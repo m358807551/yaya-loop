@@ -26,6 +26,8 @@ Before producing any structured draft:
 
 A change in conversation language must never change `document_language`.
 
+Smoke cases: with `document_language: en` and a Chinese conversation, ask questions in Chinese but return English draft values; with `document_language: zh-CN` and an English conversation, ask questions in English but return Simplified Chinese draft values.
+
 ## Core principles
 
 1. **Ask one question at a time.** Use the available user-input mechanism. Never send ten questions in one message.
@@ -179,7 +181,7 @@ priority:
   nice_to_have: [03, 04]
 ```
 
-ASCII wireframes and complete audio entries are outside this Prompt's output. `product-ui-sketcher` and `product-audio-sketcher` produce them later; this Prompt supplies their Product inputs.
+ASCII wireframes and complete audio entries are outside this workflow's output. `product-ui-sketcher` and `product-audio-sketcher` produce them later; this workflow supplies their Product inputs.
 
 ## Common traps
 
