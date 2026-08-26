@@ -1,129 +1,132 @@
-# 04 · coding_rules.md 的四层结构
+# 04 · Four-layer Coding Rules architecture
 
-## 总览
+## Overview
 
-`docs/coding_rules.md` 是 AI 写代码的"宪法"。它分四层，越往后越具体；冲突时上层优先（除非更具体层有平台硬性约束）：
+`docs/coding_rules.md` is the governing implementation contract for an AI coding agent. It has four layers, from general and highest priority to stack-specific. A higher layer wins when rules conflict unless a lower layer represents a mandatory platform or engine constraint.
 
+```text
+┌──────────────────────────────────────────────────────────┐
+│ Layer 1 · Collaboration contract                         │
+│   How the AI and human work together                     │
+│   Stack-independent and highest priority                 │
+│   Provided by the kit                                    │
+├──────────────────────────────────────────────────────────┤
+│ Layer 2 · General design and architecture                │
+│   Commands, state machines, composition, data-driven work│
+│   Independent of language and engine                     │
+│   Provided by the kit                                    │
+├──────────────────────────────────────────────────────────┤
+│ Layer 3 · Engine or platform practices                   │
+│   Select one source from coding-rules-library/engines/   │
+│   Included as @docs/coding-rules/engine-rules.md         │
+├──────────────────────────────────────────────────────────┤
+│ Layer 4 · Programming-language practices                 │
+│   Select one source from coding-rules-library/languages/ │
+│   Included as @docs/coding-rules/language-rules.md       │
+└──────────────────────────────────────────────────────────┘
 ```
-┌────────────────────────────────────────────────────┐
-│ 第 1 层 · 协作契约                                    │
-│   AI 怎么和人一起干活                                  │
-│   与技术栈无关，优先级最高                              │
-│   ─ kit 已写好，可直接复用                              │
-├────────────────────────────────────────────────────┤
-│ 第 2 层 · 通用设计模式与架构原则                         │
-│   命令模式、状态机、组件、数据驱动等                       │
-│   与语言/引擎无关                                       │
-│   ─ kit 已写好，可直接复用                              │
-├────────────────────────────────────────────────────┤
-│ 第 3 层 · 引擎最佳实践                                  │
-│   按当前引擎从 coding-rules-library/engines/ 选 1     │
-│   外部引入：@docs/coding-rules/engine-rules.md         │
-├────────────────────────────────────────────────────┤
-│ 第 4 层 · 编程语言最佳实践                              │
-│   按当前语言从 coding-rules-library/languages/ 选 1   │
-│   外部引入：@docs/coding-rules/language-rules.md       │
-└────────────────────────────────────────────────────┘
-```
 
-## 第 1 层：协作契约
+## Layer 1: collaboration contract
 
-写在 `coding_rules.md` 主体里（kit 的 `templates/coding_rules.md.tmpl` 已经预填）。包括：
+Layer 1 lives in the main `coding_rules.md`, prefilled from `methodology/templates/coding_rules.md.tmpl`. It covers:
 
-- 协作纪律 7 条（不过度设计、先确认再动手、小步推进、保持一致性、诚实标注不确定性、删除即回答、不擅自扩大改动范围）
-- 工作流约束（必须走 execute-next-feature、AI 不能自标 done、git 安全协议等）
-- AI 产出代码的提交规范（变更摘要 / 影响范围 / 未做的事 / 验证建议）
-- 何时偏离本文档（明确说明原因，例如「此处偏离了实践文档的 X 条，原因是 Y」）
+- seven collaboration disciplines: avoid over-design, confirm ambiguity before acting, work in small steps, preserve project consistency, disclose uncertainty, respect rejected decisions, and do not expand scope without approval
+- workflow constraints: use `execute-next-feature`, never let the AI self-accept a Feature, and follow the Git safety protocol
+- delivery reporting: change summary, impact, intentionally omitted work, and verification guidance
+- explicit disclosure when a rule must be deviated from
 
-**这一层不应该被修改**，除非用户的协作偏好与默认不同（很罕见）。
+Projects should not modify this layer unless the user's collaboration preferences genuinely differ from the defaults.
 
-## 第 2 层：通用设计模式与架构原则
+## Layer 2: general design and architecture
 
-也在 `coding_rules.md` 主体里。包括：
+Layer 2 also lives in the main `coding_rules.md`. It includes:
 
-- **首选模式：命令模式**——「做一件事」的逻辑优先封装成命令类
-- 其他核心原则：数据与表现分离、状态机管理状态、逻辑分层（数据/规则、调度/控制、表现/输入）、组合优于继承、数据驱动、核心规则纯函数化、依赖通过参数传入、运行时状态可序列化
-- 常用模式速查表（场景 → 首选模式）
-- 反模式清单：God Object、UI 回调写业务、裸单例、状态散落、预先抽象、魔法数字、过程式长函数
-- 通用代码组织（按功能分目录、单文件单职责、入口最小、配置集中、不建 utils.py 垃圾桶）
-- 通用错误处理（区分预期错误 vs 异常、不吞异常、资源加载兜底、断言用于不变式）
-- 性能原则（默认不优化，先测后改）
+- the command pattern as the preferred organization for a multi-step operation
+- separation of data and presentation, explicit state machines, layered logic, composition over inheritance, data-driven behavior, pure core rules, dependency injection, and serializable runtime state
+- a pattern selection table
+- anti-patterns such as God Objects, business logic in UI callbacks, pervasive raw singletons, scattered state, premature abstractions, magic values, and long procedural functions
+- organization by feature, single responsibility, minimal entry points, centralized configuration, and avoidance of miscellaneous utility dumping grounds
+- error handling that distinguishes expected failures from exceptional failures and never silently swallows exceptions
+- measurement before performance optimization
 
-这一层也是 kit 已经写好的稳定内容。
+This layer is stable kit content and remains independent of a particular stack.
 
-## 第 3 层：引擎最佳实践
+## Layer 3: engine or platform practices
 
-引擎特性差异大，**不写进主文件**，外部引入：
+Engine behavior varies too much to embed in the main file. The main file names the current engine or platform and includes one external project rule file:
 
 ```markdown
-## 3.1 当前引擎
+## 3.1 Current engine or platform
 
-godot4.3  <!-- 或 unity / unreal / web-frontend / backend-service / ... -->
+godot4.3 <!-- or unity, unreal, web-frontend, backend-service, ... -->
 
-请遵循: @docs/coding-rules/engine-rules.md
+Follow: @docs/coding-rules/engine-rules.md
 ```
 
-`docs/coding-rules/engine-rules.md` 的内容从 kit 的 `coding-rules-library/engines/<engine>.md` 拷贝。
+Copy `docs/coding-rules/engine-rules.md` from `coding-rules-library/engines/<engine>.md` when a suitable source exists. If the source is a stub, Bootstrap must ask whether to fill its essential sections now or retain explicit TODOs. If no source exists, begin with `coding-rules-library/engines/_stub-template.md`.
 
-如果当前引擎在 library 里有真实文件（如 `godot.md`）→ 直接拷贝。
-如果是 stub → BOOTSTRAP STEP 3 引导用户填充关键章节。
-如果库里没有 → 用 `_stub-template.md` 起新文件。
+An engine rule file should cover:
 
-引擎规则文件应覆盖：
-- 生命周期 / 场景与节点 / 资源管理
-- 信号 / 事件 / 消息机制
-- 调试工具 / 编辑器集成
-- 引擎特有的性能陷阱
+- lifecycle, scenes or nodes, and resource management
+- signals, events, or messaging
+- debugging tools and editor integration
+- engine-specific performance traps
 
-## 第 4 层：编程语言最佳实践
+## Layer 4: programming-language practices
 
-同样外部引入：
+The main file names the implementation language and includes one external project rule file:
 
 ```markdown
-## 4.1 当前语言
-gdscript  <!-- 或 csharp / typescript / python / rust / ... -->
+## 4.1 Current language
 
-请遵循: @docs/coding-rules/language-rules.md
+gdscript <!-- or csharp, typescript, python, rust, ... -->
+
+Follow: @docs/coding-rules/language-rules.md
 ```
 
-语言规则文件应覆盖：
-- 类型系统 / 静态检查 / 命名约定
-- 内存与生命周期 / 引用规则
-- 语言特有的常见陷阱（如 GDScript lambda 捕获、TS strict 模式、Python 默认参数可变性）
-- 标准库与第三方生态约定
+Select `docs/coding-rules/language-rules.md` from `coding-rules-library/languages/<language>.md`, using the same real-source, stub, and missing-source behavior as Layer 3.
 
-## 跨层通用的命名与可读性（写在 `coding_rules.md` 主体）
+A language rule file should cover:
 
-- 命名表达意图，不表达类型：`enemies` 而不是 `enemyList`
-- 统一术语：同一概念用同一个词（用 `tile` 就不混用 `cell`/`block`）
-- 布尔以 `is_` / `has_` / `can_` / `should_` 开头
-- 函数名是动词短语：`spawn_enemy`、`apply_damage`
-- 命令类名是动名词或"动词 + 名词"：`RocketMaker`、`DamageCalculator`
-- 避免缩写（除 `pos`/`vel`/`hp`/`fps` 等行业通名）
-- 注释解释"为什么"，不解释"是什么"
+- type system, static checks, and naming conventions
+- memory, lifetime, and reference rules
+- language-specific traps such as GDScript lambda capture, TypeScript strictness, or mutable Python default arguments
+- standard-library and third-party ecosystem conventions
 
-## 何时偏离本文档
+## Cross-layer naming and readability
 
-四层全部都不是教条，以下情况可以偏离，但需在 AI 输出中明确说明：
+The main `coding_rules.md` should establish stack-independent conventions:
 
-- 用户明确要求另一种做法
-- 项目已有的代码风格与本文档冲突，且修改成本过高
-- 特定平台/引擎的惯例与本文档冲突（应优先遵循平台惯例）
+- Name by intent rather than container type: `enemies`, not `enemyList`.
+- Use one term for one concept; do not alternate among `tile`, `cell`, and `block` without a domain distinction.
+- Prefix booleans consistently with `is_`, `has_`, `can_`, or `should_` as appropriate to the language.
+- Use verb phrases for functions, such as `spawn_enemy` or `apply_damage`.
+- Use an action-oriented name for command classes, such as `RocketMaker` or `DamageCalculator`.
+- Avoid abbreviations except established domain terms such as `pos`, `vel`, `hp`, or `fps`.
+- Comments should explain why, not restate what the code says.
 
-偏离时 AI 应一句话告知："此处偏离了 coding_rules.md 第 X 条，原因是 Y。"
+## Deviating from a rule
 
-## 文件落盘对照
+The four layers are guidance with explicit priorities, not an excuse to ignore project reality. An agent may deviate when:
 
-```
+- the user explicitly requests a different approach
+- established project style conflicts with the rule and migration cost is disproportionate
+- a mandatory platform or engine convention conflicts with a more general preference
+
+The agent must disclose the deviation and reason, for example: `This implementation deviates from Coding Rules section X because Y.`
+
+## Files written into a project
+
+```text
 docs/
-├── coding_rules.md                       ← 第 1+2 层 + 引擎/语言引用语句
+├── coding_rules.md                       ← Layers 1 and 2 plus includes
 └── coding-rules/
-    ├── engine-rules.md                   ← 第 3 层，从 library 选/写
-    └── language-rules.md                 ← 第 4 层，从 library 选/写
+    ├── engine-rules.md                   ← Layer 3
+    └── language-rules.md                 ← Layer 4
 ```
 
-## 演化建议
+## Evolution guidance
 
-- 三个文件都不要写满。前几个 feature 实现过程中，让 AI 在「阶段 6 代码气味扫描」自然暴露规则缺口，再补对应章节。
-- 永远先看是否能把规则提到上层。如果"Godot 信号命名"其实是个泛用的"事件命名规则"，应放第 2 层而不是第 3 层。
-- 一条规则反复触发偏离 → 要么改规则，要么改代码风格统一。不留长期不一致。
+- Keep all three project files focused. Let fresh-context code-smell scans reveal demonstrated gaps before adding more rules.
+- Prefer the highest layer that accurately owns a rule. For example, a general event-naming rule belongs in Layer 2 rather than in Godot-specific guidance.
+- If a rule is repeatedly bypassed, either revise the rule or align the codebase. Do not preserve permanent contradiction.

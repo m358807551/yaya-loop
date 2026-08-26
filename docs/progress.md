@@ -2,11 +2,13 @@
 
 ## Current work
 
-No Feature is currently in progress.
+F012 - Convert core Methodology specifications to canonical English
 
 ## Progress
 
-- F011 completed at `2026-08-26T06:52:04Z` after human acceptance and a fresh-context scan with zero remaining must_fix findings.
+- Started at `2026-08-26T06:54:12Z`.
+- Rewrote the Methodology overview and Product document structure in natural American English while preserving the standardizer route, human completion authority, document hierarchy, module naming, and Product semantics.
+- Rewrote the Feature three-file schema and four-layer Coding Rules architecture in English while preserving stable fields, enums, dependency direction, status transitions, layer precedence, and completion gates.
 
 ## Context notes
 
