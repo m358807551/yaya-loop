@@ -10,6 +10,7 @@ F016 - Internationalize Product initialization and change-standardization workfl
 - Confirmed the scope is two paired workflows across four stable distribution files: Product initialization and Product change standardization for Claude Skills and portable Prompts.
 - Confirmed that durable Product output must follow persisted `document_language`, transient conversation follows the user's current language, and native and portable behavior must remain equivalent.
 - Rewrote the native and portable Product initialization elicitors in canonical English, retained concise English and Chinese trigger discovery, preserved the complete three-stage question inventory, and added an explicit conversation-versus-document language contract.
+- Rewrote the native and portable Product change standardizers in canonical English, replaced embedded localized template copies with the canonical rendering contract, preserved all seven routing/write/sync/report stages and boundaries, and made wrong-language child output a blocking condition.
 
 ## Context notes
 
