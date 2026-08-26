@@ -1,289 +1,258 @@
-# GDScript 编程最佳实践
+# GDScript best practices
 
-> 本文件作为 `coding_rules.md` 第四部分（编程语言最佳实践）的外部引入。
-> 适用版本：**GDScript 2.0**（Godot 4.x，4.3+ 默认）。
-> 本文件只覆盖 GDScript 语言层面的实践，引擎层面（节点、信号、Resource、autoload）见 `engine-rules.md`（Godot），通用原则（设计模式、命名思想）见主文件 `coding_rules.md`。
+> This document is imported as Part 4, programming-language practices, of `coding_rules.md`.
+> Applies to: **GDScript 2.0** in Godot 4.x, with Godot 4.3 and later as the default baseline.
+> This file covers GDScript language practices only. See `engine-rules.md` for Nodes, signals, Resources, and Autoloads, and the main `coding_rules.md` for general design and naming principles.
 
 ---
 
-## 一、静态类型：默认开启，不要省
+## 1. Static typing is the default
 
-> 这是 GDScript 最重要的一条实践，违反它项目腐烂速度会快一个数量级。
+> This is the most important GDScript rule. Ignoring it makes a project decay dramatically faster.
 
-GDScript 是**渐进类型**的——可以全部不写类型也能跑。但**不写类型就不要用 GDScript**：你失去了自动补全、编译期错误检查，还有 28%-59% 的性能损失（基于 Godot 官方基准）。
+GDScript is gradually typed: untyped code runs, but it gives up autocomplete, compile-time error detection, and the 28%–59% performance benefit reported by Godot's official benchmarks for typed GDScript.
 
-### 1.1 强制规则
+### 1.1 Required rules
 
-- **所有变量、参数、返回值都标类型**。Project Settings → Debug → GDScript → Untyped Declarations 设为 Warning 或 Error。
-- **类型推断用 `:=`**（编译器能从右值推出来时）；**显式标注用 `:`**（编译器推不出，或想让代码更清晰时）。
+- **Type every variable, parameter, and return value.** Set Project Settings → Debug → GDScript → Untyped Declarations to Warning or Error.
+- Use **`:=` for type inference** when the compiler can determine the right-hand type. Use an **explicit `:` annotation** when it cannot, or when the annotation clarifies intent.
 
 ```gdscript
-# 推荐：右值类型明显，用推断
-var speed := 100.0                    # float
-var enemies := []                     # Array（但元素类型未知）
-var position := Vector2(10, 20)       # Vector2
+# Prefer inference when the right-hand type is clear.
+var speed := 100.0
+var enemies := []
+var position := Vector2(10, 20)
 
-# 推荐：右值类型不明显或需要约束，显式标注
-var enemies: Array[Enemy] = []        # 显式 typed array
+# Annotate when inference is unclear or a constraint matters.
+var enemies: Array[Enemy] = []
 @onready var sprite: Sprite2D = $Sprite2D
-var damage: int = stats.attack        # 不写就推断成 Variant
+var damage: int = stats.attack
 
-# 函数签名一律标完整
+# Always type complete function signatures.
 func apply_damage(target: Node, amount: int) -> void:
-    target.health -= amount
+	target.health -= amount
 
 func find_nearest_enemy(from: Vector2) -> Enemy:
-    # ...
-    return null  # 返回类型显式，调用方知道可能拿到 null
+	# ...
+	return null
 ```
 
-### 1.2 Typed Array / Typed Dictionary
+### 1.2 Typed arrays and dictionaries
 
-- **集合一律带元素类型**：`Array[Enemy]`、`Array[int]`、`Dictionary[String, ItemData]`（Dictionary 类型需要 Godot 4.4+）。
-- **嵌套泛型只能一层**：`Array[Array]` 可以，`Array[Array[int]]` 不行（内层只能 untyped）。
-- **typed array 在写入时做运行时检查**，类型不对会报错——这是优点，能在 bug 现场抓到，而不是后面 100 行才发现。
+- **Give collections element types:** `Array[Enemy]`, `Array[int]`, and, on Godot 4.4 and later, `Dictionary[String, ItemData]`.
+- Nested generics support only one typed level: `Array[Array]` is valid, but `Array[Array[int]]` is not.
+- A typed array checks values at runtime when they are inserted. Treat that early failure as useful bug detection.
 
-### 1.3 类型不是教条
+### 1.3 Typing is not dogma
 
-- **闭包/小工具临时变量**用 `var x = foo()` 也无所谓——能读懂就好。
-- **`Variant` 是合法工具**，不是耻辱：`Dictionary.get()`、`Array.pop_back()` 这类返回 Variant，接住就行。
-- **`as` 类型转换的两种行为要记住**：
-  - 转 Object 类型失败返回 `null`（安全）：`var p := body as Player` 然后 `if not p: return`
-  - 转内置类型失败**直接崩**：`value as int` 如果 value 是 String 会崩。
+- A short-lived local in a closure or tiny utility may use `var x = foo()` when it remains obvious.
+- `Variant` is a legitimate tool for APIs such as `Dictionary.get()` and `Array.pop_back()`; do not spread it beyond the boundary that requires it.
+- Remember the two behaviors of `as`:
+  - A failed Object cast returns `null`: `var player := body as Player`; follow it with `if not player: return`.
+  - A failed built-in type cast raises a runtime error; casting a String value with `value as int` is not safe.
 
 ---
 
-## 二、命名约定
+## 2. Naming conventions
 
-> 这一部分覆盖 GDScript 语言层面的命名。文件名、节点名、场景名等引擎层面的约定在 `godot最佳实践.md` 9.2。
+### 2.1 Identifier casing
 
-### 2.1 标识符大小写
-
-| 对象 | 风格 | 示例 |
-|------|------|------|
-| 变量、函数 | `snake_case` | `player_health`、`apply_damage()` |
-| 私有变量、私有函数、虚函数 | `_snake_case`（下划线前缀） | `_internal_state`、`_ready()` |
-| 常量 | `CONSTANT_CASE` | `MAX_HEALTH`、`DEFAULT_SPEED` |
-| 枚举类型名 | `PascalCase` | `enum Direction` |
-| 枚举成员 | `CONSTANT_CASE` | `Direction.NORTH` |
+| Construct | Style | Example |
+| --- | --- | --- |
+| Variables and functions | `snake_case` | `player_health`, `apply_damage()` |
+| Private members and virtual callbacks | `_snake_case` | `_internal_state`, `_ready()` |
+| Constants | `CONSTANT_CASE` | `MAX_HEALTH`, `DEFAULT_SPEED` |
+| Enum type names | `PascalCase` | `enum Direction` |
+| Enum members | `CONSTANT_CASE` | `Direction.NORTH` |
 | `class_name` | `PascalCase` | `class_name PlayerStats` |
-| 信号名 | `snake_case`，过去式或事件式 | `health_changed`、`died`、`item_collected` |
-| 信号回调方法 | `_on_<signal_name>` 或 `_on_<source>_<signal_name>` | `_on_pressed`、`_on_player_died` |
+| Signals | event-oriented `snake_case`, often past tense | `health_changed`, `died`, `item_collected` |
+| Signal callbacks | `_on_<signal_name>` or `_on_<source>_<signal_name>` | `_on_pressed`, `_on_player_died` |
 
-### 2.2 文件名与 class_name 的关系
+### 2.2 Filenames and `class_name`
 
-- **`.gd` 文件名 = `class_name` 转 `snake_case`**：`class_name PlayerStats` → `player_stats.gd`。
-- 这避免跨平台大小写敏感问题（Windows 不分大小写，Linux 分）。
+- A `.gd` filename must be the `snake_case` form of its `class_name`: `class_name PlayerStats` belongs in `player_stats.gd`.
+- This avoids cross-platform failures between case-insensitive and case-sensitive filesystems.
 
-### 2.3 数字字面量约定
+### 2.3 Numeric literals
 
-- **浮点数必带前导和后导零**：`0.5` 而不是 `.5`；`2.0` 而不是 `2.`。
-- **大数用下划线分隔**：`1_000_000` 而不是 `1000000`。
+- Floats must include both leading and trailing digits: use `0.5`, not `.5`, and `2.0`, not `2.`.
+- Separate large numbers with underscores: use `1_000_000`, not `1000000`.
 
-### 2.4 命名表达意图
+### 2.4 Names express intent
 
-继承主文件 4.2 的通用原则，这里只补充 GDScript 相关的：
-
-- **不要把类型嵌在名字里**：写 `health: int = 100` 而不是 `int_health = 100`。静态类型本身已经说明类型。
-- **布尔用 `is_` / `has_` / `can_` / `should_` 开头**：`is_alive`、`has_key`、`can_jump`。
-- **函数名是动词短语**：`spawn_enemy`、`apply_damage`，不是 `enemy_spawn`、`damage_handle`。
-- **避免缩写**，行业通名除外（`pos`、`vel`、`hp`、`dt`、`fps`、`xy`）。
+- Do not encode the type in the name: use `health: int`, not `int_health`.
+- Start Booleans with `is_`, `has_`, `can_`, or `should_`.
+- Name functions with verb phrases such as `spawn_enemy` and `apply_damage`.
+- Avoid abbreviations except established domain terms such as `pos`, `vel`, `hp`, `dt`, `fps`, and `xy`.
 
 ---
 
-## 三、文件成员顺序（GDScript 官方推荐）
+## 3. Official GDScript member order
 
-新加内容要按这个顺序插入，**不要往末尾乱堆**。
+Insert new members in this order; do not append unrelated declarations at the end of a file.
 
 ```gdscript
-@tool                                          # 1. 编辑器工具脚本标注
-class_name PlayerController                    # 2. 类名
-extends CharacterBody2D                        # 3. 继承
+@tool
+class_name PlayerController
+extends CharacterBody2D
 
-## 玩家角色控制器                              # 4. 文档字符串（双 ##）
-## 处理移动、跳跃、攻击等核心行为
+## Controls the player character.
 
-signal health_changed(new_health: int)         # 5. 信号
+signal health_changed(new_health: int)
 signal died
 
-enum State {                                   # 6. 枚举
-    IDLE,
-    RUNNING,
-    JUMPING,
-}
+enum State { IDLE, RUNNING, JUMPING }
 
-const MAX_HEALTH := 100                        # 7. 常量
+const MAX_HEALTH := 100
 const JUMP_VELOCITY := -400.0
 
-static var instance_count: int = 0             # 8. 静态变量
+static var instance_count: int = 0
 
-@export var speed: float = 200.0               # 9. 导出变量
+@export var speed: float = 200.0
 @export var max_jumps: int = 2
 
-var current_health: int = MAX_HEALTH           # 10. 普通公开变量
+var current_health: int = MAX_HEALTH
 var current_state: State = State.IDLE
 
-var _jumps_remaining: int = 0                  # 11. 私有变量（_ 前缀）
+var _jumps_remaining: int = 0
 var _last_damage_source: Node = null
 
-@onready var sprite: Sprite2D = $Sprite2D      # 12. @onready 变量
+@onready var sprite: Sprite2D = $Sprite2D
 @onready var hitbox: Area2D = $Hitbox
 
-func _init() -> void:                          # 13. _init
-    instance_count += 1
+func _init() -> void:
+	instance_count += 1
 
-func _ready() -> void:                         # 14. _ready
-    health_changed.connect(_on_health_changed)
+func _ready() -> void:
+	health_changed.connect(_on_health_changed)
 
-func _process(delta: float) -> void: pass      # 15. _process / _physics_process
-func _physics_process(delta: float) -> void: pass
+func _process(delta: float) -> void:
+	pass
 
-func take_damage(amount: int) -> void:         # 16. 公开方法
-    current_health -= amount
-    health_changed.emit(current_health)
+func _physics_process(delta: float) -> void:
+	pass
 
-func _on_health_changed(new_value: int) -> void:  # 17. 私有方法（信号回调等）
-    pass
+func take_damage(amount: int) -> void:
+	current_health -= amount
+	health_changed.emit(current_health)
+
+func _on_health_changed(new_value: int) -> void:
+	pass
 ```
 
-注意 `@export` 要在普通变量之前，`@onready` 在普通变量之后——这是官方推荐顺序，**编辑器创建脚本的模板就是这个顺序**。
+The order is: annotations, `class_name`, `extends`, documentation, signals, enums, constants, static variables, exported variables, public variables, private variables, `@onready` variables, `_init`, `_ready`, process callbacks, public methods, then private methods and signal callbacks. In particular, `@export` precedes ordinary variables and `@onready` follows them.
 
 ---
 
-## 四、缩进与格式
+## 4. Indentation and formatting
 
-- **用 Tab 缩进**，不用空格（Godot 编辑器默认）。
-- **LF 行尾**，不是 CRLF。
-- **UTF-8 编码，无 BOM**。
-- **文件末尾保留一个换行符**。
-- **延续行用 2 级缩进**，与正常代码块区分：
+- Indent with tabs, not spaces; this is the Godot editor default.
+- Use LF line endings and UTF-8 without a BOM.
+- End every file with one newline.
+- Indent continuation lines two levels so they are visually distinct from ordinary blocks.
 
 ```gdscript
-# 推荐
 var result := some_long_function(
-        first_argument,
-        second_argument,
-        third_argument,
+		first_argument,
+		second_argument,
+		third_argument,
 )
 
-# 长条件用括号包起来，逻辑运算符放行首
 if (some_condition_that_is_long
-        and another_condition
-        and yet_another_one):
-    do_something()
+		and another_condition
+		and yet_another_one):
+	do_something()
 ```
 
 ---
 
-## 五、`@export` 与 `@onready` 实战
+## 5. `@export`, `@onready`, setters, and getters
 
-> 注：基本规则在 `godot最佳实践.md` 第五节已经覆盖；这里补充 GDScript 语言细节。
-
-### 5.1 `@export` 的常用变体
+### 5.1 Common export annotations
 
 ```gdscript
-@export var speed: float = 100.0                  # 基础
-@export_range(0, 100, 1) var health: int = 100    # 范围 + 步长
-@export_range(0.0, 1.0, 0.01) var volume: float   # 浮点滑块
-@export_enum("Easy", "Normal", "Hard") var difficulty: int  # 下拉选项
-@export_file("*.json") var config_path: String    # 文件选择器
-@export_dir var save_dir: String                  # 目录选择器
-@export_color_no_alpha var tint: Color            # 颜色（无 alpha）
-@export_multiline var description: String         # 多行文本
-@export_node_path("Sprite2D") var sprite_path: NodePath  # 限定节点类型
-@export_group("Movement")                         # 分组（之后的导出归入该组）
-@export var speed: float
+@export var speed: float = 100.0
+@export_range(0, 100, 1) var health: int = 100
+@export_range(0.0, 1.0, 0.01) var volume: float
+@export_enum("Easy", "Normal", "Hard") var difficulty: int
+@export_file("*.json") var config_path: String
+@export_dir var save_dir: String
+@export_color_no_alpha var tint: Color
+@export_multiline var description: String
+@export_node_path("Sprite2D") var sprite_path: NodePath
+@export_group("Movement")
+@export var movement_speed: float
 @export var jump_height: float
-@export_group("")                                 # 结束分组
+@export_group("")
 ```
 
-### 5.2 setter / getter 语法
-
-Godot 4 的 setter/getter 写法和 Godot 3 不同：
+### 5.2 Godot 4 setter and getter syntax
 
 ```gdscript
 var hp: int = 100:
-    set(value):
-        if hp != value:
-            hp = value
-            health_changed.emit(hp)
-    get:
-        return hp
+	set(value):
+		if hp != value:
+			hp = value
+			health_changed.emit(hp)
+	get:
+		return hp
 
-# 简写：只有 setter
-var name: String = "":
-    set(value):
-        name = value
-        _update_label()
+var display_name: String = "":
+	set(value):
+		display_name = value
+		_update_label()
 
-# 用独立函数：
-var hp: int = 100:
-    set = _set_hp,
-    get = _get_hp
+var score: int = 0:
+	set = _set_score,
+	get = _get_score
 
-func _set_hp(value: int) -> void:
-    hp = value
-    health_changed.emit(hp)
+func _set_score(value: int) -> void:
+	score = value
 
-func _get_hp() -> int:
-    return hp
+func _get_score() -> int:
+	return score
 ```
 
-**陷阱**：setter 里直接 `self.x = value` 会**无限递归**。要么写 `hp = value`（直接赋后端字段），要么用 backing field（`_hp`）。
+**Trap:** assigning `self.x = value` inside the setter for `x` recurses forever. Assign the property directly under Godot 4's setter semantics, or use a separate backing field such as `_x`.
 
 ---
 
-## 六、信号语法（Godot 4 风格）
+## 6. Godot 4 signal syntax
 
-> 注：信号的架构使用见 `godot最佳实践.md` 第二节；这里只讲 GDScript 语法。
-
-### 6.1 声明与触发
+### 6.1 Declaration and emission
 
 ```gdscript
-# 声明带类型的信号参数（强烈推荐）
 signal health_changed(new_health: int, max_health: int)
 signal died
 
-# 触发（Godot 4 用 .emit，不是 emit_signal()）
 health_changed.emit(current_hp, MAX_HEALTH)
 died.emit()
 ```
 
-### 6.2 连接
+Use `.emit()` in Godot 4, not the old string-based `emit_signal()` form.
+
+### 6.2 Connections
 
 ```gdscript
-# 推荐：Callable 风格，编辑器能静态检查方法存在
 button.pressed.connect(_on_button_pressed)
-
-# 带绑定参数
 button.pressed.connect(_on_button_pressed.bind("attack"))
-
-# 一次性连接（触发一次后自动断开）
 timer.timeout.connect(_on_timeout, CONNECT_ONE_SHOT)
-
-# 延迟到 idle 帧再调用
 some_signal.connect(_on_some_signal, CONNECT_DEFERRED)
-
-# 用 lambda 做临时回调
 button.pressed.connect(func(): print("clicked"))
 
-# 不推荐：字符串方法名（Godot 3 风格，没有静态检查）
-button.connect("pressed", self, "_on_button_pressed")  # ✗
+# Godot 3 style: do not use.
+button.connect("pressed", self, "_on_button_pressed")
 ```
 
-### 6.3 信号回调命名
-
-- 自己监听自己的信号：`_on_<signal_name>`，如 `_on_pressed`、`_on_health_changed`。
-- 监听别人的信号：`_on_<source>_<signal_name>`，如 `_on_player_died`、`_on_enemy_hit`。
+Prefer Callable connections because the editor can check the target method. Name a callback `_on_<signal_name>` for a locally observed signal and `_on_<source>_<signal_name>` when observing another object.
 
 ---
 
-## 七、Lambda 与 Callable
+## 7. Lambdas and Callable
 
-GDScript 2.0 支持 lambda（函数字面量）。**临时小函数用 lambda，复用的用普通函数**。
+GDScript 2.0 supports function literals. Use a lambda for a small, temporary function and a normal function for reused behavior.
 
 ```gdscript
-# 用于排序、过滤、map
 var sorted := enemies.duplicate()
 sorted.sort_custom(func(a, b): return a.threat > b.threat)
 
@@ -291,224 +260,175 @@ var visible_enemies := enemies.filter(func(e): return e.is_visible())
 var damages := enemies.map(func(e): return e.attack)
 var total := enemies.reduce(func(acc, e): return acc + e.attack, 0)
 
-# 用于信号回调
 button.pressed.connect(func(): score += 10)
 
-# 命名 lambda（在栈追踪中显示名字，调试更友好）
-var compute_damage := func compute(base: int, multi: float) -> int:
-    return int(base * multi)
+var compute_damage := func compute(base: int, multiplier: float) -> int:
+	return int(base * multiplier)
 print(compute_damage.call(10, 1.5))
-
-# 闭包：捕获外部变量
-func _ready():
-    var threshold := 50
-    var high_hp := enemies.filter(func(e): return e.hp > threshold)
 ```
 
-### 7.1 Lambda 的注意点
+Name a nontrivial lambda, as in `func compute(...)`, so stack traces identify it during debugging.
 
-- **调用 lambda 用 `.call()`**：`my_lambda.call(arg1, arg2)`，不能直接 `my_lambda(...)`。这是 Callable 的统一约定。
-- **闭包按值捕获**：lambda 创建时捕获变量的快照。但**引用类型（Array、Dictionary、Object）的内容修改是共享的**：
+### 7.1 Lambda constraints
+
+- Invoke a lambda with `.call()`, as in `my_lambda.call(arg1, arg2)`; do not write `my_lambda(...)`.
+- Closures capture values at creation time. Mutating a captured scalar changes the lambda's copy, while the contents of a captured reference type such as Array, Dictionary, or Object remain shared.
 
 ```gdscript
 var counter := 0
-var inc := func(): counter += 1  # 修改的是 lambda 内的副本
-inc.call()
-print(counter)  # 仍然是 0
+var increment := func(): counter += 1
+increment.call()
+print(counter) # Still 0.
 
 var items := []
-var add_item := func(): items.append(1)  # Array 是引用，修改的是同一个
+var add_item := func(): items.append(1)
 add_item.call()
-print(items)  # [1]
+print(items) # [1]
 ```
 
-- **lambda 不能是 static**。复用的工具函数用普通 static 函数。
-
-### 7.2 性能提示
-
-热路径里用 lambda 做 `filter/map` 有调用开销，比直接写 for 循环慢。**冷路径用 lambda 求可读性，热路径（每帧调用、大数组迭代）用 for 循环**。
+- A lambda cannot be `static`; use a normal static function for reusable utilities.
+- Functional calls such as `filter` and `map` add Callable overhead. Prefer readability on cold paths, but use a direct `for` loop in per-frame or large-array hot paths.
 
 ---
 
-## 八、错误处理
+## 8. Error handling
 
-> GDScript **没有 try-catch**。不要被网上某些过时教程误导。
+> GDScript has no try-catch. Do not copy exception examples from outdated or unrelated tutorials.
 
-### 8.1 三种错误信号
+### 8.1 Three error signals
 
 ```gdscript
-# 1. assert：开发期断言，发布版可关闭（默认关闭）
-# 用于"绝不应该发生"的不变式
+# Development invariant; assertions may be disabled in release builds.
 func take_damage(amount: int) -> void:
-    assert(amount >= 0, "damage amount must be non-negative")
-    health -= amount
+	assert(amount >= 0, "damage amount must be non-negative")
+	health -= amount
 
-# 2. push_error：报错并记录，但程序继续运行
-# 用于"出错了但能容忍"的情况
+# Recoverable failure: report it and return a safe result.
 func load_config(path: String) -> Dictionary:
-    if not FileAccess.file_exists(path):
-        push_error("config file not found: %s" % path)
-        return {}
-    # ...
+	if not FileAccess.file_exists(path):
+		push_error("config file not found: %s" % path)
+		return {}
+	return {}
 
-# 3. push_warning：警告，不影响运行
+# Non-fatal warning.
 func deprecated_function() -> void:
-    push_warning("deprecated_function is deprecated, use new_function instead")
+	push_warning("deprecated_function is deprecated; use new_function")
 ```
 
-### 8.2 不存在的关键字
+- `assert` protects conditions that must never be false during development.
+- `push_error` records an error while allowing execution to continue.
+- `push_warning` reports a non-fatal concern.
 
-- **没有 `throw`**：GDScript 不能抛出异常。
-- **没有 `try` / `except`**：不能捕获异常。
-- **没有 `finally`**：用 `_exit_tree()` 或 `func _notification(what)` 处理清理。
+### 8.2 Keywords that do not exist
 
-### 8.3 错误处理模式
+- There is no `throw`, `try`, `except`, or `finally` in GDScript.
+- Perform lifecycle cleanup in `_exit_tree()` or `_notification(what)` where appropriate.
 
-由于没有异常，约定俗成的做法：
+### 8.3 Error-handling patterns
 
-**模式一：返回错误码 + 输出参数（Godot API 风格）**
+Use one of these explicit patterns:
+
+1. Return an error code and output data, following the style of Godot APIs.
+2. Return `null` and require the caller to check it.
+3. Return a result object containing success, data, and an error message.
 
 ```gdscript
 var file := FileAccess.open("res://data.json", FileAccess.READ)
 if not file:
-    var err := FileAccess.get_open_error()
-    push_error("failed to open: %s" % err)
-    return
-```
+	var error := FileAccess.get_open_error()
+	push_error("failed to open: %s" % error)
+	return
 
-**模式二：返回 null + 调用方检查**
-
-```gdscript
 func find_enemy_by_id(id: int) -> Enemy:
-    for e in enemies:
-        if e.id == id:
-            return e
-    return null
+	for enemy in enemies:
+		if enemy.id == id:
+			return enemy
+	return null
 
-var e := find_enemy_by_id(42)
-if not e:
-    return
-```
-
-**模式三：返回结构体（包含 success + 数据 + 错误信息）**
-
-```gdscript
 class Result:
-    var success: bool
-    var data: Variant
-    var error: String
-
-func load_data() -> Result:
-    var r := Result.new()
-    # ...
-    return r
+	var success: bool
+	var data: Variant
+	var error: String
 ```
 
-### 8.4 关于 null
+### 8.4 Null and freed Objects
 
-GDScript 的 null 是个常见 bug 源：
-
-- **函数返回可能为 null**：明确写在返回类型上（`-> Enemy`）并标注在文档里。调用方必须检查。
-- **`is_instance_valid(node)`**：检查 Object 是否还活着（没被 free）。访问已释放对象会**直接崩**，所以 await 之后、协程中要先检查。
-- **`node.is_queued_for_deletion()`**：检查节点是否已经 `queue_free()` 过但还没真正释放。
-- **数组/字典默认值用空容器，不用 null**：`var items: Array[Item] = []` 而不是 `var items: Array[Item] = null`。少一道判断。
+- Document when a typed Object return may still be `null`, and require callers to check it.
+- Use `is_instance_valid(node)` before accessing an Object that may have been freed, especially after `await` or inside a coroutine.
+- Use `node.is_queued_for_deletion()` to detect a Node that has received `queue_free()` but has not yet left the tree.
+- Default arrays and dictionaries to empty containers rather than `null`.
 
 ---
 
-## 九、文档字符串
+## 9. Documentation comments
 
-GDScript 4 用 `##` 双井号写文档字符串，编辑器和文档生成器能识别。
+GDScript 4 uses `##` documentation comments, which the editor and documentation generator recognize.
 
 ```gdscript
-## 玩家角色控制器。
+## Controls the player character.
 ##
-## 处理移动、跳跃、攻击等核心行为。
-## 不负责输入采集——输入由 [InputHandler] 单独处理。
+## Handles movement, jumping, and attacks. Input collection belongs to
+## [InputHandler], not this class.
 class_name PlayerController
 extends CharacterBody2D
 
-## 玩家当前血量。降至 0 时触发 [signal died]。
+## Current health. Emits [signal died] when it reaches zero.
 var current_health: int = 100
 
-## 对玩家造成伤害。
-## [param amount] 伤害值，必须 >= 0。
-## [param source] 伤害来源节点，用于伤害日志。
-## 返回剩余血量。
+## Applies [param amount] damage from [param source].
+## The amount must be non-negative. Returns the remaining health.
 func take_damage(amount: int, source: Node) -> int:
-    # ...
-    return current_health
+	return current_health
 ```
 
-要点：
-
-- **`##` 是文档注释**，`#` 是普通注释。两者作用不同。
-- **支持 BBCode**：`[b]粗体[/b]`、`[code]代码[/code]`、`[param x]`、`[signal foo]`、`[method bar]`、`[member baz]`。
-- **类的文档字符串写在 `class_name` 行之后、`extends` 行之后**（成员顺序见第三节）。
-- **重要的公开 API 都要写**；私有方法（`_` 前缀）可以不写。
+- `##` is documentation; `#` is an ordinary comment.
+- Documentation supports BBCode and references such as `[b]text[/b]`, `[code]value[/code]`, `[param x]`, `[signal foo]`, `[method bar]`, and `[member baz]`.
+- Put class documentation after the `class_name` and `extends` declarations, following the member order above.
+- Document every important public API; private `_` methods may omit documentation when their intent is obvious.
 
 ---
 
-## 十、控制流惯例
+## 10. Control-flow conventions
 
-### 10.1 函数 return 的位置
+### 10.1 Return placement
 
-- **`return` 用在函数的开头（守卫语句）或结尾**。
-- **避免在函数中间 return**，让数据流容易追踪。
+- Use `return` for guard clauses at the beginning of a function or for the final result.
+- Avoid scattered returns in the middle of a function; keep data flow easy to follow.
 
 ```gdscript
-# 推荐：开头守卫 + 结尾返回
 func apply_damage(target: Node, amount: int) -> int:
-    if not is_instance_valid(target):
-        return 0
-    if amount <= 0:
-        return 0
+	if not is_instance_valid(target):
+		return 0
+	if amount <= 0:
+		return 0
 
-    var actual_damage := _calculate_damage(target, amount)
-    target.health -= actual_damage
-    return actual_damage
-
-# 不推荐：中间 return 多个分支
-func apply_damage(target: Node, amount: int) -> int:
-    if is_instance_valid(target):
-        if amount > 0:
-            var d := _calc(target, amount)
-            target.health -= d
-            return d
-        else:
-            return 0
-    return 0
+	var actual_damage := _calculate_damage(target, amount)
+	target.health -= actual_damage
+	return actual_damage
 ```
 
-### 10.2 迭代修改容器
+### 10.2 Do not mutate a collection while iterating it
 
-**遍历时不要修改容器**——会跳元素或越界。
+Mutation can skip elements or move indexes out of bounds. Build a filtered collection, iterate indexes backward, or collect removals first.
 
 ```gdscript
-# 反模式
-for e in enemies:
-    if e.is_dead:
-        enemies.erase(e)  # ✗ 跳元素
+enemies = enemies.filter(func(enemy): return not enemy.is_dead)
 
-# 推荐：filter 反向构造
-enemies = enemies.filter(func(e): return not e.is_dead)
+for index in range(enemies.size() - 1, -1, -1):
+	if enemies[index].is_dead:
+		enemies.remove_at(index)
 
-# 推荐：倒序遍历删除
-for i in range(enemies.size() - 1, -1, -1):
-    if enemies[i].is_dead:
-        enemies.remove_at(i)
-
-# 推荐：先收集要删的，再统一删
 var to_remove: Array[Enemy] = []
-for e in enemies:
-    if e.is_dead:
-        to_remove.append(e)
-for e in to_remove:
-    enemies.erase(e)
+for enemy in enemies:
+	if enemy.is_dead:
+		to_remove.append(enemy)
+for enemy in to_remove:
+	enemies.erase(enemy)
 ```
 
-### 10.3 三元运算符
+### 10.3 Conditional expressions
 
-GDScript 用 Python 风格（`a if cond else b`），**不是 `cond ? a : b`**：
+GDScript uses Python-style `a if condition else b`, not `condition ? a : b`.
 
 ```gdscript
 var status := "alive" if hp > 0 else "dead"
@@ -517,86 +437,68 @@ var first := items[0] if not items.is_empty() else null
 
 ---
 
-## 十一、Packed Arrays（性能场景）
+## 11. Packed arrays for performance-sensitive data
 
-GDScript 有专门的紧凑数组类型，存大量同质数据时性能更好：
+| Type | Typical use |
+| --- | --- |
+| `PackedByteArray` | File or network byte streams |
+| `PackedInt32Array`, `PackedInt64Array` | Integer data |
+| `PackedFloat32Array`, `PackedFloat64Array` | Floating-point data |
+| `PackedStringArray` | Strings |
+| `PackedVector2Array`, `PackedVector3Array` | Particle positions or path points |
+| `PackedColorArray` | Colors |
 
-| 类型 | 用途 |
-|------|------|
-| `PackedByteArray` | 字节流（文件、网络） |
-| `PackedInt32Array` / `PackedInt64Array` | 整数数组 |
-| `PackedFloat32Array` / `PackedFloat64Array` | 浮点数组 |
-| `PackedStringArray` | 字符串数组 |
-| `PackedVector2Array` / `PackedVector3Array` | 向量数组（粒子位置、路径点） |
-| `PackedColorArray` | 颜色数组 |
-
-**何时用**：
-- 元素量上万、且类型同质。
-- 性能敏感的迭代或修改。
-- 网络传输或文件序列化（直接转 PackedByteArray）。
-
-**何时不用**（用普通 `Array[T]`）：
-- 元素量在几百以内——便利性更重要。
-- 类型混合或需要存对象。
-- 频繁 insert/erase（Packed 数组的修改开销更高）。
+Use packed arrays for tens of thousands of homogeneous values, performance-sensitive iteration, or direct serialization and transport. Prefer ordinary `Array[T]` for a few hundred values, mixed types, Object references, or frequent insertion and removal, because packed-array mutation is more expensive.
 
 ---
 
-## 十二、static 关键字（Godot 4）
-
-GDScript 4 支持静态变量、静态函数、静态构造器：
+## 12. The `static` keyword in Godot 4
 
 ```gdscript
 class_name MathUtils
 extends Object
 
-# 静态变量：全类共享
 static var instance_count: int = 0
 
-# 静态函数：不依赖实例
 static func clamp_angle(angle: float) -> float:
-    return fposmod(angle + PI, TAU) - PI
+	return fposmod(angle + PI, TAU) - PI
 
-# 静态构造器：脚本加载时执行一次
 static func _static_init() -> void:
-    print("MathUtils loaded")
+	print("MathUtils loaded")
 ```
 
-**用途**：
-- **工具函数库**：纯函数式的辅助方法（`MathUtils.clamp_angle(x)`）。
-- **类级别计数器**：全类共享的统计。
-
-**注意**：
-- 静态函数**无法访问 `self` 和实例成员**。
-- **Lambda 不能是 static**。
-- 静态变量在脚本卸载时清空，**不是真正的全局**——跨场景持久数据还是用 autoload + Resource。
+- Use static functions for pure utility methods and static variables for class-wide counters.
+- `_static_init()` runs once when the script is loaded.
+- A static function cannot access `self` or instance members.
+- A lambda cannot be static.
+- Static variables disappear when the script unloads; they are not durable global state. Use an Autoload plus a Resource for data that must persist across Scenes.
 
 ---
 
-## 十三、GDScript 反模式速查
+## 13. GDScript anti-pattern checklist
 
-- **不写类型**：见第一节。
-- **`@onready` 和 `@export` 标在同一变量**：`@onready` 在 `_ready()` 阶段覆盖 `@export` 的值，Godot 4 会发出 `ONREADY_WITH_EXPORT` 警告。
-- **setter 里 `self.x = value`**：无限递归。
-- **遍历容器时修改容器**：跳元素或越界。见 10.2。
-- **`free()` 替代 `queue_free()`**：见 `godot最佳实践.md`。
-- **`emit_signal("name", args)` 字符串风格**：Godot 4 用 `signal_name.emit(args)`，Godot 3 风格已经过时。
-- **`connect("signal", self, "method")` 字符串风格**：Godot 4 用 `signal.connect(callable)`，参考 6.2。
-- **return 在函数中间多处**：见 10.1。
-- **过度使用 `Variant`**：所有 untyped 变量都是 Variant，性能损失 + 失去静态检查。
-- **lambda 滥用在热路径**：见 7.2。
-- **`==` 比较节点用引用相等**：节点比较用 `==`（Godot 内部就是引用比较），但**不要比较已释放的节点**，先 `is_instance_valid`。
-- **数组用 `null` 作默认值**：用 `[]`，少一道判断。
-- **每帧 `print`**：日志会被刷爆，肉眼看不过来；用 `print` + 计数器，或者直接断点。
+- Untyped declarations: they discard static checking and typed-code performance.
+- Combining `@onready` and `@export` on one variable: `@onready` overwrites the exported value during `_ready()` and Godot 4 emits `ONREADY_WITH_EXPORT`.
+- Assigning `self.x = value` inside the setter for `x`: infinite recursion.
+- Mutating a collection during iteration: skipped elements or invalid indexes.
+- Calling `free()` where `queue_free()` is required by the engine lifecycle.
+- String-based `emit_signal("name", args)` instead of `signal_name.emit(args)`.
+- String-based `connect("signal", self, "method")` instead of `signal.connect(callable)`.
+- Scattered returns in the middle of a function.
+- Pervasive `Variant`: reduced static checking and performance.
+- Lambdas in per-frame or other hot paths without measurement.
+- Comparing or accessing a freed Node without first calling `is_instance_valid`.
+- Using `null` instead of `[]` or `{}` as a collection default.
+- Printing every frame; use a counter, a breakpoint, or targeted logging.
 
 ---
 
-## 十四、调试小工具
+## 14. Debugging utilities
 
-- **`print()`**：基础输出。
-- **`prints("hp:", hp, "pos:", position)`**：自动加空格分隔，多值调试方便。
-- **`printt(...)`**：用 Tab 分隔，列对齐。
-- **`print_debug()`**：附带文件名和行号。
-- **`breakpoint`**：代码里写这一行，运行时触发断点（编辑器内运行）。
-- **`OS.alert("message")`**：弹窗（调试时用，发布版不要留）。
-- **`@warning_ignore("unused_variable")`**：临时压制某条警告。滥用是反模式——警告通常是对的。
+- `print()` provides basic output.
+- `prints("hp:", hp, "pos:", position)` separates values with spaces.
+- `printt(...)` separates values with tabs for aligned columns.
+- `print_debug()` includes the filename and line number.
+- A `breakpoint` statement triggers the debugger when running in the editor.
+- `OS.alert("message")` displays a debugging dialog; never leave it in a release build.
+- `@warning_ignore("unused_variable")` suppresses one warning temporarily. Overuse is an anti-pattern because warnings usually identify a real issue.
