@@ -207,10 +207,8 @@ Before entering either branch, confirm that `DOCUMENT_LANGUAGE` is loaded from `
 
 5. **记录静态检查命令**：
    问用户：「我之后实现 feature 时，要跑哪个命令做静态检查？例如 `npm run typecheck` / `cargo check` / `mypy .` / `tsc --noEmit`。这个命令必须能快速反馈类型/语法错误，且能在 30 秒内完成。」
-   读取 STEP 0.5 已创建或更新的 `docs/methodology-config.json`，补全下面字段。**必须保留已确认的 `document_language`，不得通过重建配置将其覆盖或遗漏。** 最终结构为：
-   ```bash
-   mkdir -p docs
-   cat > docs/methodology-config.json <<EOF
+   读取 STEP 0.5 已创建或更新的 `docs/methodology-config.json`，把下面列出的 Bootstrap 管理字段合并到现有 JSON 对象中。**只更新这些字段，必须保留已确认的 `document_language` 和所有未知字段；不得通过重建配置将现有配置覆盖或遗漏。** 如果文件不存在，则先创建空 JSON 对象 `{}`。合并完成后必须包含：
+   ```json
    {
      "document_language": "<DOCUMENT_LANGUAGE>",
      "static_check_cmd": "<用户答案>",
@@ -220,8 +218,8 @@ Before entering either branch, confirm that `DOCUMENT_LANGUAGE` is loaded from `
      "bootstrap_at": "<ISO 时间戳>",
      "bootstrap_mode": "greenfield | legacy"
    }
-   EOF
    ```
+   上面的对象只展示必需字段，不代表配置文件只允许包含这些字段。使用 JSON-aware edit 更新现有对象，不要用整文件模板覆盖它。
    验证：`python3 -m json.tool docs/methodology-config.json > /dev/null`
 
 6. **生成 feature-list（必须在 coding rules 之后）**：

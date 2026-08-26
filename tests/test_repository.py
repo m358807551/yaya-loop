@@ -61,7 +61,12 @@ class RepositoryTests(unittest.TestCase):
             bootstrap,
         )
         self.assertIn(
-            "不得通过重建配置将其覆盖或遗漏",
+            "必须保留已确认的 `document_language` 和所有未知字段",
+            bootstrap,
+        )
+        self.assertNotIn("cat > docs/methodology-config.json", bootstrap)
+        self.assertIn(
+            "上面的对象只展示必需字段，不代表配置文件只允许包含这些字段",
             bootstrap,
         )
         self.assertIn(

@@ -11,6 +11,7 @@ F010 - Make Bootstrap select and persist document_language
 - Updated later Bootstrap stages to preserve, verify, and report the confirmed language without translating existing content.
 - Clarified non-binding language inference and BCP 47 confirmation behavior in the canonical contract.
 - Added a repository test that locks Bootstrap ordering, persistence, non-translation, and conversation-language independence.
+- Replaced the destructive full-file config example with a JSON-aware merge contract that preserves unknown project fields, and added a regression assertion against the old overwrite pattern.
 
 ## Context notes
 
