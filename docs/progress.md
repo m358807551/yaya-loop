@@ -24,6 +24,8 @@ F026 - Document the upgrade perform the release audit and publish v0.2.0
 - Executed all four canonical scenarios in separate disposable repositories; 28 scenario assertions passed across questions, confirmations, generated prose, stable protocols, Legacy preservation, and prohibited behavior.
 - Exported the current Kit into separate `en` and `zh-CN` repositories and passed the complete 69-test suite in each configuration.
 - Added structured durable smoke evidence and release-test enforcement; final repository verification and renewed human acceptance remain pending because this repair changes visible release evidence.
+- Repaired repository verification passed with 70 tests, all JSON parsing, release-link checks, and diff checks successful.
+- Renewed human acceptance passed at `2026-08-26T13:17:26Z`; the final fresh-context rescan is pending.
 
 ## Context notes
 
