@@ -1,0 +1,12 @@
+{
+  "id": "F012",
+  "description": "Rewrite the core tool-independent Methodology specifications in natural American English while preserving their normative behavior. The migration covers the overview Product structure Feature schema and Coding Rules architecture outside the detailed execution loop.",
+  "acceptance_criteria": [
+    "The selected Methodology documents are written in natural American English",
+    "Product Feature schema dependency and Coding Rules requirements retain their prior semantics",
+    "Internal links and referenced paths remain valid",
+    "A rule-by-rule review finds no removed gate or weakened normative requirement"
+  ],
+  "source": "product/05-internationalization.md#Product decisions",
+  "notes": ""
+}

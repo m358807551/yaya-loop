@@ -1,0 +1,12 @@
+{
+  "id": "F018",
+  "description": "Rewrite the initial Feature-list generation Claude Skill and portable Prompt as paired English canonical instructions. Generated natural-language values must follow document_language while structure dependencies statuses scopes IDs and validation remain language-neutral.",
+  "acceptance_criteria": [
+    "Both generation workflows use natural English canonical instructions",
+    "Feature titles descriptions acceptance criteria source prose and notes follow document_language",
+    "JSON keys enum values IDs and consistency checks remain unchanged",
+    "Native and portable variants preserve equivalent decomposition and validation behavior"
+  ],
+  "source": "product/05-internationalization.md#Language boundaries",
+  "notes": ""
+}

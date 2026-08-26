@@ -1,0 +1,11 @@
+{
+  "id": "F001",
+  "description": "The repository provides a tool-independent Methodology, schemas, and reusable templates that define the durable Product-to-Feature workflow. These assets establish the compatibility foundation used by every agent integration.",
+  "acceptance_criteria": [
+    "The Methodology documents define Product structure Feature schemas execution stages and Coding Rules layers",
+    "Reusable templates exist for Product modules Feature data Progress and Coding Rules",
+    "Repository tests can parse every JSON and JSON template asset"
+  ],
+  "source": "product/04-adoption-and-integrations.md#Distribution surfaces",
+  "notes": "Implemented before self-hosting; reverse-engineered from repository state at commit a496666."
+}

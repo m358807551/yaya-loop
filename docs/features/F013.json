@@ -1,0 +1,12 @@
+{
+  "id": "F013",
+  "description": "Rewrite the detailed Feature execution specification and the canonical Coding Rules template in natural American English. Stage numbering evidence formats human-acceptance gates and self-modification snapshot behavior must remain stable.",
+  "acceptance_criteria": [
+    "The Stage 0 through Stage 8 execution specification is fully available in English",
+    "Human acceptance fresh-context review and must_fix completion gates are unchanged",
+    "The Coding Rules template preserves collaboration architecture stack and language layers",
+    "Stable evidence strings and Hook-compatible formats are unchanged"
+  ],
+  "source": "product/05-internationalization.md#Product decisions",
+  "notes": ""
+}

@@ -1,0 +1,11 @@
+{
+  "id": "F003",
+  "description": "The repository can generate an initial dependency-ordered Feature plan and incrementally synchronize later Product changes. Lightweight status indexes remain separate from detailed Feature files and revision history.",
+  "acceptance_criteria": [
+    "Initial generation produces a consistent Feature index detail files and revision log",
+    "Incremental synchronization preserves completed history and records revisions",
+    "Generated dependencies scopes IDs and source references pass the documented consistency checks"
+  ],
+  "source": "product/02-feature-planning.md#Core flows",
+  "notes": "Implemented before self-hosting; reverse-engineered from repository state at commit a496666."
+}

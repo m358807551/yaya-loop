@@ -1,0 +1,12 @@
+{
+  "id": "F015",
+  "description": "Rewrite every programming-language Coding Rules source in natural American English without creating localized copies. The complete GDScript rules and all language stubs must retain their technical constraints and installation paths.",
+  "acceptance_criteria": [
+    "Every file under coding-rules-library/languages uses English canonical prose",
+    "GDScript typing naming lambda resource and error-handling rules retain their technical meaning",
+    "CSharp TypeScript Python Rust and generic stubs remain clearly actionable",
+    "Bootstrap can continue copying the same stable file paths"
+  ],
+  "source": "product/05-internationalization.md#Product decisions",
+  "notes": ""
+}

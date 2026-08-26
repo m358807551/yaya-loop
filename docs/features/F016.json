@@ -1,0 +1,12 @@
+{
+  "id": "F016",
+  "description": "Rewrite the Product initialization and Product change-standardization Claude Skills and portable Prompts as paired English canonical instructions. They must read document_language and write durable Product knowledge in that language while conversing in the user's current language.",
+  "acceptance_criteria": [
+    "Product initialization and change-standardization workflows use natural English canonical instructions",
+    "Both native Skills and portable Prompts read document_language before producing durable content",
+    "Chinese and English trigger examples remain discoverable without duplicating workflow bodies",
+    "Native and portable variants preserve equivalent questions routing boundaries and outputs"
+  ],
+  "source": "product/05-internationalization.md#Language boundaries",
+  "notes": ""
+}

@@ -1,0 +1,12 @@
+{
+  "id": "F024",
+  "description": "Publish a complete natural-English README as the default repository homepage and preserve the current complete Chinese positioning as README.zh-CN.md. Both entry points must remain meaning-equivalent and link to each other without claiming unverified support.",
+  "acceptance_criteria": [
+    "README.md is a complete natural-English presentation of Yaya Loop",
+    "README.zh-CN.md preserves the complete Simplified Chinese presentation",
+    "Both README files contain working text-based language links to each other",
+    "All repository-relative links resolve and the documented behavior matches the implemented internationalization workflow"
+  ],
+  "source": "product/05-internationalization.md#Acceptance criteria",
+  "notes": ""
+}

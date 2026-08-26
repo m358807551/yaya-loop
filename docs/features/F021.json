@@ -1,0 +1,12 @@
+{
+  "id": "F021",
+  "description": "Rewrite refactor-selection workflows and portable usage guidance in natural English while retaining concise multilingual trigger discoverability. Refactor findings written into durable Feature notes must follow document_language.",
+  "acceptance_criteria": [
+    "Native and portable refactor-selection instructions use natural English canonical prose",
+    "The portable usage guide provides English commands and retains concise Chinese trigger examples",
+    "Severity names scoring rules and handoff behavior remain unchanged",
+    "Durable refactor notes follow document_language"
+  ],
+  "source": "product/05-internationalization.md#Product decisions",
+  "notes": ""
+}

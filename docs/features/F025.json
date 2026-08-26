@@ -1,0 +1,12 @@
+{
+  "id": "F025",
+  "description": "Add automated compatibility checks and documented smoke scenarios for English and Chinese project knowledge. Verification must cover conversation and document language differences legacy configuration migration stable protocols and distribution parity.",
+  "acceptance_criteria": [
+    "Automated tests verify the document_language configuration contract and legacy compatibility path",
+    "Static checks verify stable JSON keys enum values IDs paths and evidence across language modes",
+    "Documented smoke scenarios cover English documents Chinese documents and Chinese conversation with English documents",
+    "Repository tests and git diff --check pass without requiring new runtime dependencies"
+  ],
+  "source": "product/05-internationalization.md#Acceptance criteria",
+  "notes": ""
+}

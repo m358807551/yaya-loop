@@ -1,0 +1,11 @@
+{
+  "id": "F004",
+  "description": "The repository defines an execution loop that selects one eligible Feature and moves it through preparation implementation verification human acceptance review completion and handoff. The loop stops after handoff until the maintainer explicitly continues.",
+  "acceptance_criteria": [
+    "Every execution stage has documented entry conditions actions and outputs",
+    "A Feature cannot reach done without human acceptance and zero remaining must_fix findings",
+    "The workflow records progress completion evidence and the next eligible Feature without starting it"
+  ],
+  "source": "product/03-feature-delivery.md#Core flows",
+  "notes": "Implemented before self-hosting; reverse-engineered from repository state at commit a496666."
+}

@@ -1,0 +1,12 @@
+{
+  "id": "F011",
+  "description": "Convert the Product Feature Progress and configuration templates into natural English canonical rendering sources. Template instructions must require agents to render human-readable headings and guidance in document_language without translating machine fields.",
+  "acceptance_criteria": [
+    "Canonical Product module Feature detail and Progress templates contain natural English source text",
+    "Rendering instructions preserve every required section when document_language is not English",
+    "JSON keys enum values IDs paths and evidence strings remain unchanged across document languages",
+    "Template JSON files continue to pass repository validation"
+  ],
+  "source": "product/05-internationalization.md#Core flows",
+  "notes": ""
+}

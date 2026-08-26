@@ -1,0 +1,11 @@
+{
+  "id": "F006",
+  "description": "Agents without native Claude Code Skills can use equivalent portable Prompts while a Git commit-message Hook provides completion-gate enforcement. The portable workflow preserves the same core invariants as the native distribution.",
+  "acceptance_criteria": [
+    "Portable Prompts cover Product Feature planning execution and refactor workflows",
+    "The Git Hook rejects incomplete Feature completion evidence",
+    "Installation guidance explains how non-Claude agents discover and use the Prompts"
+  ],
+  "source": "product/04-adoption-and-integrations.md#Distribution surfaces",
+  "notes": "Implemented before self-hosting; reverse-engineered from repository state at commit a496666."
+}

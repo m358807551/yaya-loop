@@ -1,0 +1,12 @@
+{
+  "id": "F026",
+  "description": "Document the upgrade path audit the international release against Product acceptance criteria and publish the resulting kit as v0.2.0. The release must identify unsupported behavior and avoid automatic translation of existing projects.",
+  "acceptance_criteria": [
+    "Upgrade guidance explains document_language migration for existing projects without translating their current documents",
+    "A release audit maps every internationalization Product acceptance criterion to verification evidence",
+    "kit-version.txt README version references and upgrade notes consistently report 0.2.0",
+    "All repository tests link checks JSON checks and English-Chinese smoke scenarios pass"
+  ],
+  "source": "product/05-internationalization.md#Acceptance criteria",
+  "notes": ""
+}

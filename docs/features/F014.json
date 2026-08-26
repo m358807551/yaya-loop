@@ -1,0 +1,12 @@
+{
+  "id": "F014",
+  "description": "Rewrite every engine and platform Coding Rules source in natural American English without creating localized copies. Real Godot rules and stub guidance for other platforms must keep the same technical constraints and installation paths.",
+  "acceptance_criteria": [
+    "Every file under coding-rules-library/engines uses English canonical prose",
+    "Godot anti-patterns naming lifecycle signal and resource rules retain their technical meaning",
+    "Stub files remain clearly identified as incomplete and actionable",
+    "Bootstrap can continue copying the same stable file paths"
+  ],
+  "source": "product/05-internationalization.md#Product decisions",
+  "notes": ""
+}

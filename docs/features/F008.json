@@ -1,0 +1,11 @@
+{
+  "id": "F008",
+  "description": "The repository is packaged for public adoption with examples upgrade guidance contribution and security policies automated tests and an open-source license. Users can inspect a complete small project and a legacy adoption walkthrough.",
+  "acceptance_criteria": [
+    "A complete greenfield example contains consistent Product Feature and Coding Rules state",
+    "Repository tests cover JSON validity example consistency executable Hooks and completion gates",
+    "Public README contribution security upgrade and license files are present"
+  ],
+  "source": "product/04-adoption-and-integrations.md#Acceptance criteria",
+  "notes": "Implemented before self-hosting; reverse-engineered from repository state at commit a496666."
+}

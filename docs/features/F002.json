@@ -1,0 +1,11 @@
+{
+  "id": "F002",
+  "description": "The repository provides structured workflows for initializing Product knowledge and routing later requirements through one controlled Product-change entry point. Product intent is updated before Feature plans or source code.",
+  "acceptance_criteria": [
+    "A short project description can be expanded into a Product overview and module drafts",
+    "Later product changes are routed through one standardization workflow",
+    "Product workflows separate observable intent from implementation details"
+  ],
+  "source": "product/01-product-workflow.md#Core flows",
+  "notes": "Implemented before self-hosting; reverse-engineered from repository state at commit a496666."
+}

@@ -1,0 +1,12 @@
+{
+  "id": "F020",
+  "description": "Rewrite the Feature execution Claude Skill and portable Prompt as paired English canonical instructions. Interaction follows the user's current language while durable Feature notes Progress acceptance records and handoff state follow document_language.",
+  "acceptance_criteria": [
+    "Both execution workflows use natural English canonical instructions",
+    "All Stage 0 through Stage 8 gates and evidence requirements remain unchanged",
+    "Durable project knowledge follows document_language even when conversation uses another language",
+    "Native and portable variants preserve equivalent implementation verification review and Git behavior"
+  ],
+  "source": "product/05-internationalization.md#Language boundaries",
+  "notes": ""
+}

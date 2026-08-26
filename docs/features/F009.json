@@ -1,0 +1,12 @@
+{
+  "id": "F009",
+  "description": "Define one stable document-language contract for Yaya Loop projects before changing any localized behavior. The contract must separate current conversation language from durable project knowledge and preserve all machine protocol identifiers.",
+  "acceptance_criteria": [
+    "The configuration contract defines document_language as a BCP 47 language tag",
+    "The documented scope lists which natural-language artifacts follow document_language and which protocol elements never change",
+    "Missing configuration language changes and mixed-language legacy content each have an explicit compatibility rule",
+    "The contract introduces no parallel localized workflow source trees"
+  ],
+  "source": "product/05-internationalization.md#Product decisions",
+  "notes": ""
+}

@@ -1,0 +1,12 @@
+{
+  "id": "F017",
+  "description": "Rewrite the Product specification UI sketching and audio sketching Claude Skills and portable Prompts as paired English canonical instructions. Their durable Product output must follow document_language while fixed technical names and placeholder conventions remain stable.",
+  "acceptance_criteria": [
+    "Product specification UI and audio workflows use natural English canonical instructions",
+    "All three workflow pairs produce durable prose in document_language",
+    "ASCII conventions filenames and _placeholder_ prefixes remain stable",
+    "Native and portable variants preserve equivalent behavior and boundaries"
+  ],
+  "source": "product/05-internationalization.md#Language boundaries",
+  "notes": ""
+}

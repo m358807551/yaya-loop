@@ -1,0 +1,12 @@
+{
+  "id": "F023",
+  "description": "Convert the default greenfield example and legacy adoption walkthrough into complete natural-English references. The example must demonstrate the same Product Feature Coding Rules and Progress contracts that new English projects receive.",
+  "acceptance_criteria": [
+    "The default greenfield example contains English Product Feature and Coding Rules natural-language content",
+    "The legacy walkthrough explains the complete adoption flow in natural English",
+    "Example Feature IDs detail files counts dependencies and JSON remain consistent",
+    "The example does not introduce a duplicated translated workflow source tree"
+  ],
+  "source": "product/05-internationalization.md#Acceptance criteria",
+  "notes": ""
+}

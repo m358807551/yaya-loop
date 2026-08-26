@@ -1,0 +1,9 @@
+{
+  "document_language": "en",
+  "static_check_cmd": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+  "engine": "documentation-toolkit",
+  "language": "python-markdown-shell",
+  "kit_version": "0.1.0",
+  "bootstrap_at": "2026-08-26T05:14:44Z",
+  "bootstrap_mode": "legacy"
+}

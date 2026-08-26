@@ -1,0 +1,11 @@
+{
+  "id": "F007",
+  "description": "A single agent-readable Bootstrap entry point can initialize new existing or previously initialized repositories. It installs project state stack-appropriate Coding Rules and the correct agent integration before running structural verification.",
+  "acceptance_criteria": [
+    "Bootstrap distinguishes greenfield legacy and already initialized repositories",
+    "Bootstrap creates Product Feature Coding Rules configuration and Progress state in dependency order",
+    "Bootstrap installs the appropriate agent integration and verifies the resulting structure"
+  ],
+  "source": "product/04-adoption-and-integrations.md#Core flows",
+  "notes": "Implemented before self-hosting; reverse-engineered from repository state at commit a496666."
+}

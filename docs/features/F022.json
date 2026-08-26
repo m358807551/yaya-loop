@@ -1,0 +1,12 @@
+{
+  "id": "F022",
+  "description": "Convert installation guidance and direct Hook-facing text to clear canonical English after the underlying workflows and rule libraries are migrated. Hook logic evidence parsing and failure safety must remain unchanged.",
+  "acceptance_criteria": [
+    "Claude Code and Git Hook installation guides are complete natural-English documents",
+    "Direct Hook messages no longer require knowledge of Chinese punctuation conventions",
+    "Hook evidence strings parsing behavior and exit behavior remain unchanged",
+    "Installation paths commands and executable permissions remain valid"
+  ],
+  "source": "product/05-internationalization.md#Explicit non-goals for the first international release",
+  "notes": ""
+}

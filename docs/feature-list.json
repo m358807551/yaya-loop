@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "generated_from": [
+      "docs/product.md",
+      "docs/product/**/*.md",
+      "docs/coding_rules.md"
+    ],
+    "generated_at": "2026-08-26T05:14:44Z",
+    "total_features": 26,
+    "details_dir": "docs/features/",
+    "revisions_file": "docs/feature-list-revisions.json",
+    "notes": "F001-F008 reverse-engineer the existing v0.1.0 capabilities; F009-F026 deliver internationalization in dependency order without duplicating canonical workflow sources."
+  },
+  "features": [
+    {"id":"F001","title":"Establish the canonical Methodology and template foundation","status":"done","depends_on":[],"estimated_scope":"medium","completed_at":"2026-08-26T05:14:44Z"},
+    {"id":"F002","title":"Provide the structured Product workflow","status":"done","depends_on":["F001"],"estimated_scope":"medium","completed_at":"2026-08-26T05:14:44Z"},
+    {"id":"F003","title":"Generate and synchronize dependency-ordered Feature plans","status":"done","depends_on":["F001","F002"],"estimated_scope":"medium","completed_at":"2026-08-26T05:14:44Z"},
+    {"id":"F004","title":"Execute one Feature through verification and handoff","status":"done","depends_on":["F001","F003"],"estimated_scope":"medium","completed_at":"2026-08-26T05:14:44Z"},
+    {"id":"F005","title":"Enforce Feature completion gates in Claude Code","status":"done","depends_on":["F004"],"estimated_scope":"medium","completed_at":"2026-08-26T05:14:44Z"},
+    {"id":"F006","title":"Support agent-agnostic workflows and Git completion gates","status":"done","depends_on":["F004"],"estimated_scope":"medium","completed_at":"2026-08-26T05:14:44Z"},
+    {"id":"F007","title":"Bootstrap greenfield and existing projects across technology stacks","status":"done","depends_on":["F002","F003","F005","F006"],"estimated_scope":"medium","completed_at":"2026-08-26T05:14:44Z"},
+    {"id":"F008","title":"Package examples tests and open-source adoption guidance","status":"done","depends_on":["F007"],"estimated_scope":"medium","completed_at":"2026-08-26T05:14:44Z"},
+    {"id":"F009","title":"Define the document-language contract and compatibility behavior","status":"pending","depends_on":["F008"],"estimated_scope":"small","completed_at":null},
+    {"id":"F010","title":"Make Bootstrap select and persist document_language","status":"pending","depends_on":["F009"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F011","title":"Convert Product and Feature templates to canonical English rendering sources","status":"pending","depends_on":["F009"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F012","title":"Convert core Methodology specifications to canonical English","status":"pending","depends_on":["F009"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F013","title":"Convert the execution specification and Coding Rules template to English","status":"pending","depends_on":["F012"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F014","title":"Convert engine Coding Rules to canonical English","status":"pending","depends_on":["F012"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F015","title":"Convert programming-language Coding Rules to canonical English","status":"pending","depends_on":["F012"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F016","title":"Internationalize Product initialization and change-standardization workflows","status":"pending","depends_on":["F009","F011","F012"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F017","title":"Internationalize Product specification UI and audio workflows","status":"pending","depends_on":["F016"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F018","title":"Internationalize Feature-list generation workflows","status":"pending","depends_on":["F009","F011","F012"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F019","title":"Internationalize Feature-list synchronization workflows","status":"pending","depends_on":["F018"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F020","title":"Internationalize Feature execution workflows","status":"pending","depends_on":["F009","F011","F013"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F021","title":"Internationalize refactor selection and portable usage guidance","status":"pending","depends_on":["F009","F012"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F022","title":"Convert installation guidance and Hook-facing text to canonical English","status":"pending","depends_on":["F010","F014","F015","F016","F017","F018","F019","F020","F021"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F023","title":"Convert the default example into a complete English reference project","status":"pending","depends_on":["F010","F011","F014","F015","F016","F018","F019","F020"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F024","title":"Publish the English README and preserve the complete Chinese README","status":"pending","depends_on":["F010","F016","F017","F018","F019","F020","F022","F023"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F025","title":"Add document-language compatibility and smoke-test coverage","status":"pending","depends_on":["F010","F011","F012","F013","F014","F015","F016","F017","F018","F019","F020","F021","F022","F023","F024"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F026","title":"Document the upgrade perform the release audit and publish v0.2.0","status":"pending","depends_on":["F025"],"estimated_scope":"small","completed_at":null}
+  ]
+}

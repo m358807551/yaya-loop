@@ -1,0 +1,12 @@
+{
+  "id": "F010",
+  "description": "Bootstrap must infer a reasonable document-language default ask the user to confirm it once and persist the result before generating durable project knowledge. Existing initialized projects without the field must receive a non-translating migration path.",
+  "acceptance_criteria": [
+    "Bootstrap confirms document_language before creating Product or Feature natural-language content",
+    "The confirmed value is stored in docs/methodology-config.json",
+    "An existing project without the field is asked once and its current documents are not automatically translated",
+    "Changing conversation language does not modify the stored document_language"
+  ],
+  "source": "product/05-internationalization.md#Core flows",
+  "notes": ""
+}

@@ -1,0 +1,12 @@
+{
+  "id": "F019",
+  "description": "Rewrite the Feature-list synchronization Claude Skill and portable Prompt as paired English canonical instructions. Synchronization must preserve the configured document language and completed history while recording revisions in the same language as durable project knowledge.",
+  "acceptance_criteria": [
+    "Both synchronization workflows use natural English canonical instructions",
+    "New and revised natural-language Feature values follow document_language",
+    "Existing completed history is not translated or rewritten solely because of the migration",
+    "Native and portable variants preserve equivalent diff revision and consistency behavior"
+  ],
+  "source": "product/05-internationalization.md#Core flows",
+  "notes": ""
+}

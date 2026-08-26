@@ -1,0 +1,11 @@
+{
+  "id": "F005",
+  "description": "Claude Code projects can install native Skills and Hooks that expose Yaya Loop workflows and prevent unsupported Feature completion. Gate evidence must be Feature-specific and produced by the assistant after human acceptance.",
+  "acceptance_criteria": [
+    "Claude Code configuration registers both completion and consistency Hooks",
+    "A newly done Feature is rejected when matching assistant evidence is missing",
+    "Valid Feature-specific evidence with must_fix set to zero passes the gate"
+  ],
+  "source": "product/03-feature-delivery.md#Acceptance criteria",
+  "notes": "Implemented before self-hosting; reverse-engineered from repository state at commit a496666."
+}
