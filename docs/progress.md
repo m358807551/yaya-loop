@@ -2,11 +2,13 @@
 
 ## Current work
 
-No Feature is currently in progress.
+F015 - Convert programming-language Coding Rules to canonical English
 
 ## Progress
 
-- F014 completed at `2026-08-26T08:10:41Z` after human acceptance and a fresh-context scan with zero remaining must_fix findings.
+- Started at `2026-08-26T08:12:22Z`.
+- Confirmed that all six stable language-rule source paths are present: five actionable stubs and one complete GDScript rules document.
+- Confirmed that the migration requires natural American English without weakening GDScript's technical constraints or presenting incomplete language stubs as complete.
 
 ## Context notes
 
@@ -14,6 +16,16 @@ No Feature is currently in progress.
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T08:12:22Z - F015 started
+
+Current work before F015:
+
+No Feature was in progress.
+
+Progress:
+
+- F014 completed at `2026-08-26T08:10:41Z` after human acceptance and a fresh-context scan with zero remaining must_fix findings.
 
 ### 2026-08-26T05:30:31Z - Self-hosting initialization
 
