@@ -328,6 +328,70 @@ class RepositoryTests(unittest.TestCase):
             with self.subTest(removed_heading=removed_heading):
                 self.assertNotIn(removed_heading, template)
 
+    def test_engine_rule_sources_are_english_at_stable_paths(self):
+        engines = REPO_ROOT / "coding-rules-library" / "engines"
+        expected_files = {
+            "_stub-template.md",
+            "backend-service.md",
+            "godot.md",
+            "unity.md",
+            "unreal.md",
+            "web-frontend.md",
+        }
+        self.assertEqual({path.name for path in engines.glob("*.md")}, expected_files)
+
+        han_pattern = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff]")
+        for path in engines.glob("*.md"):
+            content = path.read_text(encoding="utf-8")
+            with self.subTest(path=path.name):
+                self.assertIsNone(han_pattern.search(content))
+
+        for filename in expected_files - {"godot.md"}:
+            content = (engines / filename).read_text(encoding="utf-8")
+            with self.subTest(stub=filename):
+                self.assertIn("**Incomplete stub:**", content)
+                self.assertIn("TODO:", content)
+
+        godot = (engines / "godot.md").read_text(encoding="utf-8")
+        self.assertNotIn("Incomplete stub", godot)
+        self.assertNotIn("TODO:", godot)
+        required_godot_rules = (
+            "Godot 4.3 and later",
+            "scenes are reusable objects",
+            "Golden rule: call down, signal up",
+            'get_node("../../SomeNode/SomeOtherNode")',
+            "button.pressed.connect(_on_pressed)",
+            "A sender must not depend on whether anyone listened",
+            "Appropriate Autoload uses",
+            "One `.tres` file is one shared in-memory Resource",
+            "Local to Scene",
+            'ResourceSaver.save(res, "user://save.tres")',
+            "A Resource has no `_process`",
+            "emit_changed()",
+            "Never combine `@export` and `@onready`",
+            "Recommended GDScript member order",
+            "Put physics, movement, and collision in `_physics_process`",
+            "Remove empty `_process` or `_physics_process` callbacks",
+            "is_instance_valid(self)",
+            "Godot 4 uses `instantiate()`, not Godot 3's `instance()`",
+            "Destroy with `queue_free()`, not `free()`",
+            'do not use `set_deferred("process_mode", ...)`',
+            "MultiMeshInstance2D",
+            "Rising Orphan Nodes",
+            "Use `snake_case` for Scene files",
+            "Use `PascalCase` for node names",
+            "Godot anti-pattern checklist",
+            "Remote Scene tree",
+            "Play Current Scene, F6",
+        )
+        for rule in required_godot_rules:
+            with self.subTest(godot_rule=rule):
+                self.assertIn(rule, godot)
+
+        bootstrap = (REPO_ROOT / "BOOTSTRAP.md").read_text(encoding="utf-8")
+        self.assertIn("coding-rules-library/engines/<engine>.md", bootstrap)
+        self.assertIn("coding-rules-library/engines/_stub-template.md", bootstrap)
+
 
 if __name__ == "__main__":
     unittest.main()
