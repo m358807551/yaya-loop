@@ -8,5 +8,5 @@
     "Stable evidence strings and Hook-compatible formats are unchanged"
   ],
   "source": "product/05-internationalization.md#Product decisions",
-  "notes": ""
+  "notes": "Human review confirmed all acceptance criteria on 2026-08-26. The complete Stage 0–8 execution specification and canonical four-layer Coding Rules template now use natural American English. Stable stage numbers, Feature statuses, placeholders, paths, human-acceptance authority, fresh-context review, must_fix completion behavior, exact Hook evidence, Git boundaries, and the self-modification rule snapshot remain intact. Commit b77175d restored the post-acceptance ban on behavior-changing smell repairs, the unqualified core-rule purity recommendation, and proactive Pattern guide behavior after fresh-context review. No localized workflow copy was created. Code smell scan: pass (feature: F013, must_fix: 0, suggest: 0, acceptable: 4)."
 }

@@ -2,15 +2,11 @@
 
 ## Current work
 
-F013 - Convert the execution specification and Coding Rules template to English
+No Feature is currently in progress.
 
 ## Progress
 
-- Started at `2026-08-26T07:08:35Z`.
-- Rewrote the complete Stage 0–8 execution specification in natural American English while preserving entry conditions, outputs, fixed report and evidence formats, human authority, independent review, Git boundaries, and exception handling.
-- Rewrote the canonical four-layer Coding Rules template in English and made the self-modification rule snapshot explicit without changing its placeholders or external rule paths.
-- Added regression coverage for all nine Stage headings, execution gates, independent-review JSON, exact Hook evidence, seven collaboration rules, four Coding Rules layers, stable placeholders, and rule-snapshot behavior.
-- Restored the post-acceptance ban on behavior-changing smell repairs, the unqualified core-rule purity recommendation, and proactive Pattern guide behavior after fresh-context review detected semantic weakening; pinned all three in tests.
+- F013 completed at `2026-08-26T07:15:56Z` after human acceptance and a fresh-context scan with zero remaining must_fix findings.
 
 ## Context notes
 
@@ -104,3 +100,19 @@ Progress:
 - Restored Stage 0 rule citations, Stage 1 placeholder registration, Stage 6 independent review evidence, the full command-pattern scope, resource-loading fallback, and invariant assertions after fresh-context review detected translation loss; expanded tests to pin each restored rule.
 - All acceptance criteria were verified by human review.
 - Fresh-context code-smell scan passed with zero remaining must_fix findings; two non-blocking test improvements were recorded in F012 notes for F025.
+
+### 2026-08-26T07:15:56Z - F013 completed
+
+Current work:
+
+F013 - Convert the execution specification and Coding Rules template to English
+
+Progress:
+
+- Started at `2026-08-26T07:08:35Z`.
+- Rewrote the complete Stage 0–8 execution specification in natural American English while preserving entry conditions, outputs, fixed report and evidence formats, human authority, independent review, Git boundaries, and exception handling.
+- Rewrote the canonical four-layer Coding Rules template in English and made the self-modification rule snapshot explicit without changing its placeholders or external rule paths.
+- Added regression coverage for all nine Stage headings, execution gates, independent-review JSON, exact Hook evidence, seven collaboration rules, four Coding Rules layers, stable placeholders, and rule-snapshot behavior.
+- Restored the post-acceptance ban on behavior-changing smell repairs, the unqualified core-rule purity recommendation, and proactive Pattern guide behavior after fresh-context review detected semantic weakening; pinned all three in tests.
+- All acceptance criteria were verified by human review.
+- Fresh-context code-smell scan passed with zero remaining must_fix or suggest findings.
