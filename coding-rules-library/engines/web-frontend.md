@@ -1,46 +1,46 @@
-# Web 前端最佳实践（React / Vue / Svelte 共用）
+# Web frontend best practices
 
-> Stub 版本：未填充。请按 stub 章节逐项与 AI 协作补全。
-> 适用：React 18+ / Vue 3 / Svelte 4+。具体框架特性单独追加章节。
+> **Incomplete stub:** Complete each TODO section with the AI before treating this as project-tested guidance.
+> **Applies to:** React 18+, Vue 3, and Svelte 4+. Add framework-specific sections when needed.
 
-## 1. 核心理念 / 项目结构
+## 1. Core model and project structure
 
-TODO：组件按功能分目录（feature-first）vs 按类型分（type-first）的选择；page / component / hook / store 的划分。
+TODO: Choose feature-first or type-first component organization and define the boundaries among pages, components, hooks, and stores.
 
-## 2. 渲染生命周期
+## 2. Rendering lifecycle
 
-TODO：组件挂载/更新/卸载钩子（useEffect / onMounted / onMount）；副作用的清理；何时该 memoize。
+TODO: Cover mount, update, and unmount hooks such as `useEffect`, `onMounted`, and `onMount`; clean up side effects; and define when memoization is justified.
 
-## 3. 状态管理
+## 3. State management
 
-TODO：local state vs context vs global store（Zustand / Pinia / Svelte stores）的选择标准；服务端状态用 TanStack Query / SWR 隔离。
+TODO: Define selection criteria for local state, context, and global stores such as Zustand, Pinia, and Svelte stores. Isolate server state through TanStack Query or SWR.
 
-## 4. 事件与跨组件通信
+## 4. Events and cross-component communication
 
-TODO：props down / events up；何时该上 event bus 或 pub-sub；避免 `forwardRef` + `useImperativeHandle` 滥用。
+TODO: Define props-down/events-up communication, when an event bus or pub-sub is justified, and why excessive `forwardRef` plus `useImperativeHandle` should be avoided.
 
-## 5. 样式约定
+## 5. Styling conventions
 
-TODO：CSS modules / Tailwind / styled-components / vanilla-extract 的选择；设计 token 的位置。
+TODO: Choose among CSS Modules, Tailwind, styled-components, and vanilla-extract, and define where design tokens live.
 
-## 6. 性能陷阱
+## 6. Performance traps
 
-TODO：不必要的 re-render；useEffect 依赖错误；列表 key 错误；图片懒加载与字体加载策略。
+TODO: Cover unnecessary rerenders, incorrect `useEffect` dependencies, unstable list keys, and image and font loading strategies.
 
-## 7. 可访问性与 SEO
+## 7. Accessibility and SEO
 
-TODO：语义化标签；ARIA 何时该写；SSR / SSG / ISR 的选择对 SEO 的影响。
+TODO: Define semantic HTML, appropriate ARIA usage, and how SSR, SSG, or ISR choices affect SEO.
 
-## 8. 测试
+## 8. Testing
 
-TODO：单元（Vitest / Jest）+ 组件（Testing Library）+ E2E（Playwright / Cypress）的分层；测试覆盖哪些边界。
+TODO: Define the boundary among unit tests with Vitest or Jest, component tests with Testing Library, and E2E tests with Playwright or Cypress.
 
-## 9. 反模式速查
+## 9. Anti-pattern checklist
 
-TODO：`any` 满天飞、`useEffect` 内做 fetch 不取消、props drilling 三层以上、CSS 全局污染。
+TODO: Pervasive `any`, uncancelled fetches inside `useEffect`, props drilling beyond three levels, and global CSS pollution.
 
-## 10. 社区参考
+## 10. References
 
-- React 官方文档：https://react.dev
-- Vue 官方风格指南：https://vuejs.org/style-guide/
-- Svelte 官方教程：https://svelte.dev/tutorial
+- [React documentation](https://react.dev)
+- [Vue style guide](https://vuejs.org/style-guide/)
+- [Svelte tutorial](https://svelte.dev/tutorial)

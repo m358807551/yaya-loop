@@ -1,42 +1,42 @@
-# Unreal Engine 编程最佳实践
+# Unreal Engine best practices
 
-> Stub 版本：未填充。请按 stub 章节逐项与 AI 协作补全。
-> 适用版本：UE 5.3+
+> **Incomplete stub:** Complete each TODO section with the AI before treating this as project-tested guidance.
+> **Supported version:** Unreal Engine 5.3 and later.
 
-## 1. 核心理念 / 项目结构
+## 1. Core model and project structure
 
-TODO：Actor / Component / Subsystem 三层心智模型；Modules 划分；C++ + Blueprint 双层职责边界。
+TODO: Define the Actor, Component, and Subsystem model; module boundaries; and the responsibility split between C++ and Blueprint.
 
-## 2. 生命周期与帧
+## 2. Lifecycle and frames
 
-TODO：BeginPlay / Tick / EndPlay；GameInstance / World / Level / Actor 各自的生命周期；FTickFunction 与 Tickable 接口。
+TODO: Cover BeginPlay, Tick, and EndPlay; the lifetimes of GameInstance, World, Level, and Actor; and when to use FTickFunction or Tickable interfaces.
 
-## 3. 资源管理
+## 3. Resource management
 
-TODO：UAsset / Soft Reference / Async Load；Asset Manager 的角色。
+TODO: Define UAsset, soft references, asynchronous loading, and the role of Asset Manager.
 
-## 4. 事件 / 消息机制
+## 4. Events and messaging
 
-TODO：Multicast Delegate vs Event Dispatcher vs Subsystem broadcast；何时该走 Game Events Plugin。
+TODO: Choose among Multicast Delegates, Event Dispatchers, and Subsystem broadcasts, and define when the Game Events Plugin is appropriate.
 
-## 5. 编辑器集成
+## 5. Editor integration
 
-TODO：UPROPERTY / UFUNCTION 标记常用项；Details Panel 自定义；Editor Module 划分。
+TODO: Document common UPROPERTY and UFUNCTION specifiers, Details Panel customization, and Editor Module boundaries.
 
-## 6. 性能陷阱
+## 6. Performance traps
 
-TODO：Tick 滥用；BP 跨 Tick 调用 C++ 的开销；蓝图编译时间；Static Mesh 合批。
+TODO: Cover excessive Tick usage, Blueprint-to-C++ calls across Tick, Blueprint compilation time, and Static Mesh batching.
 
-## 7. 调试工具
+## 7. Debugging tools
 
-TODO：Stat 命令家族；Unreal Insights；Memory Profiler；Blueprint Debugger。
+TODO: Document Stat commands, Unreal Insights, Memory Profiler, and Blueprint Debugger.
 
-## 8. 反模式速查
+## 8. Anti-pattern checklist
 
-TODO：Cast 滥用、God Actor、Singleton GameInstance 越长越大、BP 中循环依赖。
+TODO: Excessive Cast usage, God Actors, an ever-growing singleton GameInstance, and Blueprint circular dependencies.
 
-## 9. 社区参考
+## 9. References
 
-- Epic 官方编码规范：https://docs.unrealengine.com/5.0/en-US/epic-cplusplus-coding-standard-for-unreal-engine/
-- Tom Looman 的 Unreal C++ 入门：https://www.tomlooman.com/unreal-engine-cpp-guide/
-- Unreal Source Code（最佳学习材料）
+- [Epic C++ coding standard](https://docs.unrealengine.com/5.0/en-US/epic-cplusplus-coding-standard-for-unreal-engine/)
+- [Tom Looman's Unreal Engine C++ guide](https://www.tomlooman.com/unreal-engine-cpp-guide/)
+- Unreal Engine source code

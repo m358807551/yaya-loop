@@ -1,46 +1,46 @@
-# 后端服务最佳实践（无引擎，纯服务）
+# Backend service best practices
 
-> Stub 版本：未填充。请按 stub 章节逐项与 AI 协作补全。
-> 适用：REST / GraphQL / RPC 服务，任何语言实现。
+> **Incomplete stub:** Complete each TODO section with the AI before treating this as project-tested guidance.
+> **Applies to:** REST, GraphQL, and RPC services implemented in any language.
 
-## 1. 核心理念 / 项目结构
+## 1. Core model and project structure
 
-TODO：按业务领域分目录（DDD-style）vs 按技术层分（controller / service / repository）的选择；路由文件的边界。
+TODO: Choose between business-domain organization, such as DDD-style modules, and technical layers such as controller, service, and repository. Define route-file boundaries.
 
-## 2. 请求生命周期
+## 2. Request lifecycle
 
-TODO：middleware 顺序；请求级 context（trace id / user id）的传递；超时与取消的层层透传。
+TODO: Define middleware order, propagation of request-scoped context such as trace ID and user ID, and end-to-end timeout and cancellation behavior.
 
-## 3. 数据持久化
+## 3. Persistence
 
-TODO：ORM vs 原生 SQL；事务边界；连接池配置；migration 工具与历史。
+TODO: Decide when to use an ORM or native SQL, where transactions begin and end, how connection pools are configured, and how migration tools and history are managed.
 
-## 4. 错误处理与日志
+## 4. Error handling and logging
 
-TODO：错误分类（client error vs server error）；HTTP 状态码语义；结构化日志（JSON）；trace / metric / log 三件套的接入。
+TODO: Classify client and server errors, define HTTP status semantics, use structured JSON logs, and connect traces, metrics, and logs.
 
-## 5. 鉴权与权限
+## 5. Authentication and authorization
 
-TODO：session / JWT / OAuth 的选择；权限粒度（路由级 / 资源级 / 字段级）；CSRF / XSS 防御。
+TODO: Choose among sessions, JWT, and OAuth. Define route-, resource-, or field-level authorization and CSRF/XSS defenses.
 
-## 6. 性能与可观测性
+## 6. Performance and observability
 
-TODO：N+1 查询识别；缓存层级（本地 / Redis / CDN）；APM 工具；慢查询日志。
+TODO: Detect N+1 queries, define local/Redis/CDN cache layers, select APM tooling, and configure slow-query logs.
 
-## 7. 并发与限流
+## 7. Concurrency and rate limiting
 
-TODO：限流算法（令牌桶 / 漏桶 / 滑动窗口）；幂等性设计；分布式锁的使用边界。
+TODO: Select token-bucket, leaky-bucket, or sliding-window rate limiting; define idempotency behavior and the boundaries of distributed locks.
 
-## 8. 测试
+## 8. Testing
 
-TODO：单元测试与集成测试的边界；contract test；测试数据的隔离（per-test schema / transaction rollback）。
+TODO: Define unit versus integration test boundaries, contract tests, and per-test data isolation through schemas or transaction rollback.
 
-## 9. 反模式速查
+## 9. Anti-pattern checklist
 
-TODO：业务逻辑写进 controller、ORM 关系级联误删、N+1 查询、错误消息泄漏内部细节。
+TODO: Business logic in controllers, accidental cascade deletion through ORM relationships, N+1 queries, and error messages that leak internal details.
 
-## 10. 社区参考
+## 10. References
 
-- 12-Factor App：https://12factor.net/
-- Microsoft REST API Guidelines：https://github.com/microsoft/api-guidelines
-- Google API Design Guide：https://cloud.google.com/apis/design
+- [The Twelve-Factor App](https://12factor.net/)
+- [Microsoft REST API Guidelines](https://github.com/microsoft/api-guidelines)
+- [Google API Design Guide](https://cloud.google.com/apis/design)
