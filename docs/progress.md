@@ -2,11 +2,14 @@
 
 ## Current work
 
-No Feature is currently in progress.
+F024 - Publish the English README and preserve the complete Chinese README
 
 ## Progress
 
-- F023 completed at `2026-08-26T12:16:17Z` after final human acceptance, 54 passing tests, and a definitive fresh-context scan with zero `must_fix` findings.
+- Started at `2026-08-26T12:17:22Z` from commit `55eba76`.
+- Confirmed that all dependencies are done and the working tree is clean on `dev`.
+- Scope is the two complete README entry points, bidirectional text language links, meaning-equivalent positioning, implemented internationalization behavior, and resolvable repository-relative links.
+- The current Chinese README will be preserved as the complete `README.zh-CN.md`; the default `README.md` will be rewritten in natural American English rather than mechanically translated.
 
 ## Context notes
 
@@ -14,6 +17,16 @@ No Feature is currently in progress.
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T12:17:22Z - F024 started
+
+Current work before F024:
+
+No Feature was in progress.
+
+Progress:
+
+- F023 completed at `2026-08-26T12:16:17Z` after final human acceptance, 54 passing tests, and a definitive fresh-context scan with zero `must_fix` findings.
 
 ### 2026-08-26T12:16:17Z - F023 completed
 
