@@ -8,5 +8,5 @@
     "Installation paths commands and executable permissions remain valid"
   ],
   "source": "product/05-internationalization.md#Explicit non-goals for the first international release",
-  "notes": "Human acceptance passed on 2026-08-26. Automated verification: all 50 repository tests passed; installation guides and Hook sources contain no Chinese prose; Hook syntax, evidence regex fragments, return codes, warnings, paths, commands, and executable permissions were verified."
+  "notes": "Human acceptance passed on 2026-08-26. Claude Code and Git Hook installation guides are complete canonical English documents, and direct Hook messages/comments are punctuation-neutral English. Evidence regexes, assistant transcript filtering, staged-versus-HEAD detection, JSON validation, warnings, fail-open/fail-safe behavior, exit codes, commands, paths, and executable modes remain stable. Automated verification: all 50 repository tests passed; target sources contain no Chinese prose; JSON and git diff checks passed. Fresh-context review corrected plural wording for multiple newly completed Features. Code smell scan: pass (feature: F022, must_fix: 0, suggest: 0, acceptable: 1)."
 }
