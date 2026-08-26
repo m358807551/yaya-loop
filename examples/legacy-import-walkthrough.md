@@ -156,15 +156,15 @@ A B2B order-management system covering the path from customer order creation thr
 
 | No. | File | Module | Status |
 | --- | --- | --- | --- |
-| 01 | [01-orders.md](./product/01-orders.md) | Order core | reverse-engineered |
-| 02 | [02-inventory.md](./product/02-inventory.md) | Inventory | reverse-engineered |
-| 03 | [03-customers.md](./product/03-customers.md) | Customer master data | reverse-engineered |
-| 04 | [04-shipping.md](./product/04-shipping.md) | Shipping integrations | reverse-engineered |
-| 05 | [05-invoicing.md](./product/05-invoicing.md) | Invoicing | reverse-engineered |
+| 01 | [01-customers.md](./product/01-customers.md) | Customer master data | done |
+| 02 | [02-orders.md](./product/02-orders.md) | Order core | done |
+| 03 | [03-inventory.md](./product/03-inventory.md) | Inventory | done |
+| 04 | [04-shipping.md](./product/04-shipping.md) | Shipping integrations | done |
+| 05 | [05-invoicing.md](./product/05-invoicing.md) | Invoicing | done |
 
 ## Module dependencies [REVERSE-ENGINEERED]
 
-03-customers → 01-orders → 02-inventory
+01-customers → 02-orders → 03-inventory
                      ├→ 04-shipping
                      └→ 05-invoicing
 
@@ -183,13 +183,24 @@ OrderForge has no application audio and no current requirement for sound cues.
 
 ### 2.4 Recover module specifications
 
-For each of the five selected domains, the AI reads relevant models, services, tests, and external interfaces before creating `docs/product/0N-*.md`. Each module records:
+For each of the five selected domains, the AI reads relevant models, services, tests, and external interfaces before creating `docs/product/0N-*.md`. Dependency order determines the stable numbers: customers, orders, inventory, shipping, then invoicing.
 
-- the observed functional flow;
-- data models recovered from Django models and migrations;
-- user-observable behavior supported by tests or production evidence;
-- edge cases and known failure paths; and
-- acceptance criteria for behavior that already exists.
+Every reconstructed module retains the complete canonical section set in template order. Inferred headings carry the uncertainty marker, while an inapplicable section keeps its heading and states why it does not apply:
+
+```markdown
+## Module positioning [REVERSE-ENGINEERED]
+## Functional flow [REVERSE-ENGINEERED]
+## Data model [REVERSE-ENGINEERED]
+## State machine (if applicable) [REVERSE-ENGINEERED]
+## UI sketch [REVERSE-ENGINEERED]
+## Audio entries [REVERSE-ENGINEERED]
+## Numeric rules [REVERSE-ENGINEERED]
+## Acceptance criteria [REVERSE-ENGINEERED]
+## Edge cases [REVERSE-ENGINEERED]
+## Change history [REVERSE-ENGINEERED]
+```
+
+For example, a backend-only module can say `Not applicable; this module has no direct UI` under UI sketch and `Not applicable; OrderForge has no application audio` under Audio entries. It does not delete either section.
 
 Unverified claims remain marked `[REVERSE-ENGINEERED]`. The AI does not invent future functionality or silently convert TODO comments into requirements. Future changes must enter through the Product-change workflow.
 
@@ -202,18 +213,18 @@ The history is recovered in two phases.
 | ID | Title | Source | Notes |
 | --- | --- | --- | --- |
 | F001 | Create the Django skeleton and PostgreSQL integration | infrastructure | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
-| F002 | Add customer master-data CRUD | product/03-customers.md#data-model | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
-| F003 | Add order creation and the base state machine | product/01-orders.md#order-lifecycle | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
-| F004 | Extend order states from payment through completion | product/01-orders.md#order-lifecycle | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
-| F005 | Add the inventory model and basic allocation | product/02-inventory.md#inventory-allocation | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
-| F006 | Make inventory allocation transaction-safe | product/02-inventory.md#inventory-allocation | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
-| F007 | Integrate the SF Express webhook | product/04-shipping.md#carrier-integration | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
-| F008 | Generate shipping orders | product/04-shipping.md#shipment-creation | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
-| F009 | Generate invoice PDFs | product/05-invoicing.md#invoice-generation | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
-| F010 | Send invoices asynchronously through Celery | product/05-invoicing.md#invoice-delivery | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
+| F002 | Add customer master-data CRUD | product/01-customers.md#data-model-reverse-engineered | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
+| F003 | Add order creation and the base state machine | product/02-orders.md#functional-flow-reverse-engineered | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
+| F004 | Extend order states from payment through completion | product/02-orders.md#functional-flow-reverse-engineered | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
+| F005 | Add the inventory model and basic allocation | product/03-inventory.md#data-model-reverse-engineered | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
+| F006 | Make inventory allocation transaction-safe | product/03-inventory.md#functional-flow-reverse-engineered | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
+| F007 | Integrate the SF Express webhook | product/04-shipping.md#functional-flow-reverse-engineered | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
+| F008 | Generate shipping orders | product/04-shipping.md#functional-flow-reverse-engineered | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
+| F009 | Generate invoice PDFs | product/05-invoicing.md#functional-flow-reverse-engineered | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
+| F010 | Send invoices asynchronously through Celery | product/05-invoicing.md#functional-flow-reverse-engineered | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
 | F011 | Provide the API v1 endpoints | infrastructure | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. Obsolete but retained for client compatibility. |
 | F012 | Introduce API v2 | infrastructure | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
-| F013 | Add customer authentication and permissions | product/03-customers.md#access-control | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
+| F013 | Add customer authentication and permissions | product/01-customers.md#functional-flow-reverse-engineered | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
 | F014 | Customize the sales administration UI | infrastructure | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
 | F015 | Add structured logging and Sentry monitoring | infrastructure | Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`. |
 
@@ -223,9 +234,9 @@ Completed milestones receive `done` status and evidence tied to historical commi
 
 | ID | Title | Source | Status |
 | --- | --- | --- | --- |
-| F016 | Replace database inventory locking with a Redis distributed lock | product/02-inventory.md#inventory-allocation | pending |
-| F017 | Export orders to Excel as the first reporting capability | product/01-orders.md#order-query-and-export | pending |
-| F018 | Retry failed SF Express webhook deliveries | product/04-shipping.md#carrier-integration | pending |
+| F016 | Replace database inventory locking with a Redis distributed lock | product/03-inventory.md#functional-flow-reverse-engineered | pending |
+| F017 | Export orders to Excel as the first reporting capability | product/02-orders.md#functional-flow-reverse-engineered | pending |
+| F018 | Retry failed SF Express webhook deliveries | product/04-shipping.md#functional-flow-reverse-engineered | pending |
 
 The resulting `docs/feature-list.json`, `docs/features/F0XX.json`, and `docs/feature-list-revisions.json` follow the same schema as a greenfield project. IDs, statuses, dependency references, and evidence markers remain canonical; descriptions and acceptance criteria use `document_language`.
 

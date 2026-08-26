@@ -27,6 +27,18 @@ Own all Todo data and user interactions. This is the MVP's only business module.
 
 Storage: the localStorage key is `todomate:todos:v1`, and its value is a JSON-encoded `Todo[]`. The `v1` suffix reserves room for future migrations.
 
+## State machine
+
+Each Todo has two states:
+
+```text
+incomplete ──(select checkbox)──→ complete
+complete   ──(select checkbox)──→ incomplete
+complete   ──(clear completed)──→ removed
+```
+
+A newly created Todo always starts as `incomplete`. Removal is terminal and removes the Todo from both the rendered list and persisted storage.
+
 ## UI sketch
 
 ```
@@ -49,6 +61,10 @@ Key interactions:
 - Enter → submit and clear the input.
 - Checkbox selection → toggle immediately and show visual feedback.
 - "Clear completed" displays the current completed count and is disabled when the count is zero.
+
+## Audio entries
+
+Not applicable. TodoMate has no audio in V0.1.
 
 ## Numeric rules
 

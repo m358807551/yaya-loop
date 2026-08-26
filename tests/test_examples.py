@@ -10,6 +10,11 @@ GREENFIELD_DOCS = EXAMPLES / "greenfield-todo-app" / "docs"
 HAN_TEXT = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff]")
 
 
+def markdown_heading_slug(heading):
+    text = re.sub(r"[^a-z0-9 _-]", "", heading.lower())
+    return re.sub(r" +", "-", text.strip())
+
+
 class ExampleProjectTests(unittest.TestCase):
     def test_greenfield_reference_uses_english_natural_language(self):
         sources = [
@@ -46,7 +51,9 @@ class ExampleProjectTests(unittest.TestCase):
             "## Module positioning",
             "## Functional flow",
             "## Data model",
+            "## State machine",
             "## UI sketch",
+            "## Audio entries",
             "## Numeric rules",
             "## Acceptance criteria",
             "## Edge cases",
@@ -54,14 +61,22 @@ class ExampleProjectTests(unittest.TestCase):
         ):
             self.assertIn(heading, module)
         for invariant in (
-            "An AI must never mark a Feature `done` by itself",
+            "An AI must not mark a Feature `done`",
             "Stage 0 exit report",
-            "Stage 6 code-smell scan",
+            "Stage 6 independent fresh-context code-smell scan",
             "must_fix: 0",
             "@docs/coding-rules/engine-rules.md",
             "@docs/coding-rules/language-rules.md",
         ):
             self.assertIn(invariant, coding_rules)
+
+        rendered_template = (
+            (REPO_ROOT / "methodology" / "templates" / "coding_rules.md.tmpl")
+            .read_text(encoding="utf-8")
+            .replace("{{ENGINE_NAME}}", "web-frontend (Vite + React 18 + TypeScript)")
+            .replace("{{LANGUAGE_NAME}}", "TypeScript 5.x")
+        )
+        self.assertEqual(coding_rules, rendered_template)
 
         for reference in re.findall(r"@([^\s]+\.md)", coding_rules):
             with self.subTest(reference=reference):
@@ -75,6 +90,11 @@ class ExampleProjectTests(unittest.TestCase):
             "Code smell scan: pass (feature: F001, must_fix: 0",
         ):
             self.assertIn(invariant, progress)
+        self.assertIn(
+            "## Current work\n\nNo Feature is currently in progress.\n\n"
+            "## Progress\n\nNo active Feature progress.",
+            progress,
+        )
 
         config = json.loads(
             (GREENFIELD_DOCS / "methodology-config.json").read_text(encoding="utf-8")
@@ -103,11 +123,35 @@ class ExampleProjectTests(unittest.TestCase):
         self.assertEqual(ids, [path.stem for path in detail_paths])
         self.assertEqual(index["meta"]["total_features"], len(features))
         self.assertEqual(len(ids), len(set(ids)))
+        expected_machine_projection = [
+            ("F001", "done", [], "small", "2026-05-25T11:30:00Z"),
+            ("F002", "pending", ["F001"], "small", None),
+            ("F003", "pending", ["F002"], "medium", None),
+            ("F004", "pending", ["F003"], "small", None),
+            ("F005", "pending", ["F004"], "small", None),
+        ]
+        self.assertEqual(
+            [
+                (
+                    feature["id"],
+                    feature["status"],
+                    feature["depends_on"],
+                    feature["estimated_scope"],
+                    feature["completed_at"],
+                )
+                for feature in features
+            ],
+            expected_machine_projection,
+        )
 
         seen = set()
         for summary, detail_path in zip(features, detail_paths):
             with self.subTest(feature=summary["id"]):
                 detail = json.loads(detail_path.read_text(encoding="utf-8"))
+                self.assertEqual(
+                    list(detail),
+                    ["id", "description", "acceptance_criteria", "source", "notes"],
+                )
                 self.assertEqual(summary["id"], detail["id"])
                 self.assertIn(summary["estimated_scope"], {"small", "medium"})
                 self.assertTrue(set(summary["depends_on"]).issubset(seen))
@@ -155,13 +199,45 @@ class ExampleProjectTests(unittest.TestCase):
             "docs/features/F0XX.json",
             "static_check_cmd",
             "does not automatically start F016",
-            "product/03-customers.md#data-model",
-            "product/02-inventory.md#inventory-allocation",
             "Implemented before bootstrap; reverse-engineered from code at commit `<anchor>`",
         )
         for expected in required_flow:
             with self.subTest(expected=expected):
                 self.assertIn(expected, content)
+
+        expected_module_rows = (
+            "| 01 | [01-customers.md](./product/01-customers.md) | Customer master data | done |",
+            "| 02 | [02-orders.md](./product/02-orders.md) | Order core | done |",
+            "| 03 | [03-inventory.md](./product/03-inventory.md) | Inventory | done |",
+            "| 04 | [04-shipping.md](./product/04-shipping.md) | Shipping integrations | done |",
+            "| 05 | [05-invoicing.md](./product/05-invoicing.md) | Invoicing | done |",
+        )
+        for row in expected_module_rows:
+            self.assertEqual(content.count(row), 1)
+        self.assertIn("01-customers → 02-orders → 03-inventory", content)
+
+        outline_match = re.search(
+            r"```markdown\n(## Module positioning \[REVERSE-ENGINEERED\].*?"
+            r"## Change history \[REVERSE-ENGINEERED\])\n```",
+            content,
+            flags=re.DOTALL,
+        )
+        self.assertIsNotNone(outline_match)
+        demonstrated_anchors = {
+            markdown_heading_slug(line[3:])
+            for line in outline_match.group(1).splitlines()
+            if line.startswith("## ")
+        }
+        demonstrated_modules = set(
+            re.findall(r"\]\(\./product/([^)]+\.md)\)", content)
+        )
+        feature_sources = re.findall(r"\|\s+product/([^|\s]+)\s+\|", content)
+        self.assertTrue(feature_sources)
+        for source in feature_sources:
+            with self.subTest(source=source):
+                module_path, anchor = source.split("#", 1)
+                self.assertIn(module_path, demonstrated_modules)
+                self.assertIn(anchor, demonstrated_anchors)
 
     def test_examples_do_not_duplicate_workflow_source_trees(self):
         forbidden_directory_names = {
@@ -174,7 +250,13 @@ class ExampleProjectTests(unittest.TestCase):
         duplicated = [
             path.relative_to(EXAMPLES)
             for path in EXAMPLES.rglob("*")
-            if path.is_dir() and path.name in forbidden_directory_names
+            if path.is_dir()
+            and any(
+                path.name == name
+                or path.name.startswith(f"{name}.")
+                or path.name.startswith(f"{name}-")
+                for name in forbidden_directory_names
+            )
         ]
         self.assertEqual(duplicated, [])
 

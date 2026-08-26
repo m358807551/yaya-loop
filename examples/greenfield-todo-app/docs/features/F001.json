@@ -10,5 +10,5 @@
     "tsconfig has strict mode enabled"
   ],
   "source": "infrastructure",
-  "notes": "Create the project with `npm create vite@latest todomate -- --template react-ts`. The generated tsconfig already enables strict mode. Remove the template Counter example. Code smell scan: 0 must_fix, 0 suggest, 0 acceptable (the initial skeleton contains no business logic)."
+  "notes": "Create the project with `npm create vite@latest todomate -- --template react-ts`. The generated tsconfig already enables strict mode. Remove the template Counter example. Code smell scan: pass (feature: F001, must_fix: 0, suggest: 0, acceptable: 0)."
 }
