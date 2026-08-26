@@ -183,7 +183,7 @@ AI 每次只需要读取完成当前 Feature 真正需要的那部分上下文�
 
 人工验收通过之后，还需要检查这一轮代码有没有引入新的结构问题。
 
-Code Smell Scan 会尽量交给 fresh-context 的 Agent：重新读取 Coding Rules，再独立检查当前 Feature 的实际改动。
+Code Smell Scan 必须由 fresh-context Agent 或等价的独立上下文执行：重新读取 Coding Rules，再独立检查当前 Feature 的实际改动。如果无法完成独立审查，这个 Feature 就不能完成。
 
 扫描结果分为：
 
@@ -464,8 +464,8 @@ cd ~/code/<your-project>
 对于一个已经存在的项目，Yaya Loop 会先尝试理解现有代码，再反向恢复：
 
 * 当前产品能力；
-* 已经完成的功能；
-* 后续可能需要继续开发的 Feature；
+* 一组有上限、具有代表性的已完成 Feature；
+* 只有经用户明确确认才会加入的后续 pending Feature；
 * Coding Rules；
 * 已知 Code Smell。
 

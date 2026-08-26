@@ -40,6 +40,14 @@ class ReadmeInternationalizationTests(unittest.TestCase):
             ),
             ("Product → Feature → Implement", "Product → Feature → Implement"),
             ("**Explicit human acceptance is required**", "**必须经过人工验收**"),
+            (
+                "must run in a fresh-context agent or an equivalent independent context",
+                "必须由 fresh-context Agent 或等价的独立上下文执行",
+            ),
+            (
+                "If independent review is unavailable, the Feature cannot be completed.",
+                "如果无法完成独立审查，这个 Feature 就不能完成。",
+            ),
             ("`must_fix`", "`must_fix`"),
             ("**600+ Features**", "**600+ 个 Feature**"),
             ("**2,000+ Git commits**", "**2000+ 个 Git Commit**"),
@@ -47,6 +55,14 @@ class ReadmeInternationalizationTests(unittest.TestCase):
             ("# How do I get started?", "# Q：我要怎么开始使用？"),
             ("### Greenfield", "### Greenfield"),
             ("### Legacy", "### Legacy"),
+            (
+                "representative completed Features",
+                "一组有上限、具有代表性的已完成 Feature",
+            ),
+            (
+                "future work confirmed by the user",
+                "只有经用户明确确认才会加入的后续 pending Feature",
+            ),
             ("### It is not a project-management tool", "### 它不是项目管理工具"),
             ("### It is not CI/CD", "### 它不是 CI/CD"),
             ("### It is not a code-generation model", "### 它不是代码生成模型"),

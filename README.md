@@ -171,7 +171,7 @@ Behavior that requires observation or Product judgment still needs human accepta
 
 **Without explicit confirmation from the user, an AI must not mark a Feature `done`.**
 
-After human acceptance, the current changes are reviewed for structural problems. The Code Smell Scan should use a fresh-context agent when available: it reloads the Coding Rules and independently inspects the Feature's actual diff.
+After human acceptance, the current changes are reviewed for structural problems. The Code Smell Scan must run in a fresh-context agent or an equivalent independent context that reloads the Coding Rules and inspects the Feature's actual diff. If independent review is unavailable, the Feature cannot be completed.
 
 Findings are classified as:
 
@@ -199,7 +199,7 @@ Yaya Loop focuses on a different problem:
 | The AI decides the change boundary | The Feature explicitly limits the current scope |
 | The chat carries most of the context | Repository documents preserve long-term state |
 | Passing tests may be treated as complete | Human acceptance is mandatory |
-| The next Prompt starts as soon as it runs | Code review and smell scanning still happen before Done |
+| Move to the next Prompt as soon as the code runs | Code review and smell scanning still happen before Done |
 | Prompt → Prompt → Prompt | Feature → Verify → Done → Next |
 
 Yaya Loop does not replace a Coding Agent.

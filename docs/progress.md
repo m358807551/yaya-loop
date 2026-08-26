@@ -15,6 +15,9 @@ F024 - Publish the English README and preserve the complete Chinese README
 - Added bilingual README regression coverage for language navigation, semantic section parity, support disclaimers, relative-link resolution, English-script boundaries, and conversation-URL exclusion.
 - Automated verification passed: all 58 repository tests and Git diff checks; the Chinese file differs from the pre-F024 README only by the language entry point and synchronized internationalization details.
 - Human acceptance passed on 2026-08-26; fresh-context review is next.
+- Fresh-context review found four README wording blockers in the mandatory independent-review gate, Legacy reconstruction boundaries, and one English comparison sentence.
+- Repaired both language versions and added paired semantic assertions for independent-review failure behavior, bounded completed history, and explicitly confirmed future work.
+- All 58 tests and relative-link, language-boundary, conversation-URL, and diff checks pass after repair; repeated human acceptance is required.
 
 ## Context notes
 
