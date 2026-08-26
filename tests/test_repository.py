@@ -97,15 +97,25 @@ class RepositoryTests(unittest.TestCase):
         expected_headings = {
             "product.md.tmpl": (
                 "## One-line positioning",
+                "## Target users",
                 "## Core loop",
                 "## Module list",
+                "## Module dependencies",
+                "## Visual direction",
+                "## Audio direction",
                 "## Change history",
             ),
             "product-module.md.tmpl": (
                 "## Module positioning",
                 "## Functional flow",
+                "## Data model",
+                "## State machine (if applicable)",
+                "## UI sketch",
+                "## Audio entries",
+                "## Numeric rules",
                 "## Acceptance criteria",
                 "## Edge cases",
+                "## Change history",
             ),
             "progress.md.tmpl": (
                 "## Current work",

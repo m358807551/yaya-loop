@@ -10,6 +10,7 @@ F011 - Convert Product and Feature templates to canonical English rendering sour
 - Added one canonical template rendering contract that preserves required section semantics while localizing human-readable content according to document_language.
 - Rewrote the Product, Product module, Feature detail, and Progress template sources in natural English without changing stable machine protocols.
 - Added regression coverage for canonical English headings, required-section preservation, stable protocol examples, and the Feature detail JSON schema.
+- Expanded the required-section regression inventory after fresh-context review found that several contractually required Product headings were not yet pinned by tests.
 
 ## Context notes
 
