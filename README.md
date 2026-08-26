@@ -1,111 +1,109 @@
 # Yaya Loop
 
-> **AI 会写代码。难的是连续写几百次之后，项目仍然可控。**
+**English** | [简体中文](./README.zh-CN.md)
 
-Yaya Loop 是一套面向长期 AI 编程的开发工作流。
+> **AI can write code. The hard part is keeping a project under control after hundreds of iterations.**
 
-它把产品需求拆成大量边界清晰、可以独立验收的 Feature，让 AI 一次只推进一个明确目标；同时通过产品文档、编码规则、自动检查、人工验收和代码审查，让一次次 AI 编程形成可以长期运行的开发闭环。
+Yaya Loop is a development workflow for long-running AI-assisted software projects.
+
+It breaks Product requirements into small, bounded, independently verifiable Features so an AI works toward one explicit objective at a time. Product documents, Coding Rules, automated checks, human acceptance, and independent code review turn those individual sessions into a development loop that can keep running as the project grows.
 
 **Product → Feature → Implement → Verify → Review → Ship → Next Feature ↺**
 
-当前版本：`v0.1.0`
+Current release: `v0.1.0`
 
-核心方法论、Godot 与 GDScript 规则来自真实项目实践；其他语言和技术栈的规则仍在持续补充。
-
----
-
-## Q：这个项目解决了什么问题？
-
-### 1. AI 很会写代码，但项目很容易越写越失控
-
-今天让 AI 加一个功能，通常已经不难。
-
-真正困难的是：
-
-> **连续开发几十个、几百个 Feature 之后，项目还能不能继续维护？**
-
-随着项目越来越大，AI 编程很容易出现这些问题：
-
-* 当前需求和历史需求逐渐脱节；
-* 一个小修改顺手改了一堆没有要求的东西；
-* Feature 越做越大，一次改动牵连越来越多代码；
-* AI 忘记项目早期已经确定的设计原则；
-* 修一个 Bug，又引入另一个 Bug；
-* 新增功能和修改旧功能越来越困难；
-* AI 跑完测试以后就宣布“完成”，但实际行为并没有真正验收；
-* 代码还能运行，但结构和可维护性在一点点恶化。
-
-Yaya Loop 首先试图解决的就是这个问题：
-
-> **让 AI 不只是能把代码写出来，还能连续写下去，而项目不会逐渐失控。**
-
-它并不追求让 AI 一次写更多代码。
-
-恰恰相反：
-
-**它尽量让 AI 每次只解决一个足够小、足够明确、可以验收的问题。**
+The core methodology and the Godot and GDScript rules come from real project experience. Rules for other languages and stacks are still being expanded.
 
 ---
 
-### 2. 用自然语言掌控自己并不熟悉的技术栈
+## What problem does Yaya Loop solve?
 
-AI 还带来了另一种新的开发方式：
+### 1. AI can write code, but a project can still drift out of control
 
-你不一定要先熟练掌握一个技术栈的所有语法、API 和工程细节，才能开始使用它开发项目。
+Asking an AI to add one feature is rarely the difficult part anymore.
 
-比如：
+The real question is:
 
-你熟悉 Python，但突然想用 Godot + GDScript 做一个游戏；
+> **After dozens or hundreds of Features, is the project still maintainable?**
 
-或者你主要做后端，却需要开发一个前端、桌面工具或者小游戏。
+As a codebase grows, AI-assisted development tends to accumulate familiar problems:
 
-在 Yaya Loop 中，你主要负责持续表达：
+- Current requirements drift away from earlier decisions.
+- A small request quietly changes unrelated behavior.
+- Features grow until every change touches too much code.
+- The AI forgets design principles established early in the project.
+- Fixing one bug introduces another.
+- Adding new behavior or changing old behavior becomes progressively harder.
+- The AI runs tests and declares success without anyone verifying the real behavior.
+- The application still runs, but its structure and maintainability slowly deteriorate.
 
-* 产品到底要什么；
-* 当前 Feature 要实现什么；
-* 什么行为算完成；
-* 哪些设计原则不能违反；
-* 实际运行结果是否符合预期。
+Yaya Loop is designed to address that long-term failure mode:
 
-具体的技术实现交给 AI。
+> **The goal is not merely to let AI write code, but to let it keep writing code without the project gradually becoming unmanageable.**
 
-因此，人和 AI 之间的主要交流可以逐渐从：
+It does not try to make the AI produce more code in one pass.
 
-`这个 API 怎么调？这里应该继承哪个类？这个语法怎么写？`
+It deliberately does the opposite:
 
-变成：
-
-`我想增加这个功能。`
-
-`这个行为不符合需求，应该改成这样。`
-
-`做下一个 Feature。`
-
-这并不意味着完全不懂软件开发，也可以无条件完成任何复杂项目。
-
-它更希望做到的是：
-
-> **降低技术栈本身对开发者的束缚，让你即使不熟悉底层实现细节，仍然可以通过自然语言、规则和验收长期掌控项目。**
+**Each iteration should solve one problem that is small enough to understand, bounded enough to control, and concrete enough to verify.**
 
 ---
 
-## Q：它是怎么做到的？
+### 2. Use natural language to direct a stack you do not yet know well
 
-核心思想并不复杂：
+AI also enables a different way to approach unfamiliar technology.
 
-> **不要直接让 AI 开始写一个“大项目”。**
+You do not necessarily need to master every API, syntax rule, and engineering convention before you can begin building with a stack.
 
-先把长期开发状态放进项目本身，再把每一次 AI 编程限制在一个足够小的范围内。
+You might know Python but want to build a game with Godot and GDScript. Or you might work mainly on backend systems but need to create a frontend, desktop utility, or small game.
 
-Yaya Loop 主要维护三层信息：
+With Yaya Loop, your ongoing responsibility is to express:
 
-| 层 | 回答的问题 | 作用 |
+- what the Product should do;
+- what the current Feature must accomplish;
+- which observable behavior counts as complete;
+- which design principles must remain true; and
+- whether the application actually behaves as expected.
+
+The AI handles the implementation details.
+
+The conversation can gradually move away from:
+
+`How do I call this API? Which class should this inherit from? What is the syntax here?`
+
+and toward:
+
+`I want to add this capability.`
+
+`This behavior does not match the requirement. Change it this way.`
+
+`Do the next Feature.`
+
+This does not mean that someone with no software knowledge can complete any complex project without limits.
+
+The aim is more practical:
+
+> **Reduce the technology stack's grip on the developer, so natural language, durable rules, and human verification can provide long-term control even when the low-level implementation is unfamiliar.**
+
+---
+
+## How does it work?
+
+The central idea is simple:
+
+> **Do not ask an AI to start by building one “large project.”**
+
+First, put the project's long-term development state inside the repository. Then constrain each AI coding session to a sufficiently small scope.
+
+Yaya Loop maintains three layers of durable knowledge:
+
+| Layer | Question it answers | Purpose |
 | --- | --- | --- |
-| **Product** | 产品到底要什么？ | 保存长期产品需求，作为需求的真实来源 |
-| **Feature** | 这一轮具体做什么？ | 把 Product 拆成边界清晰、可以验收的小任务 |
-| **Coding Rules** | 允许怎么实现？ | 保存架构、代码质量和技术栈相关的长期约束 |
+| **Product** | What should the Product do? | Preserves long-term requirements as the source of truth |
+| **Feature** | What exactly are we doing in this iteration? | Turns Product requirements into bounded, independently verifiable work |
+| **Coding Rules** | How may it be implemented? | Preserves architecture, quality, and stack-specific constraints |
 
-然后让一个 Feature 经过固定的开发闭环：
+Each Feature then moves through a fixed development loop:
 
 ```mermaid
 flowchart LR
@@ -119,511 +117,473 @@ flowchart LR
     N --> F
 ```
 
-这里真正重要的不是这几个文件叫什么，而是：
+The filenames themselves are not the important part. The important change is this:
 
-> **需求、任务、代码和验收之间不再只依赖当前聊天窗口。**
+> **Requirements, tasks, code, and acceptance no longer depend only on the current chat window.**
 
-项目自己保存长期状态。
-
-AI 每次只需要读取完成当前 Feature 真正需要的那部分上下文。
+The repository carries its own long-term state. A new AI session needs to load only the context required for the current Feature.
 
 ---
 
-## Q：为什么这样可以减少 AI 失控？
+## Why does this reduce AI drift?
 
-因为 Yaya Loop 尽量把一些原本依赖“AI 自觉”的事情，变成明确的流程约束。
+Yaya Loop turns responsibilities that would otherwise depend on the AI's discretion into explicit process constraints.
 
-| 常见问题 | Yaya Loop 的处理方式 |
+| Common failure | Yaya Loop response |
 | --- | --- |
-| 需求聊着聊着就变了 | Product 保存长期产品需求 |
-| AI 擅自扩大修改范围 | Feature 明确 Scope 和 Acceptance Criteria |
-| AI 忘记之前的设计原则 | Coding Rules 保存长期工程约束 |
-| 新会话不知道上次发生了什么 | Feature 状态、Progress、Notes 和 Handoff 保存上下文 |
-| 测试通过就宣布完成 | **必须经过人工验收** |
-| 功能能跑，但代码越来越烂 | 完成前进行 Fresh-context Code Smell Scan |
-| AI 跳过流程直接提交 | Hook / Git Gate 提供额外准入检查 |
+| Requirements change during conversation | Product preserves the durable requirement source |
+| The AI expands the requested change | Feature scope and acceptance criteria set the boundary |
+| Earlier design decisions are forgotten | Coding Rules preserve long-term engineering constraints |
+| A new session does not know what happened last time | Feature state, Progress, notes, and handoff records preserve context |
+| Passing tests is treated as completion | **Explicit human acceptance is required** |
+| The feature works but the codebase gets worse | A fresh-context Code Smell Scan runs before completion |
+| The AI skips the workflow and commits anyway | Hooks and Git gates provide additional admission checks |
 
-所以 Yaya Loop 的核心并不是：
+Yaya Loop is therefore not mainly about writing a more elaborate Prompt.
 
-> 写一个更厉害的 Prompt。
+It is about:
 
-而是：
-
-> **一步一步压缩 AI 在当前任务中的错误自由度。**
+> **Reducing the AI's room for error, one explicit boundary at a time.**
 
 ---
 
-## Q：AI 不能自己判断“我已经完成了吗”？
+## Can the AI decide that it is finished?
 
-不能。
+No.
 
-这是 Yaya Loop 很重要的一条原则。
+This is one of Yaya Loop's core principles.
 
-代码可以编译，只代表代码可以编译。
+Compilation proves that the code compiles. Passing tests proves that the behavior covered by those tests passes.
 
-测试通过，只代表已经覆盖到的测试通过。
+Neither proves that:
 
-它们都不能证明：
+> **The Feature's real behavior matches the user's expectation.**
 
-> **这个 Feature 的真实行为已经符合用户预期。**
+Machines should verify what machines are good at, including:
 
-因此，机器适合验证的事情交给机器，例如：
+- compilation;
+- type checking;
+- linting;
+- unit tests; and
+- project-specific static checks.
 
-* 编译；
-* 类型检查；
-* lint；
-* 单元测试；
-* 项目自己的静态检查命令。
+Behavior that requires observation or Product judgment still needs human acceptance.
 
-但是需要真实观察和产品判断的行为，仍然需要人工验收。
+**Without explicit confirmation from the user, an AI must not mark a Feature `done`.**
 
-**没有用户明确确认，AI 不能自行把 Feature 标记为 Done。**
+After human acceptance, the current changes are reviewed for structural problems. The Code Smell Scan should use a fresh-context agent when available: it reloads the Coding Rules and independently inspects the Feature's actual diff.
 
-人工验收通过之后，还需要检查这一轮代码有没有引入新的结构问题。
+Findings are classified as:
 
-Code Smell Scan 会尽量交给 fresh-context 的 Agent：重新读取 Coding Rules，再独立检查当前 Feature 的实际改动。
+- `must_fix`: must be resolved before the current Feature can complete;
+- `suggest`: worth considering later, but does not block the Feature; or
+- `acceptable`: a reasonable tradeoff that is not worth extra complexity merely to make the code look cleaner.
 
-扫描结果分为：
-
-* `must_fix`：当前 Feature 完成前必须处理；
-* `suggest`：值得以后处理，但不应该阻塞当前 Feature；
-* `acceptable`：可以接受，不值得为了“代码更漂亮”继续增加复杂度。
-
-只有必须处理的问题归零以后，这个 Feature 才真正完成。
+The Feature is complete only after every `must_fix` finding is cleared.
 
 ---
 
-## Q：这和直接使用 Claude Code / Codex 有什么区别？
+## How is this different from using Claude Code or Codex directly?
 
-Claude Code、Codex、Aider、Cursor 等 AI Coding Agent 本身已经非常擅长：
+Claude Code, Codex, Aider, Cursor, and other AI Coding Agents are already very capable at:
 
-> **写代码。**
+> **Writing code.**
 
-Yaya Loop 更关心的是：
+Yaya Loop focuses on a different problem:
 
-> **这些代码怎样一轮一轮地写下去，而项目不会逐渐失控。**
+> **How can that code be written iteration after iteration without the project gradually losing control?**
 
-简单来说：
-
-| 直接 Vibe Coding | Yaya Loop |
+| Direct Vibe Coding | Yaya Loop |
 | --- | --- |
-| Prompt 直接进入代码 | 需求先进入 Product / Feature |
-| AI 自己判断修改范围 | Feature 明确限制当前范围 |
-| 当前会话承担大量上下文 | 项目文档保存长期状态 |
-| 测试通过就可能宣布完成 | 必须经过人工验收 |
-| “能跑”以后继续下一个 Prompt | 完成前还有 Code Review / Smell Scan |
+| A Prompt goes directly into code | Requirements enter Product and Feature state first |
+| The AI decides the change boundary | The Feature explicitly limits the current scope |
+| The chat carries most of the context | Repository documents preserve long-term state |
+| Passing tests may be treated as complete | Human acceptance is mandatory |
+| The next Prompt starts as soon as it runs | Code review and smell scanning still happen before Done |
 | Prompt → Prompt → Prompt | Feature → Verify → Done → Next |
 
-Yaya Loop 不替代 Coding Agent。
+Yaya Loop does not replace a Coding Agent.
 
-它更像套在 Coding Agent 外面的一层：
+It is a layer around that agent:
 
-> **长期开发控制循环。**
-
----
-
-## Q：为什么要把需求拆成 Feature？
-
-因为：
-
-> **“开发一个大型项目”对 AI 来说太大了，但“完成一个边界明确的小功能”通常已经很容易。**
-
-Product 负责描述完整产品。
-
-Feature 负责把它变成大量可以独立执行的小问题。
-
-例如：
-
-`做一个完整游戏`
-
-显然太大。
-
-甚至：
-
-`实现完整的商城系统`
-
-可能仍然太大。
-
-它还可以继续拆成：
-
-* 商城初始化；
-* 商品池生成；
-* 商品刷新；
-* 商品购买；
-* 金币校验；
-* 刷新价格；
-* UI 状态更新；
-* 异常行为处理；
-* ……
-
-于是一个大型项目不再要求 AI：
-
-> 一次理解并完成整个系统。
-
-而变成：
-
-> **每次认真解决一个问题，然后留下足够的信息给下一轮。**
+> **A control loop for long-running development.**
 
 ---
 
-## Q：这种方法真的可以用于一个比较大的项目吗？
+## Why split requirements into Features?
 
-Yaya Loop 并不是先凭空设计了一套方法论，再寻找一个项目验证它。
+Because:
 
-它来自真实项目长期使用 AI 编程的实践。
+> **“Build a large project” is too broad for an AI, while “complete this bounded capability” is often quite manageable.**
 
-我曾经使用这套思路开发一个复刻《背包乱斗》核心玩法的游戏项目。
+Product describes the complete application. Features turn it into a sequence of independently executable problems.
 
-在持续开发过程中，这个项目被逐渐拆成了：
+For example:
 
-**600+ 个 Feature**
+`Build a complete game`
 
-并产生了：
+is clearly too broad.
 
-**2000+ 个 Git Commit**
+Even:
 
-这些 Feature 覆盖的不只是一个 Demo，而是一个真实游戏项目持续增长过程中不断出现的：
+`Implement the entire shop system`
 
-* 战斗系统；
-* 道具系统；
-* 商店；
-* UI；
-* 交互；
-* 数值；
-* 内容；
-* Bug 修复；
-* 架构调整；
-* 重构。
+may still be too broad. It can be decomposed into:
 
-整个过程可以概括成：
+- shop initialization;
+- item-pool generation;
+- inventory refresh;
+- purchasing an item;
+- currency validation;
+- refresh pricing;
+- UI-state updates; and
+- invalid-operation handling.
 
-**产品需求 → 600+ Features → 逐个实现和验收 → 2000+ Commits → 持续重构和演化**
+A large project no longer requires the AI to understand and complete the entire system at once.
 
-这个案例并不是为了证明：
+Instead:
 
-> “Yaya Loop 可以做出一款商业成功的游戏。”
-
-它证明的是另一个问题：
-
-> **一个真实、持续增长的软件项目，可以被拆成几百个足够小的问题，然后让 AI 一个一个完成。**
-
-大型项目因此从：
-
-> “要求 AI 长期记住并理解整个项目”
-
-变成：
-
-> **“让项目自己保存长期状态，每次只让 AI 理解当前 Feature 需要的上下文。”**
-
-Yaya Loop 就是在这个过程中逐渐被抽离、整理成现在这套工作流的。
-
-> **Case Study：** 示例项目计划在移除商业敏感信息和核心运营数据后开放，用于展示真实的 Feature、Commit 历史和长期迭代过程。
+> **Solve one problem carefully, then leave enough durable context for the next iteration.**
 
 ---
 
-## Q：用了它以后，我每天到底怎么开发？
+## Can this approach support a substantial project?
 
-日常开发大致只有三种主要操作：
+Yaya Loop was not designed in isolation and then attached to a convenient demonstration.
 
-| 模式 | 你主要做什么 | 示例 |
+It grew out of using AI over the long term to build a real project: a game reproducing the core gameplay loop of *Backpack Battles*.
+
+During development, the project was gradually decomposed into:
+
+**600+ Features**
+
+and produced:
+
+**2,000+ Git commits**
+
+Those Features covered far more than a disposable demo:
+
+- combat systems;
+- items;
+- the shop;
+- UI and interaction;
+- balance and content;
+- bug fixes;
+- architecture changes; and
+- refactoring.
+
+The process can be summarized as:
+
+**Product requirements → 600+ Features → implementation and acceptance one by one → 2,000+ commits → continuous refactoring and evolution**
+
+This does not prove that Yaya Loop guarantees a commercially successful game.
+
+It demonstrates something more specific:
+
+> **A real and continuously growing software project can be divided into hundreds of small problems that an AI completes one at a time.**
+
+The challenge changes from asking an AI to remember and understand the entire project indefinitely to:
+
+> **Let the repository preserve long-term state, and give each AI session only the context needed for the current Feature.**
+
+Yaya Loop was extracted and refined from that process.
+
+> **Case study:** The example project is planned for release after commercially sensitive information and core operational data have been removed. It will illustrate real Features, commit history, and long-running iteration.
+
+---
+
+## What does day-to-day development look like?
+
+Most work falls into three modes:
+
+| Mode | What you do | Example |
 | --- | --- | --- |
-| **产品编程** | 用自然语言描述新增需求或产品变化 | `我想增加 XXX 功能` |
-| **Feature 开发** | 让 AI 执行一个已经拆好的 Feature | `做下一个 Feature` |
-| **受控重构** | 从累积的 Code Smell 中选择一个处理 | `挑一个坏味道重构` |
+| **Product programming** | Describe a new requirement or Product change in natural language | `I want to add XXX.` |
+| **Feature development** | Ask the AI to execute one prepared Feature | `Do the next Feature.` |
+| **Controlled refactoring** | Select one recorded code smell to address | `Pick one code smell to refactor.` |
 
-### 产品编程
+### Product programming
 
-当你产生新的想法时，不需要自己手动修改十几个任务。
+When you have a new idea, you do not need to edit a dozen task files manually.
 
-直接描述产品变化：
+Describe the Product change:
 
-`我想增加 XXX 功能。`
+`I want to add XXX.`
 
-或者：
+or:
 
-`原来的 XXX 设计不对，我想改成 XXX。`
+`The current XXX design is wrong. Change it to XXX.`
 
-Yaya Loop 会先把变化同步到 Product，再增量更新对应 Feature。
+Yaya Loop updates Product first, then incrementally synchronizes the affected Features.
 
-**自然语言需求 → Product → Feature List**
+**Natural-language requirement → Product → Feature List**
 
-而不是：
+not:
 
-**自然语言需求 → AI 直接改代码**
+**Natural-language requirement → AI edits code immediately**
 
----
+### Feature development
 
-### Feature 开发
+Once requirements are ready:
 
-需求确定之后：
+`Do the next Feature.`
 
-`做下一个 Feature。`
+The AI loads the required context, confirms scope, implements the Feature, runs automated verification, and waits for human acceptance.
 
-AI 会读取当前需要的上下文，确认范围，实现功能，执行自动验证，然后等待人工验收。
+Only after acceptance and the Code Smell Scan does the Feature become Done.
 
-验收和 Code Smell Scan 通过后，Feature 才进入 Done。
+Then the workflow stops. The next Feature begins only when authorized.
 
-然后停止。
+### Controlled refactoring
 
-下一次再继续下一个 Feature。
+Long-running development inevitably creates technical debt.
 
----
+Yaya Loop does not require every imperfect line of code to trigger an immediate large refactor. Non-blocking findings may enter the smell backlog.
 
-### 受控重构
+At an appropriate time, ask:
 
-长期开发一定会产生技术债。
+`Pick one code smell to refactor.`
 
-Yaya Loop 并不要求：
+The long-term loop becomes:
 
-> 每发现一点代码不够漂亮，就立刻停下 Feature 进行大重构。
-
-一些非阻塞问题可以进入 Smell Backlog。
-
-在合适的时候再说：
-
-`挑一个坏味道重构。`
-
-于是长期开发形成：
-
-**产品变化 → Feature → 实现 → 验收 → Done → 必要时重构 → 继续迭代 ↺**
+**Product change → Feature → Implement → Accept → Done → Refactor when justified → Continue ↺**
 
 ---
 
-# Q：我要怎么开始使用？
+# How do I get started?
 
-## 1. 获取 Yaya Loop
+## 1. Get Yaya Loop
 
 ```bash
 git clone https://github.com/m358807551/yaya-loop.git ~/code/yaya-loop
 ```
 
-也可以直接把仓库复制到你习惯的位置。
+You may also copy the repository to any location you prefer.
 
 ---
 
-## 2. 进入你真正要开发的项目
+## 2. Enter the project you actually want to build
 
-新项目、已有项目都可以。
+Both new and existing projects are supported.
 
 ```bash
 cd ~/code/<your-project>
 ```
 
-然后打开你正在使用的 AI Coding Agent，例如：
+Open the project with an AI Coding Agent that can read and modify files and run commands, such as:
 
-* Claude Code
-* Codex
-* Aider
-* Cursor
-* 其他能够读取、修改项目文件并执行命令的 Agent
+- Claude Code
+- Codex
+- Aider
+- Cursor
+- another compatible agent
 
 ---
 
-## 3. 让 AI 初始化 Yaya Loop
+## 3. Ask the AI to initialize Yaya Loop
 
-把下面这句话交给它：
+Give it this instruction:
 
 ```text
-请按 ~/code/yaya-loop/BOOTSTRAP.md 的步骤，
-把这套方法论在当前项目里初始化好。
+Follow the steps in ~/code/yaya-loop/BOOTSTRAP.md
+to initialize Yaya Loop in the current project.
 ```
 
-然后跟着 AI 的问题完成初始化即可。
+Then answer the questions the AI asks during initialization.
 
 ---
 
-## 4. 开始开发
+## 4. Start developing
 
-初始化完成以后，日常主要就是：
+After initialization, most daily requests are as simple as:
 
-* `我想增加 XXX 功能`
-* `把 XXX 行为改成 XXX`
-* `做下一个 Feature`
-* `挑一个坏味道重构`
+- `I want to add XXX.`
+- `Change XXX behavior to YYY.`
+- `Do the next Feature.`
+- `Pick one code smell to refactor.`
 
-剩下的 Product / Feature 状态维护、上下文加载和执行流程交给 Yaya Loop。
+Yaya Loop maintains Product and Feature state, loads context, and enforces the execution process around those requests.
 
 ---
 
-## Q：新项目和已经写了一半的项目都能用吗？
+## Does it work for both new and existing projects?
 
-可以。
+Yes.
 
 ### Greenfield
 
-对于一个新项目，Yaya Loop 会从你的产品想法开始：
+For a new project, Yaya Loop starts from the Product idea:
 
-**自然语言 → Product → Coding Rules → Feature List → 开始实现**
+**Natural language → Product → Coding Rules → Feature List → Implementation**
 
-初始化完成后就可以逐个推进 Feature。
+Once initialized, Features can be executed one by one.
 
 ### Legacy
 
-对于一个已经存在的项目，Yaya Loop 会先尝试理解现有代码，再反向恢复：
+For an existing project, Yaya Loop first studies the current code and then reconstructs:
 
-* 当前产品能力；
-* 已经完成的功能；
-* 后续可能需要继续开发的 Feature；
-* Coding Rules；
-* 已知 Code Smell。
+- current Product capabilities;
+- representative completed Features;
+- likely future work confirmed by the user;
+- project-specific Coding Rules; and
+- known code smells.
 
-这样不需要为了使用 Yaya Loop 重写整个项目。
+Adopting Yaya Loop does not require rewriting the application.
 
-详细流程见 [`BOOTSTRAP.md`](./BOOTSTRAP.md)。
-
----
-
-## Q：它适合什么人？
-
-Yaya Loop 比较适合：
-
-* 正在使用 AI Coding Agent 长期开发真实项目；
-* 项目会持续增加 Feature，而不是只写几个一次性脚本；
-* 已经发现纯 Vibe Coding 随着项目增长开始变得难以控制；
-* 希望大量实现工作交给 AI，但关键产品判断仍然掌握在人手里；
-* 想尝试自己并不熟悉的语言、框架或者游戏引擎；
-* 独立开发者或小团队；
-* 喜欢主要通过自然语言驱动开发的人。
-
-如果你的项目只有几十行代码，一两个 Prompt 就能完成，这套流程可能反而太重。
+See [`BOOTSTRAP.md`](./BOOTSTRAP.md) for the complete process and [`examples/legacy-import-walkthrough.md`](./examples/legacy-import-walkthrough.md) for a narrative example.
 
 ---
 
-## Q：它不解决什么？
+## Who is it for?
 
-### 它不是项目管理工具
+Yaya Loop is a good fit when you:
 
-没有甘特图、燃尽图或者团队看板。
+- use an AI Coding Agent to develop a real project over time;
+- expect the project to keep gaining Features rather than ending after a few scripts;
+- have noticed that pure Vibe Coding becomes harder to control as the codebase grows;
+- want the AI to handle much of the implementation while humans retain Product judgment;
+- want to work with an unfamiliar language, framework, or game engine;
+- are an independent developer or part of a small team; or
+- prefer to drive development mainly through natural language.
 
-`feature-list.json` 首先是一份给 AI 使用的长期工作状态，而不是项目经理的进度仪表盘。
-
-### 它不是 CI/CD
-
-Feature 执行过程中的编译、类型检查和测试不能替代正式 CI 流水线。
-
-### 它不是代码生成模型
-
-真正写代码的仍然是 Claude Code、Codex、Aider、Cursor 或其他 AI Coding Agent。
-
-### 它也不是银弹
-
-如果 Product 本身非常混乱、Feature 拆分极差、Acceptance Criteria 含糊不清，Yaya Loop 也无法凭空把项目变好。
-
-它更像一个放大器：
-
-> **把已经想清楚的东西，更稳定地变成代码。**
+If the whole project is a few dozen lines that one or two Prompts can complete, this workflow may be unnecessarily heavy.
 
 ---
 
-# 给 AI 和想深入了解 Yaya Loop 的人
+## What does it not solve?
 
-如果你只是想开始使用，到这里其实已经足够了。
+### It is not a project-management tool
 
-下面主要介绍 Yaya Loop 内部如何维护状态和约束执行。
+There are no Gantt charts, burn-down charts, or team boards.
+
+`feature-list.json` is durable working state for AI-assisted development, not a project manager's reporting dashboard.
+
+### It is not CI/CD
+
+Compilation, type checks, and tests during Feature execution do not replace a production CI pipeline.
+
+### It is not a code-generation model
+
+Claude Code, Codex, Aider, Cursor, or another Coding Agent still writes the code.
+
+### It is not a silver bullet
+
+Yaya Loop cannot rescue a Product with incoherent requirements, badly decomposed Features, or vague acceptance criteria by itself.
+
+It is better understood as an amplifier:
+
+> **It turns well-understood intent into code more consistently.**
 
 ---
 
-## 核心文档
+# For AI agents and readers who want the internal model
 
-目标项目主要维护三类长期状态：
+If you only want to start using Yaya Loop, the sections above are enough.
 
-| 文档 | 含义 |
+The rest of this README explains how Yaya Loop preserves state and constrains execution internally.
+
+---
+
+## Core documents
+
+A target project maintains three kinds of long-term state:
+
+| Document | Meaning |
 | --- | --- |
-| `docs/product.md` + `docs/product/*.md` | **What：产品到底要什么？** |
-| `docs/feature-list.json` + `docs/features/F0XX.json` | **Todo：当前和未来具体要做什么？** |
-| `docs/coding_rules.md` | **How：代码允许怎么实现？** |
+| `docs/product.md` + `docs/product/*.md` | **What:** What should the Product do? |
+| `docs/feature-list.json` + `docs/features/F0XX.json` | **Todo:** What exactly should happen now and later? |
+| `docs/coding_rules.md` | **How:** What implementation constraints apply? |
 
-其中 Feature 主索引保持轻量。
+The Feature index remains lightweight. Detailed Feature state is loaded on demand so a growing project does not force every new session to reread its entire history.
 
-具体 Feature 的详细信息按需读取，避免项目越来越大以后，每次启动新的 AI 会话都必须重新读取全部历史内容。
-
----
-
-## Feature 执行循环
-
-`execute-next-feature` 使用固定的 Stage 0–8：
-
-**前置检查 → 资源与依赖预检 → 标记开工 → 实现与细粒度 Commit → 自动验证 → 人工验收 → Fresh-context Code Smell Scan → Done → Handoff**
-
-其中有几条重要约束：
-
-1. 不擅自扩大当前 Feature 的修改范围；
-2. 遇到需求歧义时停止猜测；
-3. AI 不能自行把 Feature 标记为 Done；
-4. 人工验收通过后仍然需要完成 Code Smell Scan；
-5. `must_fix` 没有清零，Feature 不能完成；
-6. 完成 Commit 必须留下对应的准入证据；
-7. 不直接在 `main` / `master` 上工作；
-8. 不自动执行危险 Git 操作。
-
-完整规则见 [`methodology/`](./methodology/)。
+Durable Product, Feature, and Progress prose uses the target project's configured `document_language`. Stable protocol elements—JSON keys, Feature IDs, status values, paths, evidence strings, and commands—remain English or language-neutral.
 
 ---
 
-## 三类 AI 能力
+## Feature execution loop
 
-Yaya Loop 当前主要提供三类 AI 工作能力：
+`execute-next-feature` uses fixed Stages 0–8:
+
+**Preflight → Resource and dependency checks → Start → Implement with focused commits → Automated verification → Human acceptance → Fresh-context Code Smell Scan → Done → Handoff**
+
+Important constraints include:
+
+1. Do not expand the current Feature's scope without approval.
+2. Stop and resolve requirement ambiguity instead of guessing.
+3. An AI must never mark a Feature Done by itself.
+4. Human acceptance does not replace the Code Smell Scan.
+5. A Feature cannot complete while any `must_fix` finding remains.
+6. The completion commit must contain the required admission evidence.
+7. Do not work directly on `main` or `master`.
+8. Do not automatically perform dangerous Git operations.
+
+See [`methodology/`](./methodology/) for the complete canonical rules.
+
+---
+
+## Three groups of AI capabilities
+
+Yaya Loop currently provides three main groups of workflows.
 
 ### Product
 
-把用户的自然语言需求持续维护为 Product。
-
-包括初始化产品、修改需求以及不同类型需求的标准化。
+Maintain natural-language requirements as durable Product specifications. This includes Product initialization, requirement changes, standardization, UI sketches, and audio entries.
 
 ### Generate
 
-把 Product 拆成 Feature，或者在 Product 变化以后增量同步 Feature List。
+Decompose Product into Features, or incrementally synchronize the Feature List after Product changes.
 
 ### Execute
 
-执行一个 Feature，或者从已经记录的 Code Smell 中选择一个进行受控重构。
+Execute one Feature, or select one recorded code smell for controlled refactoring.
 
-这些能力在 Claude Code 中可以使用 Skill / Hook 实现，在其他 AI Coding Agent 中则可以通过通用 Prompt 和 Git Hook 接入。
+Claude Code can consume these workflows as Skills and Hooks. Other AI Coding Agents can use the portable Prompts and Git Hook integration.
 
 ---
 
-## 目录速览
+## Repository map
 
-| 路径 | 用途 |
+| Path | Purpose |
 | --- | --- |
-| [`README.md`](./README.md) | 给人看的项目介绍和使用入口 |
-| [`BOOTSTRAP.md`](./BOOTSTRAP.md) | AI 初始化 Yaya Loop 的入口 |
-| [`methodology/`](./methodology/) | 技术栈无关的方法论、Schema、模板和执行规则 |
-| [`coding-rules-library/`](./coding-rules-library/) | 不同语言 / 引擎的 Coding Rules |
-| [`claude-code/`](./claude-code/) | Claude Code Skills、Hooks 与配置 |
-| [`ai-agnostic-prompts/`](./ai-agnostic-prompts/) | 其他 AI Coding Agent 使用的通用 Prompt |
-| [`git-hooks/`](./git-hooks/) | Git 层面的流程准入检查 |
-| [`examples/`](./examples/) | 示例项目与 Legacy 接入示例 |
-| [`tests/`](./tests/) | Yaya Loop 自身测试 |
-| [`upgrade-notes.md`](./upgrade-notes.md) | Kit 升级与迁移说明 |
+| [`README.md`](./README.md) | English project introduction and starting point |
+| [`README.zh-CN.md`](./README.zh-CN.md) | Complete Simplified Chinese project introduction |
+| [`BOOTSTRAP.md`](./BOOTSTRAP.md) | Entry point for an AI initializing Yaya Loop |
+| [`methodology/`](./methodology/) | Stack-independent methodology, schemas, templates, and execution rules |
+| [`coding-rules-library/`](./coding-rules-library/) | Coding Rules for languages and engines |
+| [`claude-code/`](./claude-code/) | Claude Code Skills, Hooks, and configuration |
+| [`ai-agnostic-prompts/`](./ai-agnostic-prompts/) | Portable Prompts for other AI Coding Agents |
+| [`git-hooks/`](./git-hooks/) | Git-level workflow admission checks |
+| [`examples/`](./examples/) | Greenfield reference project and Legacy adoption walkthrough |
+| [`tests/`](./tests/) | Tests for Yaya Loop itself |
+| [`upgrade-notes.md`](./upgrade-notes.md) | Kit upgrade and migration notes |
 
-如果你是被用户授权来初始化 Yaya Loop 的 AI：
+If you are an AI explicitly authorized to initialize Yaya Loop in a project:
 
-> **直接读取 [`BOOTSTRAP.md`](./BOOTSTRAP.md)，并按照其中的步骤执行。**
+> **Read [`BOOTSTRAP.md`](./BOOTSTRAP.md) and follow its steps.**
 
 ---
 
-## 反馈与扩展
+## Feedback and extensions
 
-Yaya Loop 仍然处于早期阶段。
+Yaya Loop is still at an early stage.
 
-如果你把它用于新的：
+If you use it with a new:
 
-* 编程语言；
-* 游戏引擎；
-* Web Framework；
-* 桌面框架；
-* 移动端技术栈；
+- programming language;
+- game engine;
+- web framework;
+- desktop framework; or
+- mobile stack;
 
-并积累出新的通用经验，可以：
+and develop reusable practices:
 
-1. 先在实际项目的 `docs/coding_rules.md` 中验证；
-2. 确认具有通用价值后，再回流到 `methodology/` 或 `coding-rules-library/`；
-3. 如果修改 Kit 本身，按照语义化版本更新 `kit-version.txt`。
+1. validate them first in a real project's `docs/coding_rules.md`;
+2. contribute them to `methodology/` or `coding-rules-library/` only after they prove generally useful; and
+3. update `kit-version.txt` according to semantic versioning when changing the Kit itself.
 
-参与贡献请阅读 [`CONTRIBUTING.md`](./CONTRIBUTING.md)。
+Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) before contributing.
 
-安全问题请按照 [`SECURITY.md`](./SECURITY.md) 私密报告。
+Report security issues privately according to [`SECURITY.md`](./SECURITY.md).
 
 ---
 
@@ -631,4 +591,4 @@ Yaya Loop 仍然处于早期阶段。
 
 [MIT License](./LICENSE)
 
-允许使用、复制、修改和商用；再分发本项目或其实质部分时，请保留版权与许可声明。
+You may use, copy, modify, and distribute this project commercially. Redistributions of the project or a substantial portion of it must retain the copyright and license notice.

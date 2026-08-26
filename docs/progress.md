@@ -10,6 +10,8 @@ F024 - Publish the English README and preserve the complete Chinese README
 - Confirmed that all dependencies are done and the working tree is clean on `dev`.
 - Scope is the two complete README entry points, bidirectional text language links, meaning-equivalent positioning, implemented internationalization behavior, and resolvable repository-relative links.
 - The current Chinese README will be preserved as the complete `README.zh-CN.md`; the default `README.md` will be rewritten in natural American English rather than mechanically translated.
+- Published a complete natural-English default README with the same problem statement, method, execution loop, real-project evidence, daily workflow, installation path, limitations, internal model, repository map, contribution guidance, and license terms.
+- Preserved the complete Chinese presentation in `README.zh-CN.md`, added bidirectional text language navigation, and synchronized the newly implemented `document_language`, Legacy walkthrough, Product UI/audio, and repository-entry details across both versions.
 
 ## Context notes
 
