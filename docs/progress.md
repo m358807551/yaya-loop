@@ -10,6 +10,7 @@ F017 - Internationalize Product specification UI and audio workflows
 - Confirmed the scope is three paired workflows across six stable files: Product specification, UI sketching, and audio sketching.
 - Confirmed that durable prose follows `document_language` while mode values, patch keys, ASCII conventions, paths, `_placeholder_` names, and sfx/bgm identifiers remain stable.
 - Rewrote the native and portable Product specification elicitors as an exact English workflow pair, preserving all four modes, mandatory risk questions, deletion confirmation, reviewable AI defaults, UI/audio trigger operations, completed-Feature impact handling, and the stable patch schema.
+- Rewrote the native and portable Product UI sketchers as an exact English workflow pair, preserving the complete ASCII symbol contract, single-CTA rule, required Product output semantics, optional one-file HTML/Tailwind exploration, stable mockup paths, and a document-language-aware HTML `lang` attribute.
 
 ## Context notes
 
