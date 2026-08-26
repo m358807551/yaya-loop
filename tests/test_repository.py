@@ -47,6 +47,28 @@ class RepositoryTests(unittest.TestCase):
             with self.subTest(path=path.relative_to(REPO_ROOT)):
                 self.assertTrue(os.access(path, os.X_OK))
 
+    def test_bootstrap_persists_document_language_before_product_generation(self):
+        bootstrap = (REPO_ROOT / "BOOTSTRAP.md").read_text(encoding="utf-8")
+
+        self.assertNotIn("用户主语言是中文", bootstrap)
+        self.assertLess(
+            bootstrap.index("## STEP 0.5: Resolve document language"),
+            bootstrap.index("## STEP 2：按项目状态走不同分支"),
+        )
+        self.assertIn('"document_language": "<DOCUMENT_LANGUAGE>"', bootstrap)
+        self.assertIn(
+            "Do not translate, rename, or otherwise rewrite any existing Product",
+            bootstrap,
+        )
+        self.assertIn(
+            "不得通过重建配置将其覆盖或遗漏",
+            bootstrap,
+        )
+        self.assertIn(
+            "A change in conversation language must never change the stored document language",
+            bootstrap,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
