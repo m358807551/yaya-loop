@@ -91,6 +91,7 @@ class InstallationGuidanceTests(unittest.TestCase):
                     source,
                 )
         self.assertIn("sys.exit(2)", gate)
+        self.assertIn("BLOCKED: The following Features would be marked done:", gate)
         self.assertIn("return 1", commit_hook)
         self.assertIn("return 0", commit_hook)
         self.assertIn("return 2", checker)

@@ -54,8 +54,8 @@ def main() -> None:
 
     missing_list = ", ".join(sorted(missing))
     print(
-        f"BLOCKED: Feature {missing_list} would be marked done, but this session has no "
-        "matching code-smell scan evidence.\n"
+        f"BLOCKED: The following Features would be marked done: {missing_list}. "
+        "This session has no matching code-smell scan evidence.\n"
         "Complete execute-next-feature Stage 6 and have the main agent output this line:\n"
         "Code smell scan: pass (feature: F0XX, must_fix: 0, suggest: N, acceptable: M)",
         file=sys.stderr,
