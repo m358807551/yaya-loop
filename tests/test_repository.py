@@ -74,6 +74,61 @@ class RepositoryTests(unittest.TestCase):
             bootstrap,
         )
 
+    def test_templates_are_english_sources_with_language_aware_rendering(self):
+        templates = REPO_ROOT / "methodology" / "templates"
+        rendering_contract = (templates / "README.md").read_text(encoding="utf-8")
+
+        self.assertIn("canonical English templates", rendering_contract)
+        self.assertIn("Read `document_language`", rendering_contract)
+        self.assertIn(
+            "must not weaken, omit, merge, or reinterpret a required section",
+            rendering_contract,
+        )
+        for stable_value in (
+            "JSON keys",
+            "Feature IDs",
+            "_placeholder_",
+            "must_fix",
+            "Code smell scan: pass",
+        ):
+            with self.subTest(stable_value=stable_value):
+                self.assertIn(stable_value, rendering_contract)
+
+        expected_headings = {
+            "product.md.tmpl": (
+                "## One-line positioning",
+                "## Core loop",
+                "## Module list",
+                "## Change history",
+            ),
+            "product-module.md.tmpl": (
+                "## Module positioning",
+                "## Functional flow",
+                "## Acceptance criteria",
+                "## Edge cases",
+            ),
+            "progress.md.tmpl": (
+                "## Current work",
+                "## Progress",
+                "## Context notes",
+                "## History",
+            ),
+        }
+        for filename, headings in expected_headings.items():
+            content = (templates / filename).read_text(encoding="utf-8")
+            with self.subTest(filename=filename):
+                for heading in headings:
+                    self.assertIn(heading, content)
+
+        feature_detail = json.loads(
+            (templates / "feature-detail.json.tmpl").read_text(encoding="utf-8")
+        )
+        self.assertEqual(
+            list(feature_detail),
+            ["id", "description", "acceptance_criteria", "source", "notes"],
+        )
+        self.assertTrue(feature_detail["description"].startswith("In 2–4 sentences"))
+
 
 if __name__ == "__main__":
     unittest.main()
