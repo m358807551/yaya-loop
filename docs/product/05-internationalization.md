@@ -56,4 +56,5 @@ Stable protocol elements include JSON keys, Feature IDs, status and scope enums,
 
 ## Change history
 
+- 2026-08-26: Completed the v0.2.0 implementation, compatibility coverage, upgrade path, and release audit.
 - 2026-08-26: Added the initial internationalization product specification after maintainer review.

@@ -10,6 +10,12 @@ F026 - Document the upgrade perform the release audit and publish v0.2.0
 - Confirmed F025 is done, the worktree is clean on `dev`, and F026 has no external resource or runtime-dependency requirements.
 - Approved scope: canonical English upgrade guidance, an eight-criterion internationalization release audit, precise v0.2.0 version updates, unsupported-behavior disclosure, and release consistency tests.
 - Historical v0.1.0 records and Legacy migration fixtures remain historical; established projects must not be translated automatically.
+- Rewrote the upgrade guide as canonical English with a confirmation-based, JSON-aware, non-translating v0.1.0 → v0.2.0 migration, verification, rollback, and release notes.
+- Added the v0.2.0 release audit mapping all eight Internationalization acceptance criteria to evidence and explicitly separating supported behavior, non-goals, and maintainer-controlled publication actions.
+- Updated the Product overview and Internationalization history from planned to implemented for the verified release.
+- Updated current release surfaces to 0.2.0 while preserving historical v0.1.0 Product, changelog, and Legacy fixture evidence.
+- Added dependency-free release tests for version consistency, historical boundaries, upgrade safety, eight-criterion evidence, support/publication limits, and release-document links.
+- First complete release verification passed with 69 repository tests.
 
 ## Context notes
 

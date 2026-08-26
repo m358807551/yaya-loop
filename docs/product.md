@@ -39,7 +39,7 @@ Yaya Loop is not optimized for one-off scripts or projects small enough to finis
 | 02 | [02-feature-planning.md](./product/02-feature-planning.md) | Feature planning and synchronization | implemented |
 | 03 | [03-feature-delivery.md](./product/03-feature-delivery.md) | Feature delivery and quality gates | implemented |
 | 04 | [04-adoption-and-integrations.md](./product/04-adoption-and-integrations.md) | Adoption and agent integrations | implemented |
-| 05 | [05-internationalization.md](./product/05-internationalization.md) | Internationalization | planned |
+| 05 | [05-internationalization.md](./product/05-internationalization.md) | Internationalization | implemented |
 
 ## Module dependencies
 
@@ -62,4 +62,5 @@ Yaya Loop is not a project-management dashboard, CI/CD platform, code-generation
 
 ## Change history
 
+- 2026-08-26: Completed the internationalization module and prepared the verified v0.2.0 release.
 - 2026-08-26: Reverse-engineered the initial self-hosted Product from the v0.1.0 repository and added the planned internationalization module.
