@@ -757,6 +757,17 @@ class RepositoryTests(unittest.TestCase):
 
         init = bodies["Product initialization elicitor"]
         self.assertLess(init.index("## Language contract"), init.index("## Stage 1"))
+        for invariant in (
+            "Ask one question at a time",
+            "Every question must provide two to four common options plus a user-defined option",
+            "Do not make Product decisions for the user",
+            "Do not repeat answered questions",
+            "At the end of every module, show its complete draft and obtain confirmation",
+            "Never omit edge cases",
+            "Show a complete draft after every module",
+        ):
+            with self.subTest(init_invariant=invariant):
+                self.assertIn(invariant, init)
         for question in (
             "Q1.1 One-line positioning",
             "Q1.2 Target users",
@@ -825,11 +836,13 @@ class RepositoryTests(unittest.TestCase):
         for invariant in (
             "the single source of truth for Product intent",
             "Product documents first, synchronize the Feature plan second",
+            "This workflow is the only Product writer",
+            "Product documents describe **what**, not **how**",
             "methodology/templates/product.md.tmpl",
             "methodology/templates/product-module.md.tmpl",
+            "Run `product-ui-sketcher`",
+            "Run `product-audio-sketcher`",
             "preserve unrelated content",
-            "run `generate-feature-list`",
-            "run `sync-feature-list`",
             "Never report synchronization as successful merely because it was invoked",
             "Do not implement code or start execution inside this workflow",
             "Never silently edit a completed Feature",
@@ -838,6 +851,15 @@ class RepositoryTests(unittest.TestCase):
         ):
             with self.subTest(standardizer_invariant=invariant):
                 self.assertIn(invariant, standardizer)
+
+        self.assertIn(
+            "an initialized Product with no real Feature plan, a new module, or a large refactor, run `generate-feature-list`",
+            standardizer,
+        )
+        self.assertIn(
+            "a small change to an existing module or a Product bug correction, run `sync-feature-list`",
+            standardizer,
+        )
 
         for removed_embedded_heading in ("## 模块定位", "## 一句话定位", "## 变更历史"):
             with self.subTest(removed_heading=removed_embedded_heading):

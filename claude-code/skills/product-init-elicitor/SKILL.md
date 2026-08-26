@@ -35,7 +35,7 @@ Smoke cases: with `document_language: en` and a Chinese conversation, ask questi
 
 1. **Ask one question at a time.** Use the available user-input mechanism. Never send ten questions in one message.
 2. **Do not make Product decisions for the user.** Durations, audiences, rules, and tradeoffs belong to the user.
-3. **Offer choices and allow a custom answer.** Give two to four common options plus a user-defined option when choices help.
+3. **Offer choices and allow a custom answer.** Every question must provide two to four common options plus a user-defined option.
 4. **Ask in dependency order.** Establish the core loop before details and values. Later questions may use earlier answers.
 5. **Do not repeat answered questions.** Extract usable facts from the user's initial description and previous answers.
 

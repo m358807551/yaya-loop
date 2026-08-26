@@ -12,6 +12,7 @@ F016 - Internationalize Product initialization and change-standardization workfl
 - Rewrote the native and portable Product initialization elicitors in canonical English, retained concise English and Chinese trigger discovery, preserved the complete three-stage question inventory, and added an explicit conversation-versus-document language contract.
 - Rewrote the native and portable Product change standardizers in canonical English, replaced embedded localized template copies with the canonical rendering contract, preserved all seven routing/write/sync/report stages and boundaries, and made wrong-language child output a blocking condition.
 - Made each native and portable workflow body byte-equivalent beneath its distribution wrapper, added English/Chinese mismatch smoke cases, and added regression coverage for bilingual triggers, complete question and route inventories, stable output keys, language ordering, and workflow boundaries; all 21 tests pass.
+- Human acceptance passed. Fresh-context review found two semantic regressions: the unconditional choice-plus-custom question rule had been weakened, and new-module/large-refactor Feature routing had changed during translation. Both rules were restored and added to regression coverage.
 
 ## Context notes
 

@@ -127,8 +127,8 @@ Before writing, show destructive or foundational changes for a second confirmati
 
 ## Step 6: Synchronize Features
 
-- For an initialized Product with no real Feature plan, or an explicitly authorized replacement, run `generate-feature-list`.
-- For every incremental Product change, including a new module, existing behavior change, or bug correction, run `sync-feature-list`.
+- For an initialized Product with no real Feature plan, a new module, or a large refactor, run `generate-feature-list`.
+- For a small change to an existing module or a Product bug correction, run `sync-feature-list`.
 
 Wait for the selected workflow to finish and inspect its result. Never report synchronization as successful merely because it was invoked. Do not rewrite completed Feature history; create explicit follow-up work when completed behavior must change.
 
