@@ -2,16 +2,11 @@
 
 ## Current work
 
-F019 - Internationalize Feature-list synchronization workflows
+No Feature is currently in progress.
 
 ## Progress
 
-- Started at `2026-08-26T10:22:46Z`.
-- Confirmed the scope is the Feature-list synchronization Claude Skill and portable Prompt at their stable distribution paths.
-- Confirmed that new and revised Feature prose and revision summaries follow `document_language`, while completed history remains untouched and keys, enums, IDs, paths, anchors, diffs, evidence, and consistency behavior remain stable.
-- Rewrote Feature-list synchronization as an exact native/portable canonical English pair while preserving anchor discovery, complete Git diff and rename analysis, change classification, explicit confirmation, append-only history, status-specific transitions, downstream regression handling, revision logging, validation, commit, exception, and handoff boundaries.
-- Added focused regression coverage for paired-body equivalence, bilingual discovery, language/history boundaries, all seven ordered stages, anchor and diff commands, status-specific transitions, completed-history exceptions, revision schema, validation, commit, exception, and Git safety behavior.
-- All 35 repository tests passed, the paired workflow bodies matched exactly, JSON validation passed, and human acceptance confirmed every F019 criterion.
+- F019 completed at `2026-08-26T10:34:22Z` after human acceptance, 35 passing tests, and a fresh-context scan with zero must_fix findings.
 
 ## Context notes
 
@@ -19,6 +14,20 @@ F019 - Internationalize Feature-list synchronization workflows
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T10:34:22Z - F019 completed
+
+Current work:
+
+F019 - Internationalize Feature-list synchronization workflows
+
+Progress:
+
+- Rewrote Feature-list synchronization as an exact native/portable canonical English pair.
+- Preserved all seven stages, Git anchor/diff analysis, status-specific history behavior, revision logging, validation, exceptions, and Git boundaries.
+- Made new and revised durable prose follow `document_language` without translating completed history.
+- Human acceptance passed; all 35 repository tests pass.
+- Code smell scan: pass (feature: F019, must_fix: 0, suggest: 2, acceptable: 3).
 
 ### 2026-08-26T10:22:46Z - F019 started
 
