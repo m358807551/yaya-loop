@@ -2,11 +2,13 @@
 
 ## Current work
 
-No Feature is currently in progress.
+F019 - Internationalize Feature-list synchronization workflows
 
 ## Progress
 
-- F018 completed at `2026-08-26T10:22:17Z` after human acceptance, 30 passing tests, and a fresh-context scan with zero must_fix findings.
+- Started at `2026-08-26T10:22:46Z`.
+- Confirmed the scope is the Feature-list synchronization Claude Skill and portable Prompt at their stable distribution paths.
+- Confirmed that new and revised Feature prose and revision summaries follow `document_language`, while completed history remains untouched and keys, enums, IDs, paths, anchors, diffs, evidence, and consistency behavior remain stable.
 
 ## Context notes
 
@@ -14,6 +16,16 @@ No Feature is currently in progress.
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T10:22:46Z - F019 started
+
+Current work before F019:
+
+No Feature was in progress.
+
+Progress:
+
+- F018 completed at `2026-08-26T10:22:17Z` after human acceptance, 30 passing tests, and a fresh-context scan with zero must_fix findings.
 
 ### 2026-08-26T10:22:17Z - F018 completed
 
