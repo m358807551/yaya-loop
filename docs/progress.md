@@ -2,18 +2,11 @@
 
 ## Current work
 
-F021 - Internationalize refactor selection and portable usage guidance
+No Feature is currently in progress.
 
 ## Progress
 
-- Started at `2026-08-26T11:03:41Z`.
-- Confirmed the scope is the paired `pick-refactor-smell` workflow plus `ai-agnostic-prompts/00-how-to-use.md` at their stable paths.
-- Confirmed that discovery remains bilingual, severity and scoring rules remain stable, the workflow selects exactly one smell without editing, and durable refactor notes follow `document_language`.
-- Rewrote refactor-smell selection in canonical English while preserving its three stages, stable scan markers, fixed red/yellow/green rubric, continuous numbering, exactly-one comparative recommendation, read-only boundary, Plan handoff, response routing, and exceptions.
-- Rewrote the portable usage guide in English with direct English commands, concise Chinese discovery examples, all nine Prompt routes, native/portable capability equivalence, independent-review fallback, and non-weakening adaptation guidance.
-- Added focused regression coverage for exact paired bodies, bilingual discovery, document-language and historical-excerpt boundaries, stable scan markers, fixed severity thresholds, continuous numbering, exactly one comparative recommendation, read-only Plan handoff, exceptions, and all portable usage routes.
-- All 46 repository tests passed, the paired workflow bodies matched exactly, JSON validation passed, and human acceptance confirmed every F021 criterion.
-- Fresh-context review restored three stable Chinese Bug markers used by existing notes and the original high-severity bonus for cross-Feature same-file accumulation.
+- F021 completed at `2026-08-26T11:30:17Z` after human acceptance, scoring repair, 46 passing tests, and a fresh-context scan with zero remaining must_fix or suggest findings.
 
 ## Context notes
 
@@ -21,6 +14,20 @@ F021 - Internationalize refactor selection and portable usage guidance
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T11:30:17Z - F021 completed
+
+Current work:
+
+F021 - Internationalize refactor selection and portable usage guidance
+
+Progress:
+
+- Rewrote refactor selection as an exact native/portable English pair and made portable usage guidance English-first with bilingual discovery.
+- Preserved stable markers, rubric thresholds, one comparative recommendation, read-only behavior, Plan handoff, and historical excerpts.
+- Human acceptance passed; all 46 tests pass.
+- Fresh-context review restored Bug tokens and same-file severity scoring before passing.
+- Code smell scan: pass (feature: F021, must_fix: 0, suggest: 0, acceptable: 3).
 
 ### 2026-08-26T11:03:41Z - F021 started
 

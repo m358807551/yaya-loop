@@ -8,5 +8,5 @@
     "Durable refactor notes follow document_language"
   ],
   "source": "product/05-internationalization.md#Product decisions",
-  "notes": "Human acceptance passed on 2026-08-26. Automated verification: all 46 repository tests passed; the native and portable workflow bodies are byte-for-byte equivalent below their canonical heading; JSON validation and git diff checks passed."
+  "notes": "Human acceptance passed on 2026-08-26. Refactor-smell selection now uses canonical English instructions across exact paired Claude Skill and portable Prompt bodies, while the portable usage guide is English-first with concise Chinese discovery examples for all nine routes. The fixed red/yellow/green rubric, stable scan tokens, continuous numbering, exactly one comparative recommendation, read-only behavior, Plan handoff, and exceptions are preserved. Historical excerpts remain verbatim and later durable refactor notes follow document_language. Automated verification: all 46 repository tests passed; paired bodies match exactly; JSON and git diff checks passed. Fresh-context review restored stable Chinese Bug markers and the high-severity same-file accumulation bonus. Code smell scan: pass (feature: F021, must_fix: 0, suggest: 0, acceptable: 3)."
 }
