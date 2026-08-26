@@ -2,11 +2,13 @@
 
 ## Current work
 
-No Feature is currently in progress.
+F020 - Internationalize Feature execution workflows
 
 ## Progress
 
-- F019 completed at `2026-08-26T10:34:22Z` after human acceptance, 35 passing tests, and a fresh-context scan with zero must_fix findings.
+- Started at `2026-08-26T10:35:13Z` under the execution-rule snapshot committed at `8a2debf`.
+- Confirmed the scope is the Feature execution Claude Skill and portable Prompt at their stable distribution paths.
+- Confirmed that Stage 0–8 gates, evidence, human authority, independent review, verification, commits, and Git boundaries remain unchanged; conversation follows the current user language while durable Feature, Progress, acceptance, and handoff prose follows `document_language`.
 
 ## Context notes
 
@@ -14,6 +16,16 @@ No Feature is currently in progress.
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T10:35:13Z - F020 started
+
+Current work before F020:
+
+No Feature was in progress.
+
+Progress:
+
+- F019 completed at `2026-08-26T10:34:22Z` after human acceptance, 35 passing tests, and a fresh-context scan with zero must_fix findings.
 
 ### 2026-08-26T10:34:22Z - F019 completed
 
