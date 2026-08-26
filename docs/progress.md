@@ -12,6 +12,7 @@ F017 - Internationalize Product specification UI and audio workflows
 - Rewrote the native and portable Product specification elicitors as an exact English workflow pair, preserving all four modes, mandatory risk questions, deletion confirmation, reviewable AI defaults, UI/audio trigger operations, completed-Feature impact handling, and the stable patch schema.
 - Rewrote the native and portable Product UI sketchers as an exact English workflow pair, preserving the complete ASCII symbol contract, single-CTA rule, required Product output semantics, optional one-file HTML/Tailwind exploration, stable mockup paths, and a document-language-aware HTML `lang` attribute.
 - Rewrote the native and portable Product audio sketchers as an exact English workflow pair, preserving focused elicitation, duration bands, countdown/completion/interruption boundaries, SFX/BGM requirements, stable `_placeholder_` filenames, and language-neutral return keys.
+- Added focused regression coverage for exact native/portable workflow equivalence, canonical English bodies, bilingual discovery wrappers, language mismatch behavior, stable Product patch keys, ASCII/HTML UI conventions, and the complete SFX/BGM contract.
 
 ## Context notes
 
