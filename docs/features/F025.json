@@ -8,5 +8,5 @@
     "Repository tests and git diff --check pass without requiring new runtime dependencies"
   ],
   "source": "product/05-internationalization.md#Acceptance criteria",
-  "notes": ""
+  "notes": "Implementation complete and awaiting human acceptance. Added methodology/06-document-language-smoke-scenarios.md with English-document, Simplified-Chinese-document, Chinese-conversation/English-document, and Legacy missing-configuration scenarios. Paired fixtures prove that only document_language and human-readable values vary while JSON keys, enums, Feature IDs, dependencies, paths, timestamps, placeholder prefixes, and completion evidence remain stable. Legacy before/after fixtures prove that migration adds only document_language and preserves unknown fields without translating history. Automated tests verify all fixtures, Bootstrap and Methodology compatibility rules, verified/invalid language tags, smoke coverage, and exact canonical-body parity for all nine native Skill/portable Prompt pairs. Automated verification: all 63 repository tests passed; JSON and git diff checks passed; no new runtime dependencies were added."
 }

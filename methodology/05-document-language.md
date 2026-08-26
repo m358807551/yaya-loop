@@ -147,3 +147,5 @@ The first international release verifies English and Simplified Chinese project 
 - verified output for every BCP 47 language tag
 
 Support claims in public documentation must not exceed behavior covered by Bootstrap checks, repository tests, and documented smoke scenarios.
+
+Run the canonical English, Simplified Chinese, conversation/document-language mismatch, and Legacy migration scenarios in [06-document-language-smoke-scenarios.md](./06-document-language-smoke-scenarios.md) before expanding public support claims.

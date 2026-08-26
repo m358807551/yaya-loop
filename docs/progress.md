@@ -10,6 +10,11 @@ F025 - Add document-language compatibility and smoke-test coverage
 - Confirmed all dependencies are done and the working tree is clean on `dev`.
 - Scope is automated configuration, Legacy migration, stable-protocol, and distribution-parity checks plus documented English, Chinese, and mismatched conversation/document-language smoke scenarios.
 - No runtime dependency, workflow-semantic change, or localized executable-source tree will be introduced.
+- Added the canonical document-language smoke guide with English, Simplified Chinese, Chinese-conversation/English-document, and Legacy missing-configuration scenarios plus explicit expected and prohibited behavior.
+- Added paired English/Chinese protocol fixtures and Legacy before/after configuration fixtures that make stable keys, enums, IDs, dependencies, paths, timestamps, placeholders, evidence, unknown-field preservation, and language-specific prose machine-verifiable.
+- Added standard-library regression coverage for Bootstrap and Methodology compatibility rules and exact canonical-body parity across all nine native Skill/portable Prompt pairs.
+- Automated verification passed: all 63 repository tests, JSON parsing, and Git diff checks; no runtime dependency was added.
+- Implementation is ready for human acceptance.
 
 ## Context notes
 
