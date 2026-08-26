@@ -1,88 +1,86 @@
-# Claude Code 安装说明
+# Claude Code installation
 
-> 本目录的内容是 Claude Code 用户的"开箱即用"包。把它装进目标项目的 `.claude/` 目录后，重启 Claude Code 即可识别全部 9 个 skill + 2 个 hook。
+> This directory is the ready-to-install Claude Code distribution. Copy it into a target project's `.claude/` directory, then restart Claude Code to discover all nine Skills and both Hooks.
 >
-> 如果你不是 Claude Code 用户（Codex / Aider / Cursor 等），请改用 `../ai-agnostic-prompts/` + `../git-hooks/`。
+> Codex, Aider, Cursor, and other non-Claude agents should use [`../ai-agnostic-prompts/`](../ai-agnostic-prompts/) together with [`../git-hooks/`](../git-hooks/).
 
-## 一键安装（在目标项目根目录跑）
+## Install from the target project root
+
+These commands assume Yaya Loop is available at `~/code/yaya-loop/`.
 
 ```bash
-# 假定 Yaya Loop 在 ~/code/yaya-loop/
 mkdir -p .claude/skills .claude/hooks
 
-# 1) 拷 9 个 skill
+# 1. Install all nine Skills.
 cp -r ~/code/yaya-loop/claude-code/skills/* .claude/skills/
 
-# 2) 拷 2 个 hook
+# 2. Install both Hooks and preserve executable permissions.
 cp ~/code/yaya-loop/claude-code/hooks/*.py .claude/hooks/
 chmod +x .claude/hooks/*.py
 
-# 3) 合并 settings.json
-#    - 若 .claude/settings.json 不存在：
+# 3a. If .claude/settings.json does not exist, install the example.
 cp ~/code/yaya-loop/claude-code/settings.example.json .claude/settings.json
 
-#    - 若已存在：手动把 settings.example.json 的 hooks 段并入你的 .claude/settings.json
+# 3b. If it exists, merge the hooks object from settings.example.json
+# into the existing file instead of overwriting project settings.
 ```
 
-## 文件清单
+## Installed files
 
-```
+```text
 claude-code/
 ├── skills/
-│   ├── execute-next-feature/SKILL.md      # 实现一个 feature（8 阶段）
-│   ├── generate-feature-list/SKILL.md     # 从零生成 feature-list
-│   ├── sync-feature-list/SKILL.md         # product 变更后增量同步
-│   ├── pick-refactor-smell/SKILL.md       # 从 notes 挑坏味道重构
-│   ├── product-init-elicitor/SKILL.md     # 新项目首问
-│   ├── product-change-standardizer/SKILL.md  # 产品变更统一入口
-│   ├── product-spec-elicitor/SKILL.md     # 追问关键点
-│   ├── product-ui-sketcher/SKILL.md       # ASCII UI 草图
-│   └── product-audio-sketcher/SKILL.md    # 音效条目
+│   ├── execute-next-feature/SKILL.md
+│   ├── generate-feature-list/SKILL.md
+│   ├── sync-feature-list/SKILL.md
+│   ├── pick-refactor-smell/SKILL.md
+│   ├── product-init-elicitor/SKILL.md
+│   ├── product-change-standardizer/SKILL.md
+│   ├── product-spec-elicitor/SKILL.md
+│   ├── product-ui-sketcher/SKILL.md
+│   └── product-audio-sketcher/SKILL.md
 ├── hooks/
-│   ├── gate-feature-done.py               # PreToolUse：阻断未通过气味扫描的 feature 标 done
-│   └── check-feature-list.py              # PostToolUse：feature-list 结构自检
-├── settings.example.json                  # hook 注册示例
-└── install.md                             # 你正在读
+│   ├── gate-feature-done.py
+│   └── check-feature-list.py
+├── settings.example.json
+└── install.md
 ```
 
-## 安装后验证
+`gate-feature-done.py` is the PreToolUse completion gate. It blocks a new `done` transition unless the current assistant transcript contains Feature-specific `Code smell scan: pass` evidence with `must_fix: 0`.
+
+`check-feature-list.py` is the PostToolUse structural check. It blocks invalid Feature JSON and warns when index IDs and detail files temporarily differ.
+
+## Verify the installation
+
+1. Restart Claude Code and confirm that all nine Skills appear in Skill discovery.
+2. Confirm both Hook paths in `.claude/settings.json` and executable files in `ls -l .claude/hooks/`.
+3. In a test project, attempt to change a Feature to `done` without Stage 6 evidence. The PreToolUse Hook should block the edit and show the required evidence format.
+4. Ask Claude Code to `do the next Feature`. Stage 0 should quote real Coding Rules with line numbers in its exit report.
+
+## Relationship to Methodology
+
+The nine `SKILL.md` files are executable distributions of the tool-independent specifications under [`../methodology/`](../methodology/). YAML frontmatter supplies Claude Code discovery metadata; canonical workflow bodies preserve the same behavior as portable Prompts.
+
+- Customize a Skill at `.claude/skills/<name>/SKILL.md`.
+- Customize a Hook at `.claude/hooks/<name>.py` and keep it executable.
+- Do not weaken human acceptance, independent review, completion evidence, or Git safety gates.
+
+## Upgrade
+
+Back up project customizations before replacing installed files:
 
 ```bash
-# 1) 看 skill 是否被 Claude Code 识别（重启 Claude Code 后）
-#    可以在 Claude Code 中输入 / 看是否出现这 9 个 skill 的选项
-
-# 2) 测试 hook
-#    随便修改 docs/feature-list.json 把某个 feature 改成 done（不通过气味扫描），
-#    保存时 hook 应阻断并提示 "Code smell scan: pass" 缺失
-
-# 3) 跑 execute-next-feature
-#    对 AI 说"做下一个 feature"——它应该按 8 阶段流程走，阶段 0 出关报告会引用
-#    docs/coding_rules.md 的行号
-```
-
-## 与方法论文档的关系
-
-- 这里的 9 个 `SKILL.md` 是 [methodology/03-execute-loop.md](../methodology/03-execute-loop.md) 等概念文档的**可执行版**——每个文件都有 YAML frontmatter，Claude Code 自动识别触发短语，按 prompt 走流程。
-- 修改 skill 行为：直接编辑 `.claude/skills/<name>/SKILL.md`。
-- 修改 hook 行为：编辑 `.claude/hooks/<name>.py`。
-
-## 升级
-
-新版本 kit 发布时：
-
-```bash
-# 备份当前 skill 与 hook（如有自定义改动）
 cp -r .claude .claude.backup-$(date +%Y%m%d)
-
-# 重新拷贝
 cp -r ~/code/yaya-loop/claude-code/skills/* .claude/skills/
 cp ~/code/yaya-loop/claude-code/hooks/*.py .claude/hooks/
+chmod +x .claude/hooks/*.py
 ```
 
-详细升级流程见 [../upgrade-notes.md](../upgrade-notes.md)。
+Merge Hook settings rather than overwriting project-specific `.claude/settings.json` content. See [`../upgrade-notes.md`](../upgrade-notes.md) for migration details.
 
-## 故障排查
+## Troubleshooting
 
-- **hook 没触发**：确认 `.claude/settings.json` 含 `hooks` 配置；hook 文件可执行（`ls -l .claude/hooks/`）。
-- **skill 没出现在 `/` 列表**：重启 Claude Code；确认 `.claude/skills/<name>/SKILL.md` 存在且首行 YAML 完整。
-- **阶段 0 出关报告引用规则失败**：检查 `docs/coding_rules.md` 是否存在；BOOTSTRAP STEP 3 是否完成。
+- **A Hook does not run:** confirm the `hooks` object, exact installed paths, and executable permissions.
+- **A Skill is missing:** restart Claude Code and confirm `.claude/skills/<name>/SKILL.md` has valid YAML frontmatter.
+- **Stage 0 cannot cite Coding Rules:** confirm `docs/coding_rules.md` exists and Bootstrap STEP 3 completed.
+- **Feature JSON is rejected:** run `python3 -m json.tool <path>` and fix the reported syntax error.
