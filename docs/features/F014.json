@@ -8,5 +8,5 @@
     "Bootstrap can continue copying the same stable file paths"
   ],
   "source": "product/05-internationalization.md#Product decisions",
-  "notes": ""
+  "notes": "Human review confirmed all acceptance criteria on 2026-08-26. All six files under coding-rules-library/engines now use English canonical prose at their original paths. The generic, backend, Unity, Unreal, and web-frontend sources remain explicit actionable stubs; Godot remains the complete Godot 4.3+ source. Commit 231ccff restored five categorical rules weakened by the initial translation: immediate return after signal emission, read-only global configuration, mandatory development-time .tres, child-reference-only @onready, and prohibition of set_deferred process_mode for pooled-object deactivation. Bootstrap source and destination copy paths remain stable. Code smell scan: pass (feature: F014, must_fix: 0, suggest: 0, acceptable: 5)."
 }

@@ -2,15 +2,11 @@
 
 ## Current work
 
-F014 - Convert engine Coding Rules to canonical English
+No Feature is currently in progress.
 
 ## Progress
 
-- Started at `2026-08-26T07:17:02Z`.
-- Rewrote the generic engine stub and the backend, Unity, Unreal, and web-frontend stubs in natural American English while keeping them visibly incomplete, actionable, and at their stable installation paths.
-- Rewrote the complete Godot 4.3+ engine rules in English while preserving Scene composition, call-down/signal-up communication, Autoload, Resource, export/onready, lifecycle, performance, naming, signal-connection, anti-pattern, and debugging constraints.
-- Added regression checks for the stable engine file set, English-only canonical prose, explicit stub status, Bootstrap copy paths, and the detailed Godot technical rule inventory.
-- Restored five categorical Godot constraints after fresh-context review found modal weakening in signal return behavior, read-only global configuration, development-time `.tres`, exclusive child-reference use of `@onready`, and pooled-object deactivation; strengthened tests to assert full normative sentences and the Bootstrap destination path.
+- F014 completed at `2026-08-26T08:10:41Z` after human acceptance and a fresh-context scan with zero remaining must_fix findings.
 
 ## Context notes
 
@@ -118,5 +114,21 @@ Progress:
 - Rewrote the canonical four-layer Coding Rules template in English and made the self-modification rule snapshot explicit without changing its placeholders or external rule paths.
 - Added regression coverage for all nine Stage headings, execution gates, independent-review JSON, exact Hook evidence, seven collaboration rules, four Coding Rules layers, stable placeholders, and rule-snapshot behavior.
 - Restored the post-acceptance ban on behavior-changing smell repairs, the unqualified core-rule purity recommendation, and proactive Pattern guide behavior after fresh-context review detected semantic weakening; pinned all three in tests.
+- All acceptance criteria were verified by human review.
+- Fresh-context code-smell scan passed with zero remaining must_fix or suggest findings.
+
+### 2026-08-26T08:10:41Z - F014 completed
+
+Current work:
+
+F014 - Convert engine Coding Rules to canonical English
+
+Progress:
+
+- Started at `2026-08-26T07:17:02Z`.
+- Rewrote the generic engine stub and the backend, Unity, Unreal, and web-frontend stubs in natural American English while keeping them visibly incomplete, actionable, and at their stable installation paths.
+- Rewrote the complete Godot 4.3+ engine rules in English while preserving Scene composition, call-down/signal-up communication, Autoload, Resource, export/onready, lifecycle, performance, naming, signal-connection, anti-pattern, and debugging constraints.
+- Added regression checks for the stable engine file set, English-only canonical prose, explicit stub status, Bootstrap copy paths, and the detailed Godot technical rule inventory.
+- Restored five categorical Godot constraints after fresh-context review found modal weakening in signal return behavior, read-only global configuration, development-time `.tres`, exclusive child-reference use of `@onready`, and pooled-object deactivation; strengthened tests to assert full normative sentences and the Bootstrap destination path.
 - All acceptance criteria were verified by human review.
 - Fresh-context code-smell scan passed with zero remaining must_fix or suggest findings.
