@@ -18,7 +18,7 @@ This workflow does **not** generate audio files. Never claim that it will. It pr
 
 1. Read `docs/methodology-config.json` and use its `document_language` for all durable human-readable prose written to Product, Feature details, notes, and returned Markdown.
 2. Use the language of the user's current message for conversation. If it differs from `document_language`, continue the conversation in the current language but keep durable prose in `document_language`.
-3. If `document_language` is missing or genuinely ambiguous, ask once before producing durable content.
+3. Resolve missing, invalid, or migration-sensitive configuration through `methodology/05-document-language.md` before producing durable content.
 4. Keep machine-facing keys, IDs, paths, filename prefixes, file extensions, `sfx`, `bgm`, and `_placeholder_` conventions exactly as specified here.
 
 Examples:

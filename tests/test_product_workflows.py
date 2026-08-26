@@ -52,6 +52,8 @@ class ProductWorkflowTests(unittest.TestCase):
             with self.subTest(title=title):
                 self.assertIn("docs/methodology-config.json", body)
                 self.assertIn("document_language", body)
+                self.assertIn("missing, invalid, or migration-sensitive", body)
+                self.assertIn("methodology/05-document-language.md", body)
                 self.assertIn("current", body.lower())
                 self.assertIn("document_language: en", body)
                 self.assertIn("document_language: zh-CN", body)
@@ -107,6 +109,11 @@ class ProductWorkflowTests(unittest.TestCase):
             "Put all primary states in one file",
             'lang="<document_language>"',
             'charset="UTF-8"',
+            "<!DOCTYPE html>",
+            "<head>",
+            "<body>",
+            "localized `<title>`",
+            '<script src="https://cdn.tailwindcss.com"></script>',
             "ascii_wireframe:",
             "html_mockup:",
             "generated:",

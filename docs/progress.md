@@ -14,6 +14,7 @@ F017 - Internationalize Product specification UI and audio workflows
 - Rewrote the native and portable Product audio sketchers as an exact English workflow pair, preserving focused elicitation, duration bands, countdown/completion/interruption boundaries, SFX/BGM requirements, stable `_placeholder_` filenames, and language-neutral return keys.
 - Added focused regression coverage for exact native/portable workflow equivalence, canonical English bodies, bilingual discovery wrappers, language mismatch behavior, stable Product patch keys, ASCII/HTML UI conventions, and the complete SFX/BGM contract.
 - All 25 repository tests passed, all three paired workflow bodies matched exactly, JSON validation passed, and human acceptance confirmed every F017 criterion.
+- Fresh-context review restored canonical handling for missing, invalid, and migration-sensitive document-language configuration and the complete standalone Tailwind HTML scaffold contract.
 
 ## Context notes
 

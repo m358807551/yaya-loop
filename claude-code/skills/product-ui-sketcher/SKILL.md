@@ -22,10 +22,11 @@ The durable Product artifact is the ASCII wireframe plus its intent and interact
 Before producing output:
 
 1. Read `document_language` from `docs/methodology-config.json`, or accept the confirmed value passed by `product-change-standardizer`.
-2. Ask transient questions in the language the user is currently using.
-3. Write wireframe labels, interaction tables, intent explanations, HTML-visible text, comments, and `notes_for_standardizer` in `document_language`.
-4. Set the optional HTML document's `lang` attribute to the confirmed BCP 47 `document_language` value.
-5. Keep ASCII symbols, YAML keys, HTML paths, module slugs, state identifiers, and interaction-marker syntax stable.
+2. Resolve missing, invalid, or migration-sensitive configuration through `methodology/05-document-language.md` before producing durable content.
+3. Ask transient questions in the language the user is currently using.
+4. Write wireframe labels, interaction tables, intent explanations, HTML-visible text, comments, and `notes_for_standardizer` in `document_language`.
+5. Set the optional HTML document's `lang` attribute to the confirmed BCP 47 `document_language` value.
+6. Keep ASCII symbols, YAML keys, HTML paths, module slugs, state identifiers, and interaction-marker syntax stable.
 
 With `document_language: en` and a Chinese conversation, discuss in Chinese but produce English UI prose. With `document_language: zh-CN` and an English conversation, discuss in English but produce Simplified Chinese UI prose.
 
@@ -137,6 +138,7 @@ Run this section only when `want_html_mockup: true`.
 - Use Tailwind only to express the confirmed `visual_tone`. It is exploratory, not a final engine or framework implementation.
 - Keep visible labels and explanatory comments in `document_language`.
 - Set `<html lang="<document_language>">` and `<meta charset="UTF-8">`.
+- Produce a complete standalone HTML document with `<!DOCTYPE html>`, `<head>`, `<body>`, a localized `<title>`, and an explicit Tailwind loading mechanism such as `<script src="https://cdn.tailwindcss.com"></script>`.
 
 The file must begin with a localized comment preserving these meanings:
 
