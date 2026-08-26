@@ -9,6 +9,7 @@ F013 - Convert the execution specification and Coding Rules template to English
 - Started at `2026-08-26T07:08:35Z`.
 - Rewrote the complete Stage 0–8 execution specification in natural American English while preserving entry conditions, outputs, fixed report and evidence formats, human authority, independent review, Git boundaries, and exception handling.
 - Rewrote the canonical four-layer Coding Rules template in English and made the self-modification rule snapshot explicit without changing its placeholders or external rule paths.
+- Added regression coverage for all nine Stage headings, execution gates, independent-review JSON, exact Hook evidence, seven collaboration rules, four Coding Rules layers, stable placeholders, and rule-snapshot behavior.
 
 ## Context notes
 

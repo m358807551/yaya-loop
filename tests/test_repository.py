@@ -234,6 +234,93 @@ class RepositoryTests(unittest.TestCase):
                 with self.subTest(filename=filename, target=target):
                     self.assertTrue(resolved.exists(), f"Broken link: {path} -> {target}")
 
+    def test_execution_spec_preserves_all_stages_and_completion_gates(self):
+        execution = (REPO_ROOT / "methodology" / "03-execute-loop.md").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("# 03 · The eight-stage execute-next-feature loop", execution)
+        for stage in range(9):
+            with self.subTest(stage=stage):
+                self.assertRegex(execution, rf"(?m)^## Stage {stage}: ")
+
+        required_invariants = (
+            "Use the committed rule snapshot from Feature start",
+            "=== Stage 0 exit report ===",
+            "with verbatim text and line numbers",
+            "Do not modify implementation files before the user approves",
+            "run it synchronously",
+            "An AI must never infer acceptance",
+            "This stage is mandatory even for small or documentation-only Features",
+            "Use a fresh-context sub-agent or equivalent independent context",
+            "must_fix",
+            "suggest",
+            "acceptable",
+            "If independent review fails, times out, returns invalid JSON",
+            "Do not start the next Feature automatically unless the user has explicitly authorized",
+            "reset --hard",
+        )
+        for invariant in required_invariants:
+            with self.subTest(invariant=invariant):
+                self.assertIn(invariant, execution)
+
+        evidence = (
+            "Code smell scan: pass (feature: F0XX, must_fix: 0, "
+            "suggest: <N>, acceptable: <M>)"
+        )
+        self.assertGreaterEqual(execution.count(evidence), 2)
+        for block in re.findall(r"```json\n(.*?)\n```", execution, flags=re.DOTALL):
+            json.loads(block)
+
+        target = REPO_ROOT / "methodology" / "02-feature-list-schema.md"
+        self.assertTrue(target.exists())
+
+    def test_coding_rules_template_preserves_four_layers_and_stable_evidence(self):
+        template = (
+            REPO_ROOT / "methodology" / "templates" / "coding_rules.md.tmpl"
+        ).read_text(encoding="utf-8")
+
+        for heading in (
+            "# Part 1 · Collaboration contract",
+            "# Part 2 · General design and architecture",
+            "# Part 3 · Engine or platform practices",
+            "# Part 4 · Programming-language practices",
+        ):
+            with self.subTest(heading=heading):
+                self.assertIn(heading, template)
+
+        collaboration = template.split("## 1.1 Collaboration discipline", 1)[1].split(
+            "## 1.2 Workflow constraints", 1
+        )[0]
+        self.assertEqual(len(re.findall(r"(?m)^\d\. \*\*", collaboration)), 7)
+
+        required_invariants = (
+            "A higher layer wins when rules conflict",
+            "A Feature that changes Yaya Loop workflow rules follows the committed rules",
+            "verbatim relevant rules and line-number citations",
+            "independent fresh-context code-smell scan",
+            "Prefer a command object for logic that represents doing one thing",
+            "three or more states",
+            "Provide a recognizable fallback resource or an actionable error",
+            "Use assertions during development to protect invariants",
+            "@docs/coding-rules/engine-rules.md",
+            "@docs/coding-rules/language-rules.md",
+        )
+        for invariant in required_invariants:
+            with self.subTest(invariant=invariant):
+                self.assertIn(invariant, template)
+
+        evidence = (
+            "Code smell scan: pass (feature: F0XX, must_fix: 0, "
+            "suggest: <N>, acceptable: <M>)"
+        )
+        self.assertIn(evidence, template)
+        self.assertEqual(template.count("{{ENGINE_NAME}}"), 1)
+        self.assertEqual(template.count("{{LANGUAGE_NAME}}"), 1)
+        for removed_heading in ("协作契约", "通用设计模式", "引擎 / 平台最佳实践", "编程语言最佳实践"):
+            with self.subTest(removed_heading=removed_heading):
+                self.assertNotIn(removed_heading, template)
+
 
 if __name__ == "__main__":
     unittest.main()
