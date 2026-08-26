@@ -2,11 +2,13 @@
 
 ## Current work
 
-No Feature is currently in progress.
+F023 - Convert the default example into a complete English reference project
 
 ## Progress
 
-- F022 completed at `2026-08-26T11:37:55Z` after human acceptance, plural-message repair, 50 passing tests, and a fresh-context scan with zero remaining must_fix or suggest findings.
+- Started at `2026-08-26T11:38:31Z`.
+- Confirmed the scope is the existing greenfield todo reference project and the single legacy adoption walkthrough; no translated workflow-source tree will be added.
+- Confirmed that all Product, Feature, Coding Rules, Progress-style guidance, and walkthrough prose become natural English while Feature IDs, detail files, counts, dependencies, statuses, paths, and JSON structure remain consistent.
 
 ## Context notes
 
@@ -14,6 +16,16 @@ No Feature is currently in progress.
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T11:38:31Z - F023 started
+
+Current work before F023:
+
+No Feature was in progress.
+
+Progress:
+
+- F022 completed at `2026-08-26T11:37:55Z` after human acceptance, plural-message repair, 50 passing tests, and a fresh-context scan with zero remaining must_fix or suggest findings.
 
 ### 2026-08-26T11:37:55Z - F022 completed
 
