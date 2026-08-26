@@ -257,6 +257,9 @@ class RepositoryTests(unittest.TestCase):
             "suggest",
             "acceptable",
             "If independent review fails, times out, returns invalid JSON",
+            "do not introduce behavior changes after human acceptance",
+            "repeat Stages 4 through 6 after the repair",
+            "must not silently change accepted behavior",
             "Do not start the next Feature automatically unless the user has explicitly authorized",
             "reset --hard",
         )
@@ -301,6 +304,9 @@ class RepositoryTests(unittest.TestCase):
             "independent fresh-context code-smell scan",
             "Prefer a command object for logic that represents doing one thing",
             "three or more states",
+            "Keep core rules pure.",
+            "Keep core rules pure so they can be called and asserted without an engine or UI",
+            "proactively apply the preferred pattern without asking for confirmation each time",
             "Provide a recognizable fallback resource or an actionable error",
             "Use assertions during development to protect invariants",
             "@docs/coding-rules/engine-rules.md",
@@ -315,6 +321,7 @@ class RepositoryTests(unittest.TestCase):
             "suggest: <N>, acceptable: <M>)"
         )
         self.assertIn(evidence, template)
+        self.assertNotIn("core rules pure where practical", template)
         self.assertEqual(template.count("{{ENGINE_NAME}}"), 1)
         self.assertEqual(template.count("{{LANGUAGE_NAME}}"), 1)
         for removed_heading in ("协作契约", "通用设计模式", "引擎 / 平台最佳实践", "编程语言最佳实践"):

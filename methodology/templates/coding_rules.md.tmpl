@@ -128,11 +128,13 @@ class RocketMaker:
 - **Keep three logical layers.** Data and rules sit below orchestration and control, which sit below presentation and input. Higher layers call lower layers; lower layers report through events rather than reverse dependencies.
 - **Prefer composition over inheritance.** Build behavior from focused components instead of a large all-purpose base-class hierarchy.
 - **Drive adjustable behavior from data.** Levels, skill values, and entity parameters belong in configuration or data when changing them should not require code changes.
-- **Keep core rules pure where practical.** Decisions, calculations, scoring, and similar domain rules should be callable and testable without an engine or UI.
+- **Keep core rules pure.** Decisions, calculations, scoring, and similar domain rules should be callable and testable without an engine or UI.
 - **Pass dependencies explicitly.** Constructor or function parameters make dependencies visible and replaceable in tests.
 - **Keep runtime state serializable.** Core state should be representable as plain data for saves, replay, or remote debugging.
 
 ## 2.3 Pattern guide
+
+The AI should recognize these situations and proactively apply the preferred pattern without asking for confirmation each time, unless project conventions or current requirements indicate otherwise.
 
 | Situation | Preferred pattern |
 | --- | --- |
@@ -230,7 +232,7 @@ Follow: @docs/coding-rules/language-rules.md
 
 ## 4.3 Cross-language testability
 
-- Keep core rules pure where practical so they can be called and asserted without an engine or UI.
+- Keep core rules pure so they can be called and asserted without an engine or UI.
 - Pass dependencies as parameters rather than hiding replaceable dependencies behind module-level access.
 - Add at least a focused test set for core rules, even if the first set contains only a few cases.
 - After modifying a core rule, proactively run or recommend the relevant tests.

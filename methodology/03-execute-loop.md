@@ -246,6 +246,7 @@ The reviewer must return only valid JSON:
 2. If `must_fix` is non-empty:
    - repair each finding in the main context
    - use a focused `refactor(F0XX): <summary>` commit for each coherent repair
+   - do not introduce behavior changes after human acceptance; if a repair may change behavior, stop for user direction, return to Stage 3, and repeat Stages 4 through 6 after the repair
    - rerun `static_check_cmd`
    - confirm that no blocking finding remains
 3. Append every `suggest` item to Feature notes with a `TODO` prefix. Suggestions do not block completion.
@@ -271,6 +272,8 @@ Code smell scan: pass (feature: F0XX, must_fix: 0, suggest: <N>, acceptable: <M>
 The final line is a stable, Hook-compatible evidence string. Replace `F0XX` and the counts with the current Feature. `must_fix` records remaining blockers and must be `0` before Stage 7.
 
 If independent review fails, times out, returns invalid JSON, or cannot read the rules, stop. Do not bypass Stage 6.
+
+A Stage 6 repair must not silently change accepted behavior. When uncertain, stop and ask the user rather than treating the earlier Stage 5 acceptance as current.
 
 ---
 
