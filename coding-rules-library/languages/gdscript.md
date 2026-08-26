@@ -491,7 +491,7 @@ static func _static_init() -> void:
 - `_static_init()` runs once when the script is loaded.
 - A static function cannot access `self` or instance members.
 - A lambda cannot be static.
-- Static variables disappear when the script unloads; they are not durable global state. Use an Autoload plus a Resource for data that must persist across Scenes.
+- Static variables normally prevent their script Resource from unloading, so their values persist across Scene changes for the lifetime of the running process. They reset when the application or script is actually reloaded; `@static_unload` is intended to allow reset after all references are lost, although Godot 4.3 documents a bug that prevents scripts from being freed. Use an Autoload for explicit global ownership and lifecycle management, and serialized Resources or files for durable storage across application runs.
 
 ---
 
