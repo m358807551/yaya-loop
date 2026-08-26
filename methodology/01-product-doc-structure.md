@@ -1,75 +1,78 @@
-# 01 · product.md + product/*.md 文档结构规范
+# 01 · Product document structure
 
-## 总览：两层结构
+## Two-level structure
 
-```
+```text
 docs/
-├── product.md              ← 总览：定位 / 用户 / 核心循环 / 模块清单 / 模块依赖 / 视觉与音效基调
+├── product.md              ← Scannable Product overview
 └── product/
-    ├── 01-<core-module>.md ← 模块详情：功能流程 / 数据状态 / UI / 音效 / 数值 / 验收 / 边缘情况
+    ├── 01-<core-module>.md ← Detailed module specification
     ├── 02-<other>.md
     └── ...
 ```
 
-**为什么两层**：让 `product.md` 始终是一页能扫完的总览，模块详情按需展开。任何 AI / 人都能 30 秒内拿到全貌、5 分钟内深入到具体模块。
+The two levels serve different context needs. `product.md` must remain short enough to scan as a whole, while module documents provide detail on demand. A person or agent should understand the Product shape in about 30 seconds and enter one module in a few minutes.
 
-## `product.md` 的标准章节
+Generated headings and prose must follow the project's configured `document_language`; the section semantics below must remain intact in every language. See [05-document-language.md](./05-document-language.md).
 
-按下面顺序写。**Section 是建议结构，不是死板模板**——某个项目用不到的章节可以省，但顺序保持一致便于不同项目之间认知互通。
+## Standard `product.md` sections
 
-| Section | 必填？ | 内容 |
-|---------|-------|------|
-| 标题 + 版本号一句话 | 必填 | 例：「V0.9 · 灵石地板房间修炼加成」。当前版本号 + 此版本核心闭环一句话 |
-| 一句话定位 | 必填 | 项目用 5-10 分钟看完什么完整链路，让任何人秒懂 |
-| 用户画像 | 必填 | 主要玩家/用户类型、使用场景、使用频率。MVP 阶段可以是开发者自测 |
-| 核心循环 | 必填 | 每个版本（V0.1, V0.2, ...）的核心闭环，用编号列表写"用户能完成的连贯动作链" |
-| 模块清单 | 必填 | 表格：序号 / 文件名 / 模块名 / 状态（draft/done/obsolete） |
-| 模块依赖关系 | 必填 | ASCII 依赖图，标明谁依赖谁、横切模块单独列出 |
-| 整体视觉风格基调 | 推荐 | 一段文字描述配色/字体/UI 调性。AI 写界面草图时的依据 |
-| 整体音效风格基调 | 推荐 | 一段文字描述音效/BGM 调性。AI 写音效条目时的依据 |
-| 变更历史 | 必填 | 按时间倒序，每次产品变更一行：日期 + 核心改动 + 原因 |
+Write these sections in this order. A document rendered from the canonical template must preserve every template section; when a section does not apply, retain its heading and state that it is not applicable. A project may add specialized sections, but the standard semantics must remain easy to locate.
 
-## `product/NN-name.md`（每个模块文件）的标准章节
+| Section semantics | Required? | Content |
+| --- | --- | --- |
+| Title and version summary | Yes | Current version plus a one-sentence description of that version's complete loop. |
+| One-line positioning | Yes | A sentence that makes the Product and its complete short experience immediately understandable. |
+| Target users | Yes | Primary users, usage context, and expected frequency. An MVP may target maintainer self-testing. |
+| Core loop | Yes | A numbered, coherent action sequence for each version such as V0.1 or V0.2. |
+| Module list | Yes | Number, filename, module name, and `draft`, `done`, or `obsolete` status. |
+| Module dependencies | Yes | An ASCII dependency diagram, with cross-cutting modules identified separately. |
+| Visual direction | Recommended | Palette, typography, and UI tone used as input to UI sketches. |
+| Audio direction | Recommended | Sound-effect and music direction used as input to audio entries. |
+| Change history | Yes | Reverse-chronological date, Product change, and reason. |
 
-模块文件比总览详细得多。下面是建议结构，**模块根据自身复杂度可省略不适用的章节**。
+## Standard `product/NN-name.md` sections
 
-| Section | 内容 |
-|---------|------|
-| 模块定位 | 一两句话：本模块在系统里的角色，与谁交互 |
-| 版本演化（可选） | 该模块在 V0.x 各版本中的渐进变化 |
-| 功能流程 | 用户/系统行为的逐步描述，可用 ASCII 图或编号列表 |
-| 数据模型 | 表格：字段 / 类型 / 默认值 / 说明 |
-| 状态机 | 若适用：状态枚举 + 迁移规则 |
-| UI 草图 | ASCII 线框图 + 关键交互说明（由 product-ui-sketcher 产出） |
-| 音效条目 | 表格：触发时机 / 文件名 / 风格说明 / 时长（由 product-audio-sketcher 产出） |
-| 数值规则 | 公式 / 阈值 / 配置项 |
-| 验收标准 | 每条是"做完后能怎么验证"的具体陈述 |
-| 边缘情况 | 已知但本版本明确不处理的情况，写明留给后续 |
-| 变更历史 | 按时间倒序，每次该模块变更一行 |
+A module document is more detailed than the overview. A rendered template must retain its standard headings and explicitly mark inapplicable sections rather than deleting them. Optional additions such as Version evolution may be included when useful, but unrelated concerns must not be collapsed in a way that hides Product behavior.
 
-## 模块文件命名规则
+| Section semantics | Content |
+| --- | --- |
+| Module positioning | The module's role and the modules or actors it interacts with. |
+| Version evolution (optional) | How the module changes across V0.x releases. |
+| Functional flow | Step-by-step user or system behavior, optionally with an ASCII diagram. |
+| Data model | Field, type, default value, and meaning. |
+| State machine | State values and transition rules, when applicable. |
+| UI sketch | ASCII wireframe and key interactions, produced by `product-ui-sketcher`. |
+| Audio entries | Trigger, filename, style, and duration, produced by `product-audio-sketcher`. |
+| Numeric rules | Formulas, thresholds, and configuration values. |
+| Acceptance criteria | Concrete statements of how completed behavior can be verified. |
+| Edge cases | Known cases intentionally deferred to later Features. |
+| Change history | Reverse-chronological record of changes to this module. |
 
-- 用两位数字前缀 + kebab-case：`01-pawn-core.md`、`02-map.md`、`13-mining.md`。
-- 数字遵循模块依赖关系：被依赖的排前面（数字小）。
-- 一旦定下的编号不要重排，新增模块用下一个空号。废弃模块文件改名前缀 `_obsolete-` 但不删（保留 git 历史）。
+## Module filename rules
 
-## 版本号约定
+- Use a two-digit prefix and a kebab-case ASCII slug, such as `01-pawn-core.md`, `02-map.md`, or `13-mining.md`.
+- Order numbers by module dependency: a module must appear before modules that depend on it.
+- Once assigned, module numbers must not be reordered. New modules use the next available number.
+- An obsolete module must be renamed with the `_obsolete-` prefix rather than deleted, preserving traceability.
 
-- 用 `V<MAJOR>.<MINOR>` 的形式（如 V0.9）。
-- MVP 阶段 MAJOR 一直是 0；正式发布后 +1。
-- MINOR 每次有用户可感知的核心循环扩展时 +1。例：V0.6 落地室内修炼加成 → V0.7 新增灵石矿采集。
-- 同一版本号下的小调整不开新号，直接进当版的核心循环描述里。
+## Version convention
 
-## 配套：什么时候开新模块文件 vs 扩展现有模块文件
+- Use `V<MAJOR>.<MINOR>`, such as `V0.9`.
+- Keep MAJOR at `0` during the MVP phase; increment it for the first formal release.
+- Increment MINOR when the user-observable core loop expands.
+- Small changes within the same loop remain in the current version rather than creating a new version number.
 
-- **新模块**：新出现一个具备独立数据模型 + 独立交互入口的系统（如「采矿」是新系统，独立矿物 + 框选挖矿入口 + 工种列）。
-- **扩展现有**：现有系统增加一个新行为/数值/UI 但仍归属原系统职责（如「修炼速度加成」属于修炼系统的演化，不开新模块）。
+## When to create a module
 
-判断不准时：用 `product-change-standardizer` skill，它会代你判断。
+- **Create a module** when a new system has its own data model and an independent interaction entry point.
+- **Extend an existing module** when new behavior, values, or UI remain within that module's established responsibility.
 
-## 反例（不要这样写）
+When the boundary is unclear, use `product-change-standardizer`; it owns the routing decision.
 
-- 模块文件里写实现细节（"用 Vector2 存储位置"、"AStar 寻路算法"）——这些是 How，应进 coding_rules.md 或代码注释。
-- 数值规则给定性描述（"伤害较高"）——应给具体公式或数值。
-- 验收标准给形容词（"渲染流畅"）——应给可观察判定（"60fps 下 100 个单位移动无掉帧"）。
-- 模块描述含未来计划（"未来可能加 X"）——应放 `docs/ideas.md` 头脑风暴文件，不污染产品定义。
+## Anti-examples
+
+- Do not put implementation choices such as a vector type or pathfinding algorithm in Product documents. Those choices belong in Coding Rules, code, or implementation notes.
+- Do not describe numeric behavior with subjective terms such as “high damage”; provide a formula or concrete value.
+- Do not use subjective acceptance language such as “renders smoothly”; state an observable threshold or outcome.
+- Do not put speculative future ideas in active Product requirements. Keep them in a separate `docs/ideas.md` until approved as Product intent.
