@@ -2,15 +2,11 @@
 
 ## Current work
 
-F011 - Convert Product and Feature templates to canonical English rendering sources
+No Feature is currently in progress.
 
 ## Progress
 
-- Started at `2026-08-26T05:49:06Z`.
-- Added one canonical template rendering contract that preserves required section semantics while localizing human-readable content according to document_language.
-- Rewrote the Product, Product module, Feature detail, and Progress template sources in natural English without changing stable machine protocols.
-- Added regression coverage for canonical English headings, required-section preservation, stable protocol examples, and the Feature detail JSON schema.
-- Expanded the required-section regression inventory after fresh-context review found that several contractually required Product headings were not yet pinned by tests.
+- F011 completed at `2026-08-26T06:52:04Z` after human acceptance and a fresh-context scan with zero remaining must_fix findings.
 
 ## Context notes
 
@@ -72,3 +68,19 @@ Progress:
 - Replaced the destructive full-file config example with a JSON-aware merge contract that preserves unknown project fields, and added a regression assertion against the old overwrite pattern.
 - All acceptance criteria were verified by human review.
 - Fresh-context code-smell scan passed after its one must_fix finding was repaired; two non-blocking suggestions were recorded in F010 notes for F025.
+
+### 2026-08-26T06:52:04Z - F011 completed
+
+Current work:
+
+F011 - Convert Product and Feature templates to canonical English rendering sources
+
+Progress:
+
+- Started at `2026-08-26T05:49:06Z`.
+- Added one canonical template rendering contract that preserves required section semantics while localizing human-readable content according to document_language.
+- Rewrote the Product, Product module, Feature detail, and Progress template sources in natural English without changing stable machine protocols.
+- Added regression coverage for canonical English headings, required-section preservation, stable protocol examples, and the Feature detail JSON schema.
+- Expanded the required-section regression inventory after fresh-context review found that several contractually required Product headings were not yet pinned by tests.
+- All acceptance criteria were verified by human review.
+- Fresh-context review passed after its one must_fix test-coverage finding was repaired; no non-blocking suggestions remain.

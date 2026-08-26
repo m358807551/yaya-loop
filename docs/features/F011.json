@@ -8,5 +8,5 @@
     "Template JSON files continue to pass repository validation"
   ],
   "source": "product/05-internationalization.md#Core flows",
-  "notes": ""
+  "notes": "Human review confirmed all acceptance criteria on 2026-08-26. Product, Product module, Feature detail, and Progress templates now use natural English canonical source text. methodology/templates/README.md defines one language-aware rendering contract: preserve every required section and its semantics, render human-readable content in document_language, and keep JSON keys, enums, IDs, paths, placeholder prefixes, review severities, and evidence strings stable. No localized template tree or runtime localization framework was introduced. Fresh-context review found one incomplete required-section test inventory; commit f3776a5 made it exhaustive and the reviewer confirmed no remaining must_fix findings. Code smell scan: pass (feature: F011, must_fix: 0, suggest: 0, acceptable: 3)."
 }
