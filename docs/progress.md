@@ -11,6 +11,7 @@ F018 - Internationalize Feature-list generation workflows
 - Confirmed that Feature titles, descriptions, acceptance criteria, source prose, and notes follow `document_language`, while keys, enums, IDs, dependencies, scopes, timestamps, paths, and validation rules remain language-neutral.
 - Rewrote initial Feature-list generation as an exact native/portable English workflow pair while preserving its first-generation versus confirmed-replacement boundary, full input loading, decomposition algorithm, three-file schema, field invariants, destructive-operation confirmation, validation checklist, and execution handoff.
 - Added focused regression coverage for paired-body equivalence, bilingual discovery, document-language behavior, routing and replacement safety, complete input loading, decomposition rules, stable schemas and enum values, self-checks, and execution handoff.
+- All 30 repository tests passed, the paired workflow bodies matched exactly, JSON validation passed, and human acceptance confirmed every F018 criterion.
 
 ## Context notes
 
