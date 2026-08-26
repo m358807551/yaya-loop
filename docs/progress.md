@@ -12,6 +12,7 @@ F020 - Internationalize Feature execution workflows
 - Rewrote the native Feature execution workflow in canonical English against the committed F020 rule snapshot, preserving Stage 0–8 entry gates, fixed reports, human authority, independent JSON review, stable evidence, atomic commits, Progress persistence, exception handling, and Git boundaries.
 - Mirrored the canonical execution body into the portable Prompt and added focused regression coverage for bilingual discovery, language/rule snapshots, all ordered stage gates, selection and approval, implementation and verification, independent review JSON, stable completion evidence, handoff, exceptions, and Git boundaries.
 - All 41 repository tests passed, the paired workflow bodies matched exactly, JSON validation passed, and human acceptance confirmed every F020 criterion.
+- Fresh-context review restored the dirty-worktree stop gate, the portable fresh-session fallback when sub-agent delegation is unavailable, and the blocking post-repair static-check/re-scan requirement.
 
 ## Context notes
 

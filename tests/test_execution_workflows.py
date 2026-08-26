@@ -79,6 +79,7 @@ class ExecutionWorkflowTests(unittest.TestCase):
             "git status",
             "git branch --show-current",
             "commit, stash, or restore",
+            "do not continue Stage 0 until the dirty state and the user's choice are resolved",
             "selected `docs/features/F0XX.json` in full",
             "the `notes` of every completed dependency Feature",
             "=== Stage 0 exit report ===",
@@ -135,6 +136,9 @@ class ExecutionWorkflowTests(unittest.TestCase):
             '"rule_ref"',
             '"fix_suggestion"',
             "make no edits or Git writes",
+            "cannot delegate to a sub-agent",
+            "open a new independent session",
+            "main implementation context must never substitute",
             "Re-scan until `must_fix` is empty",
             "independent focused `refactor(F0XX): <summary>` commit for each finding",
             "must not silently change accepted behavior",
@@ -142,6 +146,8 @@ class ExecutionWorkflowTests(unittest.TestCase):
             "Code smell scan: pass (feature: F0XX, must_fix: 0, suggest: <N>, acceptable: <M>)",
             "If review fails, times out, returns invalid JSON, or cannot read rules, stop",
             "Even when all three arrays are empty, emit the report and final evidence line",
+            "Do not continue while the post-repair `static_check_cmd` is failing",
+            "Remain in Stage 6, repair the failure, rerun verification, and re-scan",
             "Acceptance criteria all verified by human review.",
         ):
             with self.subTest(invariant=invariant):

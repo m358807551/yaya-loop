@@ -40,7 +40,7 @@ This is a mandatory Stage 0–8 workflow. Skipping a stage or its entry gate is 
 2. If any Feature is `in_progress`, ask whether to resume it or abandon it before selecting another.
 3. Use a user-specified ID, or select the first `pending` Feature whose dependencies are all `done`. If none is eligible, explain whether work is complete, blocked, or obsolete.
 4. If `estimated_scope` is `large`, stop and require decomposition through `sync-feature-list`.
-5. Run `git status` and `git branch --show-current`. Stop on `main` or `master`. For a dirty tree, ask whether the user will commit, stash, or restore; do not perform the choice without authorization.
+5. Run `git status` and `git branch --show-current`. Stop on `main` or `master`. For a dirty tree, ask whether the user will commit, stash, or restore; do not perform the choice without authorization, and do not continue Stage 0 until the dirty state and the user's choice are resolved.
 6. Load required context:
    - `docs/progress.md`, when present;
    - the selected `docs/features/F0XX.json` in full;
@@ -164,6 +164,8 @@ Delegate to a fresh-context agent. It must read the complete Coding Rules, inspe
 - comments that restate what rather than why;
 - evidence of a defect needing two or more repair attempts.
 
+If the current agent cannot delegate to a sub-agent, give the same review instructions and changed-file list to the user, ask them to open a new independent session, and wait for that session's strict JSON result. The main implementation context must never substitute for the required independent review.
+
 Severity is stable: `must_fix` blocks later work or is a recurring-defect source; `suggest` may worsen with growth but does not block; `acceptable` is disproportionate to repair.
 
 The reviewer returns only valid JSON:
@@ -184,10 +186,12 @@ The reviewer returns only valid JSON:
 
 ### 6.2 Process review
 
-1. Repair every `must_fix` in the main context, using an independent focused `refactor(F0XX): <summary>` commit for each finding, and rerun `static_check_cmd`.
+1. Repair every `must_fix` in the main context, using an independent focused `refactor(F0XX): <summary>` commit for each finding, and rerun `static_check_cmd` synchronously.
 2. A repair must not silently change accepted behavior. If it may, ask the user and return to Stage 3, then repeat Stages 4–6.
 3. Re-scan until `must_fix` is empty.
 4. Append each `suggest` to Feature notes with a `TODO` prefix. Summarize `acceptable` only in the report.
+
+Do not continue while the post-repair `static_check_cmd` is failing. Remain in Stage 6, repair the failure, rerun verification, and re-scan before emitting pass evidence.
 
 ### 6.3 Report and evidence
 
