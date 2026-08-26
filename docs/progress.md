@@ -2,11 +2,14 @@
 
 ## Current work
 
-No Feature is currently in progress.
+F026 - Document the upgrade perform the release audit and publish v0.2.0
 
 ## Progress
 
-- F025 completed at `2026-08-26T12:55:20Z` after human acceptance, 63 passing tests, and a fresh-context scan with zero `must_fix` findings.
+- Started at `2026-08-26T13:00:56Z` from commit `3da9241`.
+- Confirmed F025 is done, the worktree is clean on `dev`, and F026 has no external resource or runtime-dependency requirements.
+- Approved scope: canonical English upgrade guidance, an eight-criterion internationalization release audit, precise v0.2.0 version updates, unsupported-behavior disclosure, and release consistency tests.
+- Historical v0.1.0 records and Legacy migration fixtures remain historical; established projects must not be translated automatically.
 
 ## Context notes
 
@@ -14,6 +17,16 @@ No Feature is currently in progress.
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T13:00:56Z - F026 started
+
+Current work before F026:
+
+No Feature was in progress.
+
+Progress:
+
+- F025 completed at `2026-08-26T12:55:20Z` after human acceptance, 63 passing tests, and a fresh-context scan with zero `must_fix` findings.
 
 ### 2026-08-26T12:55:20Z - F025 completed
 
