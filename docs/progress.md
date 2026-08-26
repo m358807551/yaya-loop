@@ -2,11 +2,13 @@
 
 ## Current work
 
-No Feature is currently in progress.
+F021 - Internationalize refactor selection and portable usage guidance
 
 ## Progress
 
-- F020 completed at `2026-08-26T11:03:01Z` after human acceptance, semantic gate repair, 41 passing tests, and a fresh-context scan with zero remaining must_fix or suggest findings.
+- Started at `2026-08-26T11:03:41Z`.
+- Confirmed the scope is the paired `pick-refactor-smell` workflow plus `ai-agnostic-prompts/00-how-to-use.md` at their stable paths.
+- Confirmed that discovery remains bilingual, severity and scoring rules remain stable, the workflow selects exactly one smell without editing, and durable refactor notes follow `document_language`.
 
 ## Context notes
 
@@ -14,6 +16,16 @@ No Feature is currently in progress.
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T11:03:41Z - F021 started
+
+Current work before F021:
+
+No Feature was in progress.
+
+Progress:
+
+- F020 completed at `2026-08-26T11:03:01Z` after human acceptance, semantic gate repair, 41 passing tests, and a fresh-context scan with zero remaining must_fix or suggest findings.
 
 ### 2026-08-26T11:03:01Z - F020 completed
 
