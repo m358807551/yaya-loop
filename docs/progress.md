@@ -2,26 +2,11 @@
 
 ## Current work
 
-F024 - Publish the English README and preserve the complete Chinese README
+No Feature is currently in progress.
 
 ## Progress
 
-- Started at `2026-08-26T12:17:22Z` from commit `55eba76`.
-- Confirmed that all dependencies are done and the working tree is clean on `dev`.
-- Scope is the two complete README entry points, bidirectional text language links, meaning-equivalent positioning, implemented internationalization behavior, and resolvable repository-relative links.
-- The current Chinese README will be preserved as the complete `README.zh-CN.md`; the default `README.md` will be rewritten in natural American English rather than mechanically translated.
-- Published a complete natural-English default README with the same problem statement, method, execution loop, real-project evidence, daily workflow, installation path, limitations, internal model, repository map, contribution guidance, and license terms.
-- Preserved the complete Chinese presentation in `README.zh-CN.md`, added bidirectional text language navigation, and synchronized the newly implemented `document_language`, Legacy walkthrough, Product UI/audio, and repository-entry details across both versions.
-- Added bilingual README regression coverage for language navigation, semantic section parity, support disclaimers, relative-link resolution, English-script boundaries, and conversation-URL exclusion.
-- Automated verification passed: all 58 repository tests and Git diff checks; the Chinese file differs from the pre-F024 README only by the language entry point and synchronized internationalization details.
-- Human acceptance passed on 2026-08-26; fresh-context review is next.
-- Fresh-context review found four README wording blockers in the mandatory independent-review gate, Legacy reconstruction boundaries, and one English comparison sentence.
-- Repaired both language versions and added paired semantic assertions for independent-review failure behavior, bounded completed history, and explicitly confirmed future work.
-- All 58 tests and relative-link, language-boundary, conversation-URL, and diff checks pass after repair; repeated human acceptance is required.
-- Human acceptance passed again after the wording repair; final independent rescan is next.
-- Final rescan found one remaining English/Chinese parity gap: the English Legacy summary did not explicitly call reconstructed completed history bounded.
-- Added the bounded-history wording and an exact paired regression assertion; repeated human acceptance is required for this final visible repair.
-- Final repaired documentation received explicit human acceptance; definitive fresh-context rescan is next.
+- F024 completed at `2026-08-26T12:40:19Z` after final human acceptance, 58 passing tests, and a definitive fresh-context scan with zero `must_fix` or `suggest` findings.
 
 ## Context notes
 
@@ -29,6 +14,19 @@ F024 - Publish the English README and preserve the complete Chinese README
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T12:40:19Z - F024 completed
+
+Current work:
+
+F024 - Publish the English README and preserve the complete Chinese README
+
+Progress:
+
+- Published complete natural-English and Simplified Chinese entry points with bidirectional language navigation and meaning-equivalent Product positioning.
+- Aligned mandatory independent review, bounded Legacy history, explicitly confirmed future work, support disclaimers, internal contracts, and repository links across both languages.
+- Human acceptance passed after visible repairs; all 58 repository tests and README link/language checks pass.
+- Code smell scan: pass (feature: F024, must_fix: 0, suggest: 0, acceptable: 2).
 
 ### 2026-08-26T12:17:22Z - F024 started
 
