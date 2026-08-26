@@ -8,5 +8,5 @@
     "Native and portable variants preserve equivalent implementation verification review and Git behavior"
   ],
   "source": "product/05-internationalization.md#Language boundaries",
-  "notes": "Human acceptance passed on 2026-08-26. Automated verification: all 41 repository tests passed; the native and portable workflow bodies are byte-for-byte equivalent below their canonical heading; JSON validation and git diff checks passed."
+  "notes": "Human acceptance passed on 2026-08-26. Feature execution now uses canonical English instructions across paired Claude Skill and portable Prompt distributions. Stage 0–8 gates, rule snapshots, human authority, independent review, stable evidence, Progress persistence, atomic commits, verification, exceptions, and Git boundaries are preserved. Conversation follows the user's current language while durable Feature notes, Progress, acceptance, TODO, and handoff prose follows document_language. Automated verification: all 41 repository tests passed; paired bodies match byte-for-byte; JSON and git diff checks passed. Fresh-context review restored the dirty-worktree stop gate, independent-session fallback, and blocking post-repair static-check/re-scan behavior. Code smell scan: pass (feature: F020, must_fix: 0, suggest: 0, acceptable: 2)."
 }

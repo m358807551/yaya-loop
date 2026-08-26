@@ -2,17 +2,11 @@
 
 ## Current work
 
-F020 - Internationalize Feature execution workflows
+No Feature is currently in progress.
 
 ## Progress
 
-- Started at `2026-08-26T10:35:13Z` under the execution-rule snapshot committed at `8a2debf`.
-- Confirmed the scope is the Feature execution Claude Skill and portable Prompt at their stable distribution paths.
-- Confirmed that Stage 0–8 gates, evidence, human authority, independent review, verification, commits, and Git boundaries remain unchanged; conversation follows the current user language while durable Feature, Progress, acceptance, and handoff prose follows `document_language`.
-- Rewrote the native Feature execution workflow in canonical English against the committed F020 rule snapshot, preserving Stage 0–8 entry gates, fixed reports, human authority, independent JSON review, stable evidence, atomic commits, Progress persistence, exception handling, and Git boundaries.
-- Mirrored the canonical execution body into the portable Prompt and added focused regression coverage for bilingual discovery, language/rule snapshots, all ordered stage gates, selection and approval, implementation and verification, independent review JSON, stable completion evidence, handoff, exceptions, and Git boundaries.
-- All 41 repository tests passed, the paired workflow bodies matched exactly, JSON validation passed, and human acceptance confirmed every F020 criterion.
-- Fresh-context review restored the dirty-worktree stop gate, the portable fresh-session fallback when sub-agent delegation is unavailable, and the blocking post-repair static-check/re-scan requirement.
+- F020 completed at `2026-08-26T11:03:01Z` after human acceptance, semantic gate repair, 41 passing tests, and a fresh-context scan with zero remaining must_fix or suggest findings.
 
 ## Context notes
 
@@ -20,6 +14,21 @@ F020 - Internationalize Feature execution workflows
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T11:03:01Z - F020 completed
+
+Current work:
+
+F020 - Internationalize Feature execution workflows
+
+Progress:
+
+- Rewrote Feature execution as an exact native/portable canonical English pair under the committed start-rule snapshot.
+- Preserved Stage 0–8 gates, human acceptance, independent review, evidence, Progress, verification, commits, exceptions, and Git boundaries.
+- Made durable execution knowledge follow `document_language` while conversation remains transient.
+- Human acceptance passed; all 41 repository tests pass.
+- Fresh-context review repaired three omitted gates before passing.
+- Code smell scan: pass (feature: F020, must_fix: 0, suggest: 0, acceptable: 2).
 
 ### 2026-08-26T10:35:13Z - F020 started
 
