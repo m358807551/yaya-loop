@@ -2,28 +2,11 @@
 
 ## Current work
 
-F023 - Convert the default example into a complete English reference project
+No Feature is currently in progress.
 
 ## Progress
 
-- Started at `2026-08-26T11:38:31Z`.
-- Confirmed the scope is the existing greenfield todo reference project and the single legacy adoption walkthrough; no translated workflow-source tree will be added.
-- Confirmed that all Product, Feature, Coding Rules, Progress-style guidance, and walkthrough prose become natural English while Feature IDs, detail files, counts, dependencies, statuses, paths, and JSON structure remain consistent.
-- Converted the greenfield TodoMate Product overview, module specification, Coding Rules, Feature index, and all five Feature details to natural English without changing their machine contracts.
-- Rebuilt the legacy adoption walkthrough as a complete natural-English reference covering read-only discovery, language selection, reverse-engineered Product and Feature state, Coding Rules, Progress, installation, validation, and gradual rollout.
-- Added regression coverage for English-only example prose, Product and Coding Rules contracts, Feature graph and source-anchor consistency, complete legacy adoption stages, and the absence of copied workflow-source trees.
-- Automated verification passed: all 54 repository tests, JSON parsing, Han-text scans for target examples, and Git diff checks.
-- Human acceptance passed on 2026-08-26; fresh-context code-smell review is next.
-- Fresh-context review found four completeness blockers in the reference examples.
-- Added the missing greenfield methodology configuration, Progress snapshot, and project-specific web/TypeScript rule files so all Coding Rules references resolve.
-- Completed the legacy Product section set and corrected reconstructed Feature sources and pre-bootstrap evidence to match canonical contracts.
-- All 54 tests and target language, JSON, reference, and diff checks pass after repair; repeated human acceptance is required before the final rescan.
-- Human acceptance passed again after the completeness repair; final independent rescan is next.
-- Final independent rescan found six deeper contract gaps in template completeness, module structure, Progress archival, dependency ordering, canonical statuses, and exact Markdown anchors.
-- Replaced the abbreviated Greenfield Coding Rules with the complete rendered four-layer template; completed the Todo module section inventory and archived F001 Progress correctly.
-- Reworked the Legacy module order, statuses, complete section outline, and Feature sources, then added exact template, machine-state, and Markdown-anchor regression checks.
-- All 54 tests and language, JSON, link/reference, anchor, template-rendering, and diff checks pass; the final visible repair requires repeated human acceptance.
-- Final repaired documentation received explicit human acceptance; final fresh-context rescan is next.
+- F023 completed at `2026-08-26T12:16:17Z` after final human acceptance, 54 passing tests, and a definitive fresh-context scan with zero `must_fix` findings.
 
 ## Context notes
 
@@ -31,6 +14,20 @@ F023 - Convert the default example into a complete English reference project
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T12:16:17Z - F023 completed
+
+Current work:
+
+F023 - Convert the default example into a complete English reference project
+
+Progress:
+
+- Converted the Greenfield Product, Feature, Coding Rules, configuration, and Progress reference to complete natural English while preserving machine contracts.
+- Rebuilt the Legacy walkthrough with dependency-ordered canonical modules, complete section inventories, exact anchored Feature sources, and pre-bootstrap evidence.
+- Added regression coverage for exact template rendering, machine state, Markdown anchors, English prose, and localized workflow-tree exclusion.
+- Human acceptance passed after the final visible repair; all 54 repository tests pass.
+- Code smell scan: pass (feature: F023, must_fix: 0, suggest: 2, acceptable: 2).
 
 ### 2026-08-26T11:38:31Z - F023 started
 
