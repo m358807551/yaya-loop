@@ -14,7 +14,7 @@ F025 - Add document-language compatibility and smoke-test coverage
 - Added paired English/Chinese protocol fixtures and Legacy before/after configuration fixtures that make stable keys, enums, IDs, dependencies, paths, timestamps, placeholders, evidence, unknown-field preservation, and language-specific prose machine-verifiable.
 - Added standard-library regression coverage for Bootstrap and Methodology compatibility rules and exact canonical-body parity across all nine native Skill/portable Prompt pairs.
 - Automated verification passed: all 63 repository tests, JSON parsing, and Git diff checks; no runtime dependency was added.
-- Implementation is ready for human acceptance.
+- Human acceptance passed on 2026-08-26; fresh-context review is next.
 
 ## Context notes
 
