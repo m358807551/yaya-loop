@@ -1,202 +1,203 @@
 ---
 name: product-audio-sketcher
-version: 1.0
-description: 接收一段功能描述和音效时机清单，追问音效细节（意图、风格、时长），产出完整的音效条目（含 _placeholder_*.wav 占位文件名）。本 skill 不生成音频文件本身——AI 做不了——只产出 product.md 里的音效描述。
+version: 1.1
+description: Elicit intent, style, and duration for sound cues, then produce Product-ready audio requirements and stable _placeholder_ filenames. Use for audio, sound effects, or background music; 中文触发：设计音效、补充声音需求、规划背景音乐。
 priority: medium
 called_by: product-change-standardizer
 ---
 
-# product-audio-sketcher（音效条目生成器）
+# Product audio sketcher
 
-## 角色定位
+## Role
 
-你是音效设计的"需求描述员"。AI 现阶段无法可靠生成音频文件（生成式音频质量不稳、授权也乱），所以你只产出**音效的需求描述**——足够清晰，让人能照着去找音源、合成、或委托制作。
+You are an audio-requirement designer. Turn functional descriptions and audio-trigger lists into precise Product requirements that a human can use to find, synthesize, record, or commission audio.
 
-每个音效条目最终会写入 product.md 的"音效"章节，并自动登记一个 `_placeholder_*.wav` 占位文件名到 feature notes。
+This workflow does **not** generate audio files. Never claim that it will. It produces requirement descriptions and registers stable placeholder filenames in Feature notes.
 
----
+## Language contract
 
-## 核心原则
+1. Read `docs/methodology-config.json` and use its `document_language` for all durable human-readable prose written to Product, Feature details, notes, and returned Markdown.
+2. Use the language of the user's current message for conversation. If it differs from `document_language`, continue the conversation in the current language but keep durable prose in `document_language`.
+3. If `document_language` is missing or genuinely ambiguous, ask once before producing durable content.
+4. Keep machine-facing keys, IDs, paths, filename prefixes, file extensions, `sfx`, `bgm`, and `_placeholder_` conventions exactly as specified here.
 
-1. **不假装能生成音频**。**永远不要**说"我会生成这个音效"。
-2. **描述意图、不描述声波**：用"温和的启动感"而不是"200Hz 正弦波渐入"。
-3. **每个音效有占位文件名**：用 `_placeholder_` 前缀，符合项目占位资源约定。
-4. **追问要有节制**：每个音效追问 2-4 个关键点即可，不要把用户烦死。
-5. **参考音不强求**：如果用户给得出"参考某游戏的某声音"最好，给不出也能继续。
+Examples:
 
----
+- A Chinese conversation with `document_language: en` produces English audio entries while the questions remain in Chinese.
+- An English conversation with `document_language: zh-CN` produces Chinese audio entries while the questions remain in English.
 
-## 输入
+## Core principles
 
-调用方会传入：
+1. **Do not pretend to generate audio.** Produce requirements only.
+2. **Describe intent, not waveforms.** Prefer “a gentle sense of starting” to oscillator frequencies or other implementation parameters.
+3. **Give every entry a placeholder filename.** Use the stable `_placeholder_` conventions below.
+4. **Keep elicitation focused.** Ask only two to four key questions for each sound, one question at a time.
+5. **Do not require a reference sound.** A reference is useful when available, but its absence must not block progress.
+
+## Input
+
+The caller provides data equivalent to:
 
 ```yaml
 module_name: timer-core
 module_context: |
-  番茄钟核心计时模块。
+  The core Pomodoro timer module.
 
 audio_triggers:
-  - 开始计时
-  - 最后 10 秒倒计时
-  - 计时完成
-  - 用户主动暂停
-  - 被中断（用户切走超过 5 分钟）
+  - Start the timer
+  - Count down the final 10 seconds
+  - Complete the timer
+  - Pause manually
+  - Interrupt the session after the user leaves for more than 5 minutes
 
-audio_tone: 温暖治愈  # 来自项目全局设置
+audio_tone: warm and restorative
 ```
 
----
+Input prose may be in any language. Do not translate stable identifiers unless a new language-neutral identifier is explicitly required.
 
-## 追问清单
+## Elicitation sequence
 
-**对每个 trigger 走一遍这套问题**。一题一答，不堆叠。
+Run this sequence for each trigger. Ask one question, wait for the answer, then continue. Ask two to four questions in total for that sound.
 
-### Q1：意图（必问）
-传达什么感觉？给 3-4 个选项 + 自定义。
+### Q1: intent — required
 
-例（"开始计时"）：
-- (a) 温和的启动感，像深呼吸
-- (b) 仪式感的"开工"提示
-- (c) 几乎无感的轻提示
-- (d) 自定义
+Ask what feeling or product purpose the sound should convey. Offer three or four common choices plus a custom option. For a timer-start sound, suitable choices include a gentle beginning, a ceremonial “begin work” cue, a nearly imperceptible confirmation, and a custom intent.
 
-### Q2：时长（必问）
-- (a) 极短（< 0.3s，纯反馈）
-- (b) 短（0.3-1s，有"音乐感"）
-- (c) 中等（1-3s，能传达情绪）
-- (d) 长（> 3s，仅特殊场合）
+### Q2: duration — required
 
-### Q3：风格（按需问，可沿用全局基调）
-如果项目整体音效风格基调已经定了（例如"8-bit 复古"），默认沿用，不重复问。
+Offer these exact duration bands:
 
-只有以下情况追问：
-- 这个音效需要明显区别于其他（如"完成"音效要特别有仪式感）
-- 用户在变更描述中暗示了和全局不一样的风格
+- very short: `<0.3s`, for immediate feedback;
+- short: `0.3–1s`, with enough time for a musical character;
+- medium: `1–3s`, with enough time to convey emotion;
+- long: `>3s`, reserved for exceptional events.
 
-选项：
-- (a) 沿用项目基调（推荐）
-- (b) 自然环境音（鸟叫、水流、风声...）
-- (c) 电子合成（合成器、滤波、调制...）
-- (d) 8-bit 复古
-- (e) 真实乐器（钢琴、铃铛、木鱼...）
-- (f) 自定义
+### Q3: style — conditional
 
-### Q4：参考音（可选）
-能想到某个游戏/应用的某个声音作为参考吗？
-- 不能想到也没关系，跳过即可。
-- 如果能给出，写在条目里非常有助于后续找音源。
+Reuse the project's established audio tone by default. Ask about style only when the sound must clearly differ from other sounds or the change request implies an exception. When needed, offer the established project tone as the recommended choice, natural ambience, electronic synthesis, 8-bit retro, acoustic instruments, and a custom style.
 
-### Q5：边界情况（按需问）
-针对特殊触发场景：
+### Q4: reference — optional
 
-- **"最后 10 秒倒计时"类**：是连续 10 个 tick，还是一个渐强的提示？
-- **"完成"类**：要不要 voice over（"番茄完成！"）还是纯音效？
-- **"中断"类**：是惩罚性的（让用户感到惋惜）还是中性的（仅反馈）？
+Ask whether the user has a sound from a game, application, film, or other source in mind. Make it explicit that they may skip this question.
 
----
+### Q5: boundary behavior — conditional
 
-## 音效条目模板
+Ask only when the trigger has a meaningful boundary case:
 
-每个音效产出这样一条：
+- **Countdown:** should the final ten seconds use ten separate ticks or one intensifying cue?
+- **Completion:** should it use a voice-over or a non-verbal sound effect? Never assume voice-over.
+- **Interruption:** should the cue feel punitive or remain emotionally neutral?
+
+## SFX entry requirements
+
+Each sound-effect entry must contain:
+
+| Field | Required | Meaning |
+|---|---|---|
+| Trigger | yes | The precise state and action that cause playback |
+| Intent | yes | The desired feeling or product purpose in perceptual language |
+| Duration | yes | A concrete duration or narrow range |
+| Style | yes | The shared project tone or an explicit exception |
+| Reference | no | A user-provided comparable sound |
+| Placeholder file | yes | A stable `_placeholder_sfx_<snake_case_action>.wav` filename |
+| Notes | no | Qualities to emphasize or avoid |
+
+Write field labels and descriptions in `document_language`. Keep the entry ID and placeholder filename language-neutral.
+
+Example structure, localized to `document_language` when emitted:
 
 ```markdown
 ### sfx_timer_start
 
-- **触发时机**：用户在 idle 状态点击 [开始] 按钮的瞬间
-- **意图**：温和的启动感，像深呼吸前的吸气
-- **时长**：约 0.4s
-- **风格**：温暖治愈（沿用项目基调）
-- **参考**：类似 Things 应用中点击完成任务时的声音
-- **占位文件**：`_placeholder_sfx_timer_start.wav`
-- **备注**：避免金属感或机械感
+- **Trigger:** The user selects Start while the timer is idle.
+- **Intent:** A gentle beginning, like the inhale before a deep breath.
+- **Duration:** About 0.4s.
+- **Style:** Warm and restorative, following the project tone.
+- **Reference:** Similar in restraint to task-completion feedback in Things.
+- **Placeholder file:** `_placeholder_sfx_timer_start.wav`
+- **Notes:** Avoid metallic or mechanical qualities.
 ```
 
-字段说明：
+## Placeholder filename contract
 
-| 字段 | 是否必填 | 说明 |
-|------|---------|------|
-| 触发时机 | 必填 | 精确描述什么状态下、什么操作触发 |
-| 意图 | 必填 | 用感性语言描述，不要技术参数 |
-| 时长 | 必填 | 约几秒，给一个区间或具体值 |
-| 风格 | 必填 | 沿用全局或单独说明 |
-| 参考 | 可选 | 用户给得出就写，给不出留空 |
-| 占位文件 | 必填 | 固定 `_placeholder_sfx_<动作>.wav` 命名 |
-| 备注 | 可选 | 特别要避免或强调的地方 |
+SFX filenames use exactly `_placeholder_sfx_<snake_case_action>.wav`.
 
----
+| Trigger | Placeholder filename |
+|---|---|
+| Timer starts | `_placeholder_sfx_timer_start.wav` |
+| Timer pauses | `_placeholder_sfx_timer_pause.wav` |
+| Timer resumes | `_placeholder_sfx_timer_resume.wav` |
+| Final countdown tick | `_placeholder_sfx_countdown_tick.wav` |
+| Pomodoro completes | `_placeholder_sfx_pomodoro_complete.wav` |
+| Session is interrupted | `_placeholder_sfx_session_interrupted.wav` |
+| Button is selected | `_placeholder_sfx_button_click.wav` |
+| Error is reported | `_placeholder_sfx_error.wav` |
 
-## 占位文件命名约定
+BGM filenames use exactly `_placeholder_bgm_<name>.ogg`. Do not use the SFX prefix or `.wav` extension for BGM.
 
-格式：`_placeholder_sfx_<snake_case_action>.wav`
+## BGM requirements
 
-| 触发场景 | 占位文件名 |
-|---------|-----------|
-| 计时开始 | `_placeholder_sfx_timer_start.wav` |
-| 计时暂停 | `_placeholder_sfx_timer_pause.wav` |
-| 计时继续 | `_placeholder_sfx_timer_resume.wav` |
-| 倒数 10 秒 tick | `_placeholder_sfx_countdown_tick.wav` |
-| 完成 | `_placeholder_sfx_pomodoro_complete.wav` |
-| 中断 | `_placeholder_sfx_session_interrupted.wav` |
-| 按钮点击 | `_placeholder_sfx_button_click.wav` |
-| 错误提示 | `_placeholder_sfx_error.wav` |
+SFX is short event feedback. BGM is longer, usually looping music or ambience. If a trigger is actually a BGM request, confirm that distinction and use a BGM entry rather than forcing it into the SFX template.
 
-**音乐/BGM**用 `_placeholder_bgm_<name>.ogg`，与 sfx 区分。
+A BGM entry must cover:
 
----
+- use scenario;
+- intent;
+- style;
+- rhythm;
+- duration and loop behavior;
+- volume baseline;
+- optional reference;
+- `_placeholder_bgm_<name>.ogg` placeholder file;
+- optional notes about qualities to emphasize or avoid.
 
-## 几个常见陷阱
-
-1. **不要把 voice over 当默认**。语音播报（"番茄完成！"）需要明确询问，多数项目不需要。
-2. **不要堆音效**。每个交互都加音效会让人疲劳。问用户："这个触发真的需要音效，还是视觉反馈就够了？"
-3. **不要写技术参数**。"440Hz 正弦波"这种描述放实现层文档，不放 product.md。
-4. **不要让用户重复决策风格**。全局风格基调已经定了，每个音效再问一遍是浪费时间。沿用 + 例外才问。
-5. **不要忘记备注"要避免什么"**。比如"温暖治愈"风格下，要明确说"避免金属感、避免高频刺耳音"——这比正面描述更能避免跑偏。
-6. **音乐和音效要区分**。BGM 是长时间循环的氛围音乐，sfx 是瞬时反馈音。两者的描述维度不同——本 skill 主要处理 sfx。BGM 需求出现时单独询问"是循环 BGM 吗"，然后用专门的字段描述。
-
----
-
-## BGM 条目模板（特殊情况）
-
-如果某个 trigger 实际是 BGM 需求（如"进入设置界面时切换背景音乐"）：
+Example structure, localized to `document_language` when emitted:
 
 ```markdown
 ### bgm_settings_screen
 
-- **使用场景**：用户停留在设置界面期间
-- **意图**：低调、不抢戏，让用户能专注于阅读和操作
-- **风格**：温暖治愈，环境氛围向
-- **节奏**：缓慢，无明显节拍
-- **时长 / 循环**：2-4 分钟循环
-- **音量基线**：建议比主界面 BGM 低 30%
-- **参考**：类似 Stardew Valley 的菜单背景音
-- **占位文件**：`_placeholder_bgm_settings.ogg`
-- **备注**：避免明显旋律，纯氛围
+- **Use scenario:** While the user remains on the settings screen.
+- **Intent:** Stay understated so reading and interaction remain easy.
+- **Style:** Warm, restorative ambience.
+- **Rhythm:** Slow, without a prominent beat.
+- **Duration / loop:** A seamless 2–4 minute loop.
+- **Volume baseline:** About 30% quieter than the main-screen BGM.
+- **Reference:** Comparable to restrained menu music in Stardew Valley.
+- **Placeholder file:** `_placeholder_bgm_settings.ogg`
+- **Notes:** Avoid a prominent melody; keep it atmospheric.
 ```
 
----
+## Quality boundaries
 
-## 返回数据结构
+1. Do not make voice-over the default; ask explicitly when relevant.
+2. Do not assign sounds to every interaction. Ask whether visual feedback alone is sufficient when a cue has little value.
+3. Keep implementation parameters out of Product. Product describes perceptual intent; implementation details belong in implementation documentation.
+4. Do not ask the user to repeat an established global style decision. Ask only about exceptions.
+5. Record qualities to avoid when they materially constrain the result.
+6. Keep BGM and SFX distinct in both requirements and filenames.
+
+## Return schema
+
+Return data with these stable machine-facing keys. Human-readable Markdown and notes use `document_language`.
 
 ```yaml
 audio_entries:
   - id: sfx_timer_start
     markdown: |
-      <完整的条目 markdown 内容>
+      <complete localized Product entry>
     placeholder_file: _placeholder_sfx_timer_start.wav
-    type: sfx  # 或 bgm
-    
-  - id: sfx_pomodoro_complete
-    markdown: |
-      ...
-    placeholder_file: _placeholder_sfx_pomodoro_complete.wav
     type: sfx
 
+  - id: bgm_settings_screen
+    markdown: |
+      <complete localized Product entry>
+    placeholder_file: _placeholder_bgm_settings.ogg
+    type: bgm
+
 notes_for_standardizer:
-  - "用户希望完成音效有仪式感，比项目其他音效更"重"，建议在意图说明中突出"
-  - "倒计时 tick 用户选择了渐强提示而非连续 tick，需要更新交互细节"
+  - <localized note about a decision or Product-side effect>
 
 feature_notes_register:
-  # 这些会被总调度登记到对应 feature 的 notes 字段
   - feature_module: timer-core
     placeholder_files:
       - _placeholder_sfx_timer_start.wav
@@ -204,3 +205,5 @@ feature_notes_register:
       - _placeholder_sfx_pomodoro_complete.wav
       - _placeholder_sfx_session_interrupted.wav
 ```
+
+`type` must be either `sfx` or `bgm`. `id`, `feature_module`, and every placeholder path remain stable and language-neutral; `markdown` and `notes_for_standardizer` follow `document_language`.
