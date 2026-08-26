@@ -24,7 +24,7 @@
     {"id":"F010","title":"Make Bootstrap select and persist document_language","status":"done","depends_on":["F009"],"estimated_scope":"medium","completed_at":"2026-08-26T05:49:06Z"},
     {"id":"F011","title":"Convert Product and Feature templates to canonical English rendering sources","status":"done","depends_on":["F009"],"estimated_scope":"medium","completed_at":"2026-08-26T06:52:04Z"},
     {"id":"F012","title":"Convert core Methodology specifications to canonical English","status":"done","depends_on":["F009"],"estimated_scope":"medium","completed_at":"2026-08-26T07:07:29Z"},
-    {"id":"F013","title":"Convert the execution specification and Coding Rules template to English","status":"pending","depends_on":["F012"],"estimated_scope":"medium","completed_at":null},
+    {"id":"F013","title":"Convert the execution specification and Coding Rules template to English","status":"in_progress","depends_on":["F012"],"estimated_scope":"medium","completed_at":null},
     {"id":"F014","title":"Convert engine Coding Rules to canonical English","status":"pending","depends_on":["F012"],"estimated_scope":"medium","completed_at":null},
     {"id":"F015","title":"Convert programming-language Coding Rules to canonical English","status":"pending","depends_on":["F012"],"estimated_scope":"medium","completed_at":null},
     {"id":"F016","title":"Internationalize Product initialization and change-standardization workflows","status":"pending","depends_on":["F009","F011","F012"],"estimated_scope":"medium","completed_at":null},
