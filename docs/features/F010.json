@@ -8,5 +8,5 @@
     "Changing conversation language does not modify the stored document_language"
   ],
   "source": "product/05-internationalization.md#Core flows",
-  "notes": ""
+  "notes": "Human review confirmed all acceptance criteria on 2026-08-26. Bootstrap now confirms and persists document_language before Product or Feature generation, treats inference as a non-binding proposal, preserves existing content and unknown configuration fields, and keeps conversation language independent. The fresh-context scan found one must_fix destructive-overwrite risk; commit e0c78b0 replaced it with a JSON-aware merge contract and regression assertion. TODO (F025): add scenario-oriented or executable coverage for greenfield, legacy, and already-bootstrapped branch invariants. TODO (F025): define a conservative deterministic boundary for malformed BCP 47-style values without adding a heavy validator dependency. Code smell scan: pass (feature: F010, must_fix: 0, suggest: 2, acceptable: 2)."
 }

@@ -2,16 +2,11 @@
 
 ## Current work
 
-F010 - Make Bootstrap select and persist document_language
+No Feature is currently in progress.
 
 ## Progress
 
-- Started at `2026-08-26T05:38:17Z`.
-- Added STEP 0.5 to resolve and persist document_language before Product generation for greenfield, legacy, and already-bootstrapped projects.
-- Updated later Bootstrap stages to preserve, verify, and report the confirmed language without translating existing content.
-- Clarified non-binding language inference and BCP 47 confirmation behavior in the canonical contract.
-- Added a repository test that locks Bootstrap ordering, persistence, non-translation, and conversation-language independence.
-- Replaced the destructive full-file config example with a JSON-aware merge contract that preserves unknown project fields, and added a regression assertion against the old overwrite pattern.
+- F010 completed at `2026-08-26T05:49:06Z` after human acceptance and a fresh-context scan with zero remaining must_fix findings.
 
 ## Context notes
 
@@ -56,3 +51,20 @@ No Feature was in progress.
 Progress:
 
 - F009 completed at `2026-08-26T05:34:14Z` and awaited the next explicit instruction.
+
+### 2026-08-26T05:49:06Z - F010 completed
+
+Current work:
+
+F010 - Make Bootstrap select and persist document_language
+
+Progress:
+
+- Started at `2026-08-26T05:38:17Z`.
+- Added STEP 0.5 to resolve and persist document_language before Product generation for greenfield, legacy, and already-bootstrapped projects.
+- Updated later Bootstrap stages to preserve, verify, and report the confirmed language without translating existing content.
+- Clarified non-binding language inference and BCP 47 confirmation behavior in the canonical contract.
+- Added a repository test that locks Bootstrap ordering, persistence, non-translation, and conversation-language independence.
+- Replaced the destructive full-file config example with a JSON-aware merge contract that preserves unknown project fields, and added a regression assertion against the old overwrite pattern.
+- All acceptance criteria were verified by human review.
+- Fresh-context code-smell scan passed after its one must_fix finding was repaired; two non-blocking suggestions were recorded in F010 notes for F025.
