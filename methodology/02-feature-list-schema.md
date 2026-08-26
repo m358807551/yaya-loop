@@ -161,7 +161,9 @@ Invalid:
 Valid JSON:
 
 ```json
-"description": "Open the preview and confirm that \"Game Over\" appears"
+{
+  "description": "Open the preview and confirm that \"Game Over\" appears"
+}
 ```
 
 Every write must be followed immediately by validation:

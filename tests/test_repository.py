@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import unittest
 from pathlib import Path
 
@@ -138,6 +139,90 @@ class RepositoryTests(unittest.TestCase):
             ["id", "description", "acceptance_criteria", "source", "notes"],
         )
         self.assertTrue(feature_detail["description"].startswith("In 2–4 sentences"))
+
+    def test_core_methodology_is_english_and_preserves_normative_invariants(self):
+        methodology = REPO_ROOT / "methodology"
+        selected = {
+            "00-overview.md": ("# 00 · Methodology overview", "Three non-negotiable constraints"),
+            "01-product-doc-structure.md": (
+                "# 01 · Product document structure",
+                "Module filename rules",
+            ),
+            "02-feature-list-schema.md": (
+                "# 02 · Feature-list three-file schema",
+                "Hard constraints",
+            ),
+            "04-coding-rules-4-layers.md": (
+                "# 04 · Four-layer Coding Rules architecture",
+                "Layer 1: collaboration contract",
+            ),
+        }
+        contents = {}
+        for filename, required_text in selected.items():
+            content = (methodology / filename).read_text(encoding="utf-8")
+            contents[filename] = content
+            with self.subTest(filename=filename):
+                for text in required_text:
+                    self.assertIn(text, content)
+
+        combined = "\n".join(contents.values())
+        for removed_heading in ("方法论总览", "文档结构规范", "三文件 schema", "四层结构"):
+            with self.subTest(removed_heading=removed_heading):
+                self.assertNotIn(removed_heading, combined)
+
+        overview = contents["00-overview.md"]
+        for invariant in (
+            "product-change-standardizer",
+            "explicit human acceptance",
+            "Code smell scan: pass",
+            "must_fix: 0",
+            "main` or `master",
+            "force-push",
+            "reset --hard",
+        ):
+            with self.subTest(overview_invariant=invariant):
+                self.assertIn(invariant, overview)
+
+        schema = contents["02-feature-list-schema.md"]
+        for invariant in (
+            "pending`, `in_progress`, `done`, `obsolete`, `obsolete_done`, or `blocked",
+            "must not depend on a Feature whose numeric ID is greater",
+            "Do not emit `large`",
+            "explicit human acceptance",
+            "zero remaining `must_fix` findings",
+        ):
+            with self.subTest(schema_invariant=invariant):
+                self.assertIn(invariant, schema)
+        for block in re.findall(r"```json\n(.*?)\n```", schema, flags=re.DOTALL):
+            json.loads(block)
+
+        coding_rules = contents["04-coding-rules-4-layers.md"]
+        for invariant in (
+            "A higher layer wins when rules conflict",
+            "@docs/coding-rules/engine-rules.md",
+            "@docs/coding-rules/language-rules.md",
+            "must disclose the deviation and reason",
+        ):
+            with self.subTest(coding_rules_invariant=invariant):
+                self.assertIn(invariant, coding_rules)
+
+    def test_core_methodology_relative_links_resolve(self):
+        methodology = REPO_ROOT / "methodology"
+        selected = (
+            "00-overview.md",
+            "01-product-doc-structure.md",
+            "02-feature-list-schema.md",
+            "04-coding-rules-4-layers.md",
+        )
+        for filename in selected:
+            path = methodology / filename
+            content = path.read_text(encoding="utf-8")
+            for target in re.findall(r"\[[^\]]+\]\(([^)]+)\)", content):
+                if target.startswith(("http://", "https://", "#")):
+                    continue
+                resolved = (path.parent / target.split("#", 1)[0]).resolve()
+                with self.subTest(filename=filename, target=target):
+                    self.assertTrue(resolved.exists(), f"Broken link: {path} -> {target}")
 
 
 if __name__ == "__main__":
