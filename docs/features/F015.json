@@ -8,5 +8,5 @@
     "Bootstrap can continue copying the same stable file paths"
   ],
   "source": "product/05-internationalization.md#Product decisions",
-  "notes": ""
+  "notes": "Human review confirmed all acceptance criteria on 2026-08-26. All six stable programming-language Coding Rules sources now use canonical English: the generic, C#, Python, Rust, and TypeScript files remain explicit actionable stubs, while GDScript remains a complete field-tested rules source. Regression coverage locks the exact file set, English-only prose, every stub heading and actionable TODO clause, stable Bootstrap installation paths, and detailed GDScript invariants and typed examples. Fresh-context review corrected Godot 4 setter behavior, non-debug assert evaluation, typed signals and examples, Node/Object reference equality, and Godot 4.3 static-variable lifecycle guidance. Static state is documented as process-local across Scene changes; Autoload provides explicit global ownership and serialized Resources or files provide persistence across runs. Code smell scan: pass (feature: F015, must_fix: 0, suggest: 0, acceptable: 3)."
 }

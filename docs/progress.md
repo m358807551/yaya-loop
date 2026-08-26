@@ -2,20 +2,11 @@
 
 ## Current work
 
-F015 - Convert programming-language Coding Rules to canonical English
+No Feature is currently in progress.
 
 ## Progress
 
-- Started at `2026-08-26T08:12:22Z`.
-- Confirmed that all six stable language-rule source paths are present: five actionable stubs and one complete GDScript rules document.
-- Confirmed that the migration requires natural American English without weakening GDScript's technical constraints or presenting incomplete language stubs as complete.
-- Rewrote the generic language template and the C#, Python, Rust, and TypeScript sources as actionable English stubs while preserving their versions, topic inventories, TODO status, and stable paths.
-- Rewrote the complete GDScript 2.0 rules in English while preserving typing, naming, member order, formatting, export/property, signal, lambda, error-handling, null-safety, documentation, control-flow, packed-array, static-state, anti-pattern, and debugging guidance.
-- Added regression coverage for the exact language-rule file set, English-only canonical prose, explicit stub status, detailed GDScript invariants, and the unchanged Bootstrap destination path; all 20 repository tests pass.
-- Human acceptance passed. Fresh-context review found six blocking accuracy and regression issues: correct Godot 4 setter semantics, consistently typed examples, release-build assertion behavior, typed-signal guidance, and deeper per-language stub coverage.
-- The first repair passed all tests, but the independent rescan found four remaining gaps: three untyped recommended examples, incomplete stub heading coverage, a missing release non-evaluation test anchor, and omitted Node reference-equality guidance.
-- A final independent scan found that four loop examples still lacked explicit types and that tests protected stub headings rather than every actionable TODO clause; the final repair upgrades both areas to exhaustive checks.
-- The completion-gate scan found one last Godot 4.3 lifecycle error: static variables normally keep their script loaded and persist across Scene changes. The rule now distinguishes process-local static state, explicit Autoload ownership, and durable serialized storage.
+- F015 completed at `2026-08-26T09:42:24Z` after human acceptance, iterative accuracy repairs, 20 passing tests, and a definitive fresh-context scan with zero remaining must_fix findings.
 
 ## Context notes
 
@@ -23,6 +14,22 @@ F015 - Convert programming-language Coding Rules to canonical English
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T09:42:24Z - F015 completed
+
+Current work:
+
+F015 - Convert programming-language Coding Rules to canonical English
+
+Progress:
+
+- Started at `2026-08-26T08:12:22Z`.
+- Rewrote five language sources as explicit actionable English stubs and the complete GDScript 2.0 source as canonical English without changing stable paths.
+- Added exact regression contracts for all stub headings and TODO clauses, English-only sources, Bootstrap paths, GDScript technical invariants, and fully typed examples.
+- Human acceptance passed.
+- Fresh-context review corrected setter, assertion, signal, typing, Node equality, and static-variable lifecycle semantics before completion.
+- All 20 repository tests pass.
+- Code smell scan: pass (feature: F015, must_fix: 0, suggest: 0, acceptable: 3).
 
 ### 2026-08-26T08:12:22Z - F015 started
 
