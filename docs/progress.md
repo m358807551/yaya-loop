@@ -2,11 +2,13 @@
 
 ## Current work
 
-No Feature is currently in progress.
+F017 - Internationalize Product specification UI and audio workflows
 
 ## Progress
 
-- F016 completed at `2026-08-26T09:56:35Z` after human acceptance, semantic repair, 21 passing tests, and a fresh-context scan with zero remaining must_fix findings.
+- Started at `2026-08-26T09:57:43Z`.
+- Confirmed the scope is three paired workflows across six stable files: Product specification, UI sketching, and audio sketching.
+- Confirmed that durable prose follows `document_language` while mode values, patch keys, ASCII conventions, paths, `_placeholder_` names, and sfx/bgm identifiers remain stable.
 
 ## Context notes
 
@@ -14,6 +16,16 @@ No Feature is currently in progress.
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T09:57:43Z - F017 started
+
+Current work before F017:
+
+No Feature was in progress.
+
+Progress:
+
+- F016 completed at `2026-08-26T09:56:35Z` after human acceptance, semantic repair, 21 passing tests, and a fresh-context scan with zero remaining must_fix findings.
 
 ### 2026-08-26T09:56:35Z - F016 completed
 
