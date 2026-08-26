@@ -440,6 +440,59 @@ class RepositoryTests(unittest.TestCase):
                 self.assertIn("**Incomplete stub:**", content)
                 self.assertIn("TODO:", content)
 
+        required_stub_topics = {
+            "_stub-template.md": (
+                "{{LANGUAGE_VERSION}}",
+                "Static typing and type checking",
+                "Control flow and error handling",
+                "Concurrency and asynchronous work",
+                "Standard linting and formatting tools",
+                "Anti-pattern checklist",
+                "Community references",
+            ),
+            "csharp.md": (
+                "C# 12 / .NET 8 and later",
+                "nullable reference types",
+                "CancellationToken",
+                "IAsyncDisposable",
+                "dotnet format",
+                "async void",
+                "Community references",
+            ),
+            "python.md": (
+                "Python 3.11 and later",
+                "type hints for every public API",
+                "EAFP and LBYL",
+                "asyncio, threading, and multiprocessing",
+                "Prefer Ruff",
+                "mutable defaults",
+                "Community references",
+            ),
+            "rust.md": (
+                "Rust 1.75 and later (Edition 2021)",
+                "ownership, borrowing, and lifetimes",
+                "Propagate `Result<T, E>`",
+                "`Send + Sync` constraints",
+                "cargo fmt --check",
+                "pervasive `unwrap`",
+                "Community references",
+            ),
+            "typescript.md": (
+                "TypeScript 5.4 and later",
+                "complete `strict` family",
+                "discriminated unions",
+                "`AbortController` for cancellation",
+                "ESLint and Prettier",
+                "unawaited Promises",
+                "Community references",
+            ),
+        }
+        for filename, topics in required_stub_topics.items():
+            content = (languages / filename).read_text(encoding="utf-8")
+            for topic in topics:
+                with self.subTest(stub=filename, topic=topic):
+                    self.assertIn(topic, content)
+
         gdscript = (languages / "gdscript.md").read_text(encoding="utf-8")
         self.assertNotIn("Incomplete stub", gdscript)
         self.assertNotIn("TODO:", gdscript)
@@ -457,14 +510,18 @@ class RepositoryTests(unittest.TestCase):
             "Start Booleans with `is_`, `has_`, `can_`, or `should_`",
             "Official GDScript member order",
             "Indent with tabs, not spaces",
-            "assigning `self.x = value` inside the setter for `x` recurses forever",
+            "directly reading or writing that property name accesses the underlying value and does not recurse",
+            "this helper is not the setter itself",
             "Use `.emit()` in Godot 4",
+            "Signal parameters should be statically typed whenever their types can be expressed",
             "Prefer Callable connections",
             "Invoke a lambda with `.call()`",
             "Closures capture values at creation time",
             "A lambda cannot be `static`",
             "use a direct `for` loop in per-frame or large-array hot paths",
             "GDScript has no try-catch",
+            "Assertions are ignored in non-debug builds",
+            "An assertion expression must never contain side effects",
             "There is no `throw`, `try`, `except`, or `finally` in GDScript",
             "Return `null` and require the caller to check it",
             "Use `is_instance_valid(node)`",

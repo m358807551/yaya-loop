@@ -12,6 +12,7 @@ F015 - Convert programming-language Coding Rules to canonical English
 - Rewrote the generic language template and the C#, Python, Rust, and TypeScript sources as actionable English stubs while preserving their versions, topic inventories, TODO status, and stable paths.
 - Rewrote the complete GDScript 2.0 rules in English while preserving typing, naming, member order, formatting, export/property, signal, lambda, error-handling, null-safety, documentation, control-flow, packed-array, static-state, anti-pattern, and debugging guidance.
 - Added regression coverage for the exact language-rule file set, English-only canonical prose, explicit stub status, detailed GDScript invariants, and the unchanged Bootstrap destination path; all 20 repository tests pass.
+- Human acceptance passed. Fresh-context review found six blocking accuracy and regression issues: correct Godot 4 setter semantics, consistently typed examples, release-build assertion behavior, typed-signal guidance, and deeper per-language stub coverage.
 
 ## Context notes
 

@@ -20,11 +20,10 @@ GDScript is gradually typed: untyped code runs, but it gives up autocomplete, co
 ```gdscript
 # Prefer inference when the right-hand type is clear.
 var speed := 100.0
-var enemies := []
+var enemies: Array[Enemy] = []
 var position := Vector2(10, 20)
 
 # Annotate when inference is unclear or a constraint matters.
-var enemies: Array[Enemy] = []
 @onready var sprite: Sprite2D = $Sprite2D
 var damage: int = stats.attack
 
@@ -213,13 +212,26 @@ func _get_score() -> int:
 	return score
 ```
 
-**Trap:** assigning `self.x = value` inside the setter for `x` recurses forever. Assign the property directly under Godot 4's setter semantics, or use a separate backing field such as `_x`.
+Inside a property's own inline setter or getter, directly reading or writing that property name accesses the underlying value and does not recurse. The same exception applies inside a function assigned directly as that property's setter or getter. It does not propagate into helper functions called by the setter:
+
+```gdscript
+var hp: int = 100:
+	set(value):
+		_assign_hp(value)
+
+func _assign_hp(value: int) -> void:
+	hp = value # Infinite recursion: this helper is not the setter itself.
+```
+
+Keep the direct assignment inside the setter, or use a backing field such as `_hp` when assignment must pass through another function.
 
 ---
 
 ## 6. Godot 4 signal syntax
 
 ### 6.1 Declaration and emission
+
+Signal parameters should be statically typed whenever their types can be expressed.
 
 ```gdscript
 signal health_changed(new_health: int, max_health: int)
@@ -253,14 +265,19 @@ Prefer Callable connections because the editor can check the target method. Name
 GDScript 2.0 supports function literals. Use a lambda for a small, temporary function and a normal function for reused behavior.
 
 ```gdscript
-var sorted := enemies.duplicate()
-sorted.sort_custom(func(a, b): return a.threat > b.threat)
+var sorted: Array[Enemy] = enemies.duplicate()
+sorted.sort_custom(func(a: Enemy, b: Enemy) -> bool: return a.threat > b.threat)
 
-var visible_enemies := enemies.filter(func(e): return e.is_visible())
-var damages := enemies.map(func(e): return e.attack)
-var total := enemies.reduce(func(acc, e): return acc + e.attack, 0)
+var visible_enemies: Array[Enemy] = enemies.filter(
+	func(enemy: Enemy) -> bool: return enemy.is_visible()
+)
+var damages: Array = enemies.map(func(enemy: Enemy) -> int: return enemy.attack)
+var total: int = enemies.reduce(
+	func(accumulator: int, enemy: Enemy) -> int: return accumulator + enemy.attack,
+	0,
+)
 
-button.pressed.connect(func(): score += 10)
+button.pressed.connect(func() -> void: score += 10)
 
 var compute_damage := func compute(base: int, multiplier: float) -> int:
 	return int(base * multiplier)
@@ -276,12 +293,12 @@ Name a nontrivial lambda, as in `func compute(...)`, so stack traces identify it
 
 ```gdscript
 var counter := 0
-var increment := func(): counter += 1
+var increment := func() -> void: counter += 1
 increment.call()
 print(counter) # Still 0.
 
 var items := []
-var add_item := func(): items.append(1)
+var add_item := func() -> void: items.append(1)
 add_item.call()
 print(items) # [1]
 ```
@@ -298,7 +315,7 @@ print(items) # [1]
 ### 8.1 Three error signals
 
 ```gdscript
-# Development invariant; assertions may be disabled in release builds.
+# Development invariant; assertions are ignored in non-debug builds.
 func take_damage(amount: int) -> void:
 	assert(amount >= 0, "damage amount must be non-negative")
 	health -= amount
@@ -316,6 +333,7 @@ func deprecated_function() -> void:
 ```
 
 - `assert` protects conditions that must never be false during development.
+- Assertions are ignored in non-debug builds, and their conditions are not evaluated in release exports. An assertion expression must never contain side effects.
 - `push_error` records an error while allowing execution to continue.
 - `push_warning` reports a non-fatal concern.
 
@@ -412,7 +430,7 @@ func apply_damage(target: Node, amount: int) -> int:
 Mutation can skip elements or move indexes out of bounds. Build a filtered collection, iterate indexes backward, or collect removals first.
 
 ```gdscript
-enemies = enemies.filter(func(enemy): return not enemy.is_dead)
+enemies = enemies.filter(func(enemy: Enemy) -> bool: return not enemy.is_dead)
 
 for index in range(enemies.size() - 1, -1, -1):
 	if enemies[index].is_dead:
@@ -479,7 +497,7 @@ static func _static_init() -> void:
 
 - Untyped declarations: they discard static checking and typed-code performance.
 - Combining `@onready` and `@export` on one variable: `@onready` overwrites the exported value during `_ready()` and Godot 4 emits `ONREADY_WITH_EXPORT`.
-- Assigning `self.x = value` inside the setter for `x`: infinite recursion.
+- Writing a property from a helper called by that property's setter: infinite recursion because the helper does not receive the setter's direct-access exception.
 - Mutating a collection during iteration: skipped elements or invalid indexes.
 - Calling `free()` where `queue_free()` is required by the engine lifecycle.
 - String-based `emit_signal("name", args)` instead of `signal_name.emit(args)`.
