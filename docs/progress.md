@@ -2,11 +2,13 @@
 
 ## Current work
 
-No Feature is currently in progress.
+F022 - Convert installation guidance and Hook-facing text to canonical English
 
 ## Progress
 
-- F021 completed at `2026-08-26T11:30:17Z` after human acceptance, scoring repair, 46 passing tests, and a fresh-context scan with zero remaining must_fix or suggest findings.
+- Started at `2026-08-26T11:30:55Z`.
+- Confirmed the scope is two installation guides plus direct user-facing text and comments in the two Claude Hooks and Git `commit-msg` Hook.
+- Confirmed that evidence regexes, parsing, transition detection, fail-open/fail-safe behavior, exit codes, commands, paths, and executable permissions must remain unchanged.
 
 ## Context notes
 
@@ -14,6 +16,16 @@ No Feature is currently in progress.
 - The first planned initiative is internationalization with one English canonical workflow source and project-selected natural-language knowledge.
 
 ## History
+
+### 2026-08-26T11:30:55Z - F022 started
+
+Current work before F022:
+
+No Feature was in progress.
+
+Progress:
+
+- F021 completed at `2026-08-26T11:30:17Z` after human acceptance, scoring repair, 46 passing tests, and a fresh-context scan with zero remaining must_fix or suggest findings.
 
 ### 2026-08-26T11:30:17Z - F021 completed
 
